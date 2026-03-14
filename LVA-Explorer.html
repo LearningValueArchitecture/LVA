@@ -511,6 +511,24 @@ h1 em, h2 em, h3 em { font-style: italic; color: var(--color-primary); }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
 }
+
+/* ============================================
+   ACCESSIBILITY: Focus Visible
+   ============================================ */
+:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+.nav-tab:focus-visible, .control-btn:focus-visible, .swap-btn:focus-visible, .theme-toggle:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 4px var(--color-primary-highlight);
+}
+.dim-card:focus-visible, .theory-mini:focus-visible, .profile-card:focus-visible, .intervention-header:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+  box-shadow: var(--shadow-md);
+}
 </style>
 </head>
 <body>
@@ -519,16 +537,16 @@ h1 em, h2 em, h3 em { font-style: italic; color: var(--color-primary); }
 <header class="site-header">
   <div class="inner">
     <a href="/" class="site-logo">Learning Value <em>Architecture</em></a>
-    <div class="nav-tabs" id="nav-tabs">
-      <button class="nav-tab active" data-view="overview">Overview</button>
-      <button class="nav-tab" data-view="dimension-explorer">Dimensions</button>
-      <button class="nav-tab" data-view="profiles">Profiles</button>
-      <button class="nav-tab" data-view="level-map">Level Map</button>
-      <button class="nav-tab" data-view="evidence">Evidence</button>
-      <button class="nav-tab" data-view="interventions">Interventions</button>
-      <button class="nav-tab" data-view="compare">Compare</button>
-      <button class="nav-tab" data-view="about">About</button>
-    </div>
+    <nav class="nav-tabs" id="nav-tabs" role="tablist" aria-label="Explorer views">
+      <button class="nav-tab active" data-view="overview" role="tab" aria-selected="true" aria-controls="view-overview">Overview</button>
+      <button class="nav-tab" data-view="dimension-explorer" role="tab" aria-selected="false" aria-controls="view-dimension-explorer">Dimensions</button>
+      <button class="nav-tab" data-view="profiles" role="tab" aria-selected="false" aria-controls="view-profiles">Profiles</button>
+      <button class="nav-tab" data-view="level-map" role="tab" aria-selected="false" aria-controls="view-level-map">Level Map</button>
+      <button class="nav-tab" data-view="evidence" role="tab" aria-selected="false" aria-controls="view-evidence">Evidence</button>
+      <button class="nav-tab" data-view="interventions" role="tab" aria-selected="false" aria-controls="view-interventions">Interventions</button>
+      <button class="nav-tab" data-view="compare" role="tab" aria-selected="false" aria-controls="view-compare">Compare</button>
+      <button class="nav-tab" data-view="about" role="tab" aria-selected="false" aria-controls="view-about">About</button>
+    </nav>
     <div class="header-actions">
       <a href="/" class="back-link">&larr; Back to LVA</a>
       <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode">&#9790;</button>
@@ -540,18 +558,20 @@ h1 em, h2 em, h3 em { font-style: italic; color: var(--color-primary); }
 </header>
 
 <!-- TOOLTIP -->
-<div class="tooltip" id="tooltip"></div>
+<div class="tooltip" id="tooltip" role="tooltip"></div>
+
+<main>
 
 <!-- ============================================
      VIEW 1: OVERVIEW
      ============================================ -->
-<div class="view active" data-view="overview">
+<div class="view active" data-view="overview" id="view-overview" role="tabpanel" aria-labelledby="tab-overview">
   <div class="view-section">
     <h1>Explore the Learning Value <em>Architecture</em></h1>
     <p class="subtitle" style="margin-top:12px">A Visual Navigator for Learning Science Frameworks &mdash; Mapping How Research Grounds the LVA&rsquo;s Four Dimensions</p>
     <div class="stats-bar">
       <div class="stat-item"><strong>4</strong> Dimensions</div>
-      <div class="stat-item"><strong>25</strong> Levels</div>
+      <div class="stat-item"><strong>26</strong> Levels</div>
       <div class="stat-item"><strong>20</strong> Theories</div>
       <div class="stat-item"><strong>100+</strong> Constructs</div>
     </div>
@@ -573,7 +593,7 @@ h1 em, h2 em, h3 em { font-style: italic; color: var(--color-primary); }
 <!-- ============================================
      VIEW 2: DIMENSION EXPLORER
      ============================================ -->
-<div class="view" data-view="dimension-explorer">
+<div class="view" data-view="dimension-explorer" id="view-dimension-explorer" role="tabpanel">
   <div class="view-section">
     <p class="section-label">Dimension Explorer</p>
     <h2>Dimension Focus <em>Explorer</em></h2>
@@ -585,9 +605,9 @@ h1 em, h2 em, h3 em { font-style: italic; color: var(--color-primary); }
     <div class="chart-container">
       <h3>Radar Comparison</h3>
       <div class="control-row">
-        <select class="control-select" id="radar-sel-1"><option value="">Select Theory 1</option></select>
-        <select class="control-select" id="radar-sel-2"><option value="">Select Theory 2</option></select>
-        <select class="control-select" id="radar-sel-3"><option value="">Select Theory 3</option></select>
+        <select class="control-select" id="radar-sel-1" aria-label="Theory 1 for radar comparison"><option value="">Select Theory 1</option></select>
+        <select class="control-select" id="radar-sel-2" aria-label="Theory 2 for radar comparison"><option value="">Select Theory 2</option></select>
+        <select class="control-select" id="radar-sel-3" aria-label="Theory 3 for radar comparison"><option value="">Select Theory 3</option></select>
       </div>
       <div id="radar-compare" style="width:100%;max-width:500px;height:400px;margin:0 auto"></div>
     </div>
@@ -613,9 +633,9 @@ h1 em, h2 em, h3 em { font-style: italic; color: var(--color-primary); }
     <div class="chart-container">
       <h3>Construct Flow Between Theories</h3>
       <div class="control-row">
-        <select class="control-select" id="alluvial-a"><option value="">Select Theory A</option></select>
-        <button class="swap-btn" id="alluvial-swap" title="Swap">&#8644;</button>
-        <select class="control-select" id="alluvial-b"><option value="">Select Theory B</option></select>
+        <select class="control-select" id="alluvial-a" aria-label="Theory A for construct flow"><option value="">Select Theory A</option></select>
+        <button class="swap-btn" id="alluvial-swap" title="Swap" aria-label="Swap theories">&#8644;</button>
+        <select class="control-select" id="alluvial-b" aria-label="Theory B for construct flow"><option value="">Select Theory B</option></select>
       </div>
       <div id="alluvial-chart" style="width:100%;height:400px"></div>
     </div>
@@ -625,7 +645,7 @@ h1 em, h2 em, h3 em { font-style: italic; color: var(--color-primary); }
 <!-- ============================================
      VIEW 3: PROFILES
      ============================================ -->
-<div class="view" data-view="profiles">
+<div class="view" data-view="profiles" id="view-profiles" role="tabpanel">
   <div class="view-section">
     <p class="section-label">Theory Profiles</p>
     <h2>Framework <em>Profiles</em></h2>
@@ -637,7 +657,7 @@ h1 em, h2 em, h3 em { font-style: italic; color: var(--color-primary); }
 <!-- ============================================
      VIEW 4: LEVEL MAP (Sunburst)
      ============================================ -->
-<div class="view" data-view="level-map">
+<div class="view" data-view="level-map" id="view-level-map" role="tabpanel">
   <div class="view-section">
     <p class="section-label">Level Map</p>
     <h2>LVA Level <em>Map</em></h2>
@@ -656,7 +676,7 @@ h1 em, h2 em, h3 em { font-style: italic; color: var(--color-primary); }
 <!-- ============================================
      VIEW 5: EVIDENCE
      ============================================ -->
-<div class="view" data-view="evidence">
+<div class="view" data-view="evidence" id="view-evidence" role="tabpanel">
   <div class="view-section">
     <p class="section-label">Evidence Base</p>
     <h2>Evidence <em>Heatmap</em></h2>
@@ -705,7 +725,7 @@ h1 em, h2 em, h3 em { font-style: italic; color: var(--color-primary); }
 <!-- ============================================
      VIEW 6: INTERVENTIONS
      ============================================ -->
-<div class="view" data-view="interventions">
+<div class="view" data-view="interventions" id="view-interventions" role="tabpanel">
   <div class="view-section">
     <p class="section-label">Intervention Playbooks</p>
     <h2>Level Transition <em>Interventions</em></h2>
@@ -724,15 +744,15 @@ h1 em, h2 em, h3 em { font-style: italic; color: var(--color-primary); }
 <!-- ============================================
      VIEW 7: COMPARE
      ============================================ -->
-<div class="view" data-view="compare">
+<div class="view" data-view="compare" id="view-compare" role="tabpanel">
   <div class="view-section">
     <p class="section-label">Compare</p>
     <h2>Theory <em>Comparison</em></h2>
     <p class="subtitle" style="margin-top:8px">Side-by-side comparison of any two learning science theories</p>
     <div class="control-row" style="margin-top:24px">
-      <select class="control-select" id="compare-a"><option value="">Select Theory A</option></select>
-      <button class="swap-btn" id="compare-swap" title="Swap">&#8644;</button>
-      <select class="control-select" id="compare-b"><option value="">Select Theory B</option></select>
+      <select class="control-select" id="compare-a" aria-label="Theory A for comparison"><option value="">Select Theory A</option></select>
+      <button class="swap-btn" id="compare-swap" title="Swap" aria-label="Swap theories">&#8644;</button>
+      <select class="control-select" id="compare-b" aria-label="Theory B for comparison"><option value="">Select Theory B</option></select>
     </div>
     <div id="compare-radar" style="width:100%;max-width:500px;height:400px;margin:24px auto 0"></div>
     <div class="chart-container" style="margin-top:24px">
@@ -749,7 +769,7 @@ h1 em, h2 em, h3 em { font-style: italic; color: var(--color-primary); }
 <!-- ============================================
      VIEW 8: ABOUT
      ============================================ -->
-<div class="view" data-view="about">
+<div class="view" data-view="about" id="view-about" role="tabpanel">
   <div class="view-section about-content">
     <p class="section-label">About</p>
     <h2>What is the <em>LVA</em>?</h2>
@@ -783,7 +803,8 @@ h1 em, h2 em, h3 em { font-style: italic; color: var(--color-primary); }
     <p><strong>v2.0 (2025):</strong> Four dimensions &mdash; added Opportunity dimension informed by COM-B and behavior change literature. Sub-levels refined with evidence grades. Capability expanded to 7 levels (added Unconsolidated and Generative). All levels grounded in specific research with effect sizes where available.</p>
 
     <h2>Constructs <em>Database</em></h2>
-    <input type="text" class="search-input" id="construct-search" placeholder="Search constructs, theories, or dimensions...">
+    <label for="construct-search" class="sr-only">Search constructs database</label>
+    <input type="text" class="search-input" id="construct-search" placeholder="Search constructs, theories, or dimensions..." aria-label="Search constructs, theories, or dimensions">
     <div class="heatmap-wrap">
       <table class="heatmap-table" id="construct-table">
         <thead><tr><th>Construct</th><th>Theory</th><th>Dimensions</th></tr></thead>
@@ -798,6 +819,8 @@ h1 em, h2 em, h3 em { font-style: italic; color: var(--color-primary); }
     <p>The LVA is an interpretive framework, not an empirical instrument. Alignment scores between theories and dimensions represent expert judgment based on literature review, not statistical correlation. Evidence grades reflect the current state of research and may change as new meta-analyses are published. The MECE claim is an aspiration grounded in careful design, not a mathematical proof &mdash; edge cases exist, particularly around metacognition and self-regulation.</p>
   </div>
 </div>
+
+</main>
 
 <!-- FOOTER -->
 <footer class="site-footer">
@@ -1091,7 +1114,11 @@ function initRouter() {
 
   function showView(viewId) {
     views.forEach(v => v.classList.toggle('active', v.dataset.view === viewId));
-    tabs.forEach(t => t.classList.toggle('active', t.dataset.view === viewId));
+    tabs.forEach(t => {
+      const isActive = t.dataset.view === viewId;
+      t.classList.toggle('active', isActive);
+      t.setAttribute('aria-selected', isActive);
+    });
     window.location.hash = viewId;
   }
 
@@ -1100,6 +1127,20 @@ function initRouter() {
     const navTabs = $('#nav-tabs');
     if (navTabs.classList.contains('open')) navTabs.classList.remove('open');
   }));
+
+  // Arrow key navigation for tabs
+  const tabList = document.querySelector('[role="tablist"]');
+  tabList?.addEventListener('keydown', e => {
+    const tabBtns = [...tabList.querySelectorAll('[role="tab"]')];
+    const idx = tabBtns.indexOf(document.activeElement);
+    if (idx < 0) return;
+    let next;
+    if (e.key === 'ArrowRight') next = tabBtns[(idx + 1) % tabBtns.length];
+    else if (e.key === 'ArrowLeft') next = tabBtns[(idx - 1 + tabBtns.length) % tabBtns.length];
+    else if (e.key === 'Home') next = tabBtns[0];
+    else if (e.key === 'End') next = tabBtns[tabBtns.length - 1];
+    if (next) { e.preventDefault(); next.focus(); next.click(); }
+  });
 
   // Handle initial hash
   const hash = window.location.hash.slice(1);
@@ -1158,7 +1199,8 @@ function drawRadar(container, datasets, size) {
   const angleSlice = (Math.PI * 2) / dims.length;
 
   const svg = d3.select(container).html('').append('svg')
-    .attr('viewBox', `0 0 ${w} ${h}`).attr('class', 'chart-svg');
+    .attr('viewBox', `0 0 ${w} ${h}`).attr('class', 'chart-svg')
+    .attr('role', 'img').attr('aria-label', 'Radar chart comparing theory dimension scores');
 
   const g = svg.append('g').attr('transform', `translate(${cx},${cy})`);
 
@@ -1246,7 +1288,7 @@ function renderOverview() {
   // Dimension Cards
   const cardsEl = $('#dim-cards');
   cardsEl.innerHTML = DIMENSIONS.map(d => `
-    <div class="dim-card" data-dim="${d.id}" onclick="navigateTo('dimension-explorer')">
+    <div class="dim-card" data-dim="${d.id}" tabindex="0" role="button" aria-label="${d.name} dimension: ${d.levels.length} levels" onclick="navigateTo('dimension-explorer')" onkeydown="if(event.key==='Enter')navigateTo('dimension-explorer')">
       <div class="dim-name"><span class="dim-dot" style="background:${d.color}"></span>${d.name}</div>
       <div class="dim-question">${d.question}</div>
       <div class="dim-levels">${d.levels.length} levels</div>
@@ -1256,7 +1298,7 @@ function renderOverview() {
   // Theory Mini Cards
   const grid = $('#theory-grid');
   grid.innerHTML = THEORIES.map(t => `
-    <div class="theory-mini" onclick="navigateTo('profiles')">
+    <div class="theory-mini" tabindex="0" role="button" aria-label="${t.name} by ${t.author}" onclick="navigateTo('profiles')" onkeydown="if(event.key==='Enter')navigateTo('profiles')">
       <h4>${t.name}</h4>
       <div class="theory-meta">${t.author}, ${t.year}</div>
       <div class="mini-radar" id="mini-${t.id}"></div>
@@ -1469,8 +1511,9 @@ function renderSunburst() {
       const desc = d.data.desc || (d.data.theory ? `From: ${d.data.theory}` : `${d.children?.length || 0} children`);
       $('#sunburst-detail').textContent = desc;
       const path = d.ancestors().reverse().map(a => a.data.name);
-      $('#sunburst-breadcrumb').innerHTML = path.map((p, i) =>
-        `<span onclick="$('#sunburst-title').textContent='${p}'">${p}</span>`
+      const bcEl = document.getElementById('sunburst-breadcrumb');
+      bcEl.innerHTML = path.map(p =>
+        `<span>${p}</span>`
       ).join('');
     });
 
@@ -1532,7 +1575,7 @@ function renderInterventions() {
     const color = dimColor(int.dim);
     return `
     <div class="intervention-row" data-dim="${int.dim}">
-      <div class="intervention-header" onclick="this.parentElement.classList.toggle('open')">
+      <div class="intervention-header" tabindex="0" role="button" aria-expanded="false" onclick="this.parentElement.classList.toggle('open');this.setAttribute('aria-expanded',this.parentElement.classList.contains('open'))" onkeydown="if(event.key==='Enter'){this.parentElement.classList.toggle('open');this.setAttribute('aria-expanded',this.parentElement.classList.contains('open'))}">
         <span class="transition-label" style="color:${color}">${int.from} → ${int.to}</span>
         <span style="font-size:0.82rem;color:var(--color-text-muted)">${int.strategy.slice(0, 80)}…</span>
         <span class="evidence-badge ${int.evidence}">${int.evidence}</span>
