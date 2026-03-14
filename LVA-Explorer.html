@@ -804,3 +804,866 @@ h1 em, h2 em, h3 em { font-style: italic; color: var(--color-primary); }
   <p>Explore the Learning Value Architecture &middot; An interactive research tool for the Science of Learning</p>
   <p>&copy; 2026 Learning Value Architecture</p>
 </footer>
+
+<script>
+// ============================================
+// DATA LAYER
+// ============================================
+
+const DIMENSIONS = [
+  {
+    id: 'engagement', name: 'Engagement', color: '#c4713b', bg: '#fdf6f1',
+    question: 'Does the learner care — and if so, how and why?',
+    levels: [
+      { id: 'e0', label: 'Disengaged', desc: 'No meaningful interaction with learning content or activities.' },
+      { id: 'e1', label: 'Compliant', desc: 'Participates because required; minimal personal investment.' },
+      { id: 'e2', label: 'Interested', desc: 'Shows curiosity; engages voluntarily with content.' },
+      { id: 'e3', label: 'Committed', desc: 'Sustained effort; pursues learning beyond requirements.' },
+      { id: 'e4', label: 'Agentic', desc: 'Drives own learning agenda; seeks challenges; transforms context.' },
+      { id: 'e5', label: 'Identity-Integrated', desc: 'Learning is part of self-concept; intrinsic to professional identity.' }
+    ]
+  },
+  {
+    id: 'capability', name: 'Capability', color: '#3b7a5a', bg: '#f2f8f5',
+    question: 'Was real ability actually built — and is it durable?',
+    levels: [
+      { id: 'c0', label: 'No Capability', desc: 'Cannot perform the target skill or apply target knowledge.' },
+      { id: 'c1', label: 'Recognition', desc: 'Can identify or recognize relevant concepts when presented.' },
+      { id: 'c2', label: 'Unconsolidated', desc: 'Can perform with support but skill is fragile and context-dependent.' },
+      { id: 'c3', label: 'Consolidated', desc: 'Reliable performance in trained contexts; skill is durable.' },
+      { id: 'c4', label: 'Fluent', desc: 'Automated performance; low cognitive load; fast accurate execution.' },
+      { id: 'c5', label: 'Adaptive', desc: 'Can modify and apply skills to novel situations; transfers across contexts.' },
+      { id: 'c6', label: 'Generative', desc: 'Creates new knowledge, methods, or approaches; advances the field.' }
+    ]
+  },
+  {
+    id: 'portability', name: 'Portability', color: '#4a6190', bg: '#f2f5fa',
+    question: 'Does the learner know they have it, and can the world see it?',
+    levels: [
+      { id: 'p0', label: 'Invisible', desc: 'Learning exists but cannot be seen, measured, or articulated.' },
+      { id: 'p1', label: 'Tacit', desc: 'Learner has capability but cannot explain or demonstrate it on demand.' },
+      { id: 'p2', label: 'Articulable', desc: 'Learner can describe what they know and how they would apply it.' },
+      { id: 'p3', label: 'Demonstrated', desc: 'Evidence exists: portfolio, assessment, observable performance.' },
+      { id: 'p4', label: 'Credentialed', desc: 'Formally recognized by institution, industry body, or credential system.' },
+      { id: 'p5', label: 'Reputational', desc: 'Known for this capability; others seek them out; social proof established.' },
+      { id: 'p6', label: 'Contributory', desc: 'Teaches, mentors, or publishes; capability produces value for others.' }
+    ]
+  },
+  {
+    id: 'opportunity', name: 'Opportunity', color: '#7c4dff', bg: '#f5f2ff',
+    question: 'Does the environment support learning progression?',
+    levels: [
+      { id: 'o0', label: 'Absent', desc: 'No opportunity to learn or practice; environment blocks development.' },
+      { id: 'o1', label: 'Available', desc: 'Learning resources exist but are not actively promoted or supported.' },
+      { id: 'o2', label: 'Accessible', desc: 'Resources are available AND the learner can realistically access them.' },
+      { id: 'o3', label: 'Supported', desc: 'Active encouragement: time allocated, mentoring, psychological safety.' },
+      { id: 'o4', label: 'Integrated', desc: 'Learning is embedded in workflow; practice opportunities are routine.' },
+      { id: 'o5', label: 'Systemic', desc: 'Organization-wide learning culture; systems reinforce continuous development.' }
+    ]
+  }
+];
+
+const THEORIES = [
+  {
+    id: 'sdt', name: 'Self-Determination Theory', author: 'Deci & Ryan', year: '1985/2000',
+    scores: { engagement: 0.95, capability: 0.45, portability: 0.30, opportunity: 0.60 },
+    constructs: ['Autonomy','Competence','Relatedness','Intrinsic Motivation','Extrinsic Motivation','Amotivation','Internalization'],
+    evidence: 'strong', effectSize: 'd = 0.55–0.71',
+    insight: 'When autonomy, competence, and relatedness needs are met, learners move from compliance to identity-integrated engagement.',
+    dimMap: { engagement: ['Autonomy','Intrinsic Motivation','Internalization'], capability: ['Competence'], portability: ['Internalization'], opportunity: ['Relatedness','Autonomy Support'] }
+  },
+  {
+    id: 'evt', name: 'Expectancy-Value Theory', author: 'Eccles & Wigfield', year: '1983/2020',
+    scores: { engagement: 0.85, capability: 0.35, portability: 0.40, opportunity: 0.30 },
+    constructs: ['Expectancy of Success','Attainment Value','Intrinsic Value','Utility Value','Cost','Task Difficulty'],
+    evidence: 'strong', effectSize: 'd = 0.40–0.60',
+    insight: 'Learners engage when they believe they can succeed AND when success matters to them — both expectancy and value must be present.',
+    dimMap: { engagement: ['Expectancy of Success','Intrinsic Value','Attainment Value','Cost'], capability: ['Task Difficulty'], portability: ['Utility Value','Attainment Value'], opportunity: [] }
+  },
+  {
+    id: 'idt', name: 'Interest Development Theory', author: 'Hidi & Renninger', year: '2006',
+    scores: { engagement: 0.90, capability: 0.30, portability: 0.25, opportunity: 0.50 },
+    constructs: ['Triggered Situational Interest','Maintained Situational Interest','Emerging Individual Interest','Well-Developed Individual Interest'],
+    evidence: 'moderate', effectSize: 'd = 0.35–0.55',
+    insight: 'Interest develops through four phases from triggered to well-developed; each phase requires different environmental support.',
+    dimMap: { engagement: ['Triggered Situational Interest','Maintained Situational Interest','Emerging Individual Interest','Well-Developed Individual Interest'], capability: [], portability: [], opportunity: ['Triggered Situational Interest','Maintained Situational Interest'] }
+  },
+  {
+    id: 'comb', name: 'COM-B Model', author: 'Michie et al.', year: '2011',
+    scores: { engagement: 0.50, capability: 0.60, portability: 0.25, opportunity: 0.95 },
+    constructs: ['Capability (Physical)','Capability (Psychological)','Opportunity (Physical)','Opportunity (Social)','Motivation (Automatic)','Motivation (Reflective)'],
+    evidence: 'strong', effectSize: 'Varies by intervention function',
+    insight: 'Behavior change requires all three components — Capability, Opportunity, AND Motivation. Opportunity is often the missing lever.',
+    dimMap: { engagement: ['Motivation (Automatic)','Motivation (Reflective)'], capability: ['Capability (Physical)','Capability (Psychological)'], portability: [], opportunity: ['Opportunity (Physical)','Opportunity (Social)'] }
+  },
+  {
+    id: 'dreyfus', name: 'Skill Acquisition Model', author: 'Dreyfus & Dreyfus', year: '1980',
+    scores: { engagement: 0.30, capability: 0.95, portability: 0.40, opportunity: 0.25 },
+    constructs: ['Novice','Advanced Beginner','Competent','Proficient','Expert','Context-Free Rules','Situational Recognition','Intuitive Judgment'],
+    evidence: 'moderate', effectSize: 'Qualitative progression model',
+    insight: 'Expertise develops through qualitative shifts in perception — from rule-following to intuitive pattern recognition.',
+    dimMap: { engagement: ['Intuitive Judgment'], capability: ['Novice','Advanced Beginner','Competent','Proficient','Expert'], portability: ['Context-Free Rules','Situational Recognition'], opportunity: [] }
+  },
+  {
+    id: 'bloom', name: "Bloom's Revised Taxonomy", author: 'Anderson & Krathwohl', year: '2001',
+    scores: { engagement: 0.25, capability: 0.90, portability: 0.50, opportunity: 0.15 },
+    constructs: ['Remember','Understand','Apply','Analyze','Evaluate','Create','Factual Knowledge','Conceptual Knowledge','Procedural Knowledge','Metacognitive Knowledge'],
+    evidence: 'strong', effectSize: 'Widely validated framework',
+    insight: 'Learning progresses through cognitive complexity levels; higher-order thinking (analyze, evaluate, create) indicates deeper capability.',
+    dimMap: { engagement: [], capability: ['Remember','Understand','Apply','Analyze','Evaluate','Create'], portability: ['Metacognitive Knowledge','Factual Knowledge'], opportunity: [] }
+  },
+  {
+    id: 'solo', name: 'SOLO Taxonomy', author: 'Biggs & Collis', year: '1982',
+    scores: { engagement: 0.20, capability: 0.85, portability: 0.55, opportunity: 0.10 },
+    constructs: ['Prestructural','Unistructural','Multistructural','Relational','Extended Abstract'],
+    evidence: 'moderate', effectSize: 'Qualitative assessment framework',
+    insight: 'Responses reveal structural complexity of understanding — from disconnected pieces to integrated, transferable knowledge.',
+    dimMap: { engagement: [], capability: ['Prestructural','Unistructural','Multistructural','Relational','Extended Abstract'], portability: ['Extended Abstract','Relational'], opportunity: [] }
+  },
+  {
+    id: 'adaptive', name: 'Adaptive Expertise', author: 'Hatano & Inagaki', year: '1986',
+    scores: { engagement: 0.50, capability: 0.90, portability: 0.45, opportunity: 0.40 },
+    constructs: ['Routine Expertise','Adaptive Expertise','Conceptual Understanding','Procedural Fluency','Flexible Transfer','Innovation'],
+    evidence: 'moderate', effectSize: 'd = 0.40–0.65 for transfer tasks',
+    insight: 'Routine experts are fast but rigid; adaptive experts understand deeply enough to innovate in novel situations.',
+    dimMap: { engagement: ['Innovation'], capability: ['Routine Expertise','Adaptive Expertise','Procedural Fluency','Flexible Transfer'], portability: ['Conceptual Understanding'], opportunity: ['Innovation'] }
+  },
+  {
+    id: 'clt', name: 'Cognitive Load Theory', author: 'Sweller', year: '1988',
+    scores: { engagement: 0.35, capability: 0.80, portability: 0.20, opportunity: 0.55 },
+    constructs: ['Intrinsic Load','Extraneous Load','Germane Load','Schema Acquisition','Automation','Worked Examples','Expertise Reversal'],
+    evidence: 'strong', effectSize: 'd = 0.50–0.80',
+    insight: 'Learning fails when cognitive load exceeds working memory capacity. Instructional design must manage load to enable schema formation.',
+    dimMap: { engagement: [], capability: ['Schema Acquisition','Automation','Germane Load'], portability: [], opportunity: ['Extraneous Load','Worked Examples','Expertise Reversal'] }
+  },
+  {
+    id: 'spaced', name: 'Spaced Retrieval Practice', author: 'Ebbinghaus / Rowland / Cepeda', year: '1885/2014/2006',
+    scores: { engagement: 0.25, capability: 0.85, portability: 0.30, opportunity: 0.60 },
+    constructs: ['Spacing Effect','Testing Effect','Interleaving','Desirable Difficulties','Forgetting Curve','Retrieval Strength','Storage Strength'],
+    evidence: 'strong', effectSize: 'd = 0.50–0.70',
+    insight: 'Memory is strengthened by effortful retrieval at expanding intervals — the harder the retrieval, the stronger the storage.',
+    dimMap: { engagement: [], capability: ['Testing Effect','Spacing Effect','Interleaving','Retrieval Strength','Storage Strength'], portability: [], opportunity: ['Desirable Difficulties','Spacing Effect'] }
+  },
+  {
+    id: 'tacit', name: 'Tacit Knowledge & SECI', author: 'Polanyi / Nonaka & Takeuchi', year: '1966/1995',
+    scores: { engagement: 0.35, capability: 0.55, portability: 0.90, opportunity: 0.50 },
+    constructs: ['Tacit Knowledge','Explicit Knowledge','Socialization','Externalization','Combination','Internalization','Ba (Shared Space)'],
+    evidence: 'moderate', effectSize: 'Qualitative organizational model',
+    insight: 'Much valuable knowledge is tacit — felt but not spoken. The SECI cycle converts between tacit and explicit forms.',
+    dimMap: { engagement: [], capability: ['Internalization'], portability: ['Tacit Knowledge','Explicit Knowledge','Externalization','Socialization','Combination'], opportunity: ['Ba (Shared Space)'] }
+  },
+  {
+    id: 'meta', name: 'Metacognition & SRL', author: 'Flavell / Zimmerman', year: '1979/2015',
+    scores: { engagement: 0.55, capability: 0.70, portability: 0.80, opportunity: 0.35 },
+    constructs: ['Metacognitive Knowledge','Metacognitive Regulation','Forethought','Performance','Self-Reflection','Self-Efficacy','Goal Setting','Self-Monitoring'],
+    evidence: 'strong', effectSize: 'd = 0.55–0.70',
+    insight: 'Knowing what you know (and don\'t know) is the engine of self-regulated learning — it bridges capability and portability.',
+    dimMap: { engagement: ['Self-Efficacy','Goal Setting'], capability: ['Metacognitive Regulation','Performance','Self-Monitoring'], portability: ['Metacognitive Knowledge','Self-Reflection','Forethought'], opportunity: [] }
+  },
+  {
+    id: 'cop', name: 'Communities of Practice', author: 'Wenger', year: '1998',
+    scores: { engagement: 0.65, capability: 0.50, portability: 0.55, opportunity: 0.75 },
+    constructs: ['Legitimate Peripheral Participation','Full Participation','Shared Repertoire','Joint Enterprise','Mutual Engagement','Identity','Boundary Objects','Reification'],
+    evidence: 'moderate', effectSize: 'Qualitative social learning model',
+    insight: 'Learning is fundamentally social — newcomers learn by gradually moving from the periphery to full participation in community practice.',
+    dimMap: { engagement: ['Mutual Engagement','Identity'], capability: ['Shared Repertoire','Joint Enterprise'], portability: ['Boundary Objects','Reification'], opportunity: ['Legitimate Peripheral Participation','Full Participation'] }
+  },
+  {
+    id: 'lo', name: 'Learning Organization', author: 'Senge', year: '1990',
+    scores: { engagement: 0.55, capability: 0.45, portability: 0.50, opportunity: 0.90 },
+    constructs: ['Personal Mastery','Mental Models','Shared Vision','Team Learning','Systems Thinking'],
+    evidence: 'moderate', effectSize: 'Organizational development framework',
+    insight: 'Organizations that learn fastest win — but only when learning is systemic, not individual heroics.',
+    dimMap: { engagement: ['Personal Mastery','Shared Vision'], capability: ['Systems Thinking'], portability: ['Mental Models'], opportunity: ['Team Learning','Systems Thinking','Shared Vision'] }
+  },
+  {
+    id: 'dbl', name: 'Double-Loop Learning', author: 'Argyris', year: '1976',
+    scores: { engagement: 0.40, capability: 0.65, portability: 0.60, opportunity: 0.55 },
+    constructs: ['Single-Loop Learning','Double-Loop Learning','Espoused Theory','Theory-in-Use','Defensive Routines','Model I','Model II'],
+    evidence: 'moderate', effectSize: 'Qualitative organizational model',
+    insight: 'Single-loop learning fixes errors; double-loop learning questions the assumptions that caused them.',
+    dimMap: { engagement: [], capability: ['Single-Loop Learning','Double-Loop Learning'], portability: ['Espoused Theory','Theory-in-Use'], opportunity: ['Defensive Routines','Model II'] }
+  },
+  {
+    id: 'ci', name: 'Collective Intelligence', author: 'Woolley et al.', year: '2010',
+    scores: { engagement: 0.50, capability: 0.55, portability: 0.40, opportunity: 0.80 },
+    constructs: ['Factor C','Social Sensitivity','Conversational Turn-Taking','Cognitive Diversity','Group Composition','Collective Problem Solving'],
+    evidence: 'strong', effectSize: 'r = 0.40–0.50 for Factor C',
+    insight: 'Group intelligence is not the sum of individual IQs — it emerges from social sensitivity, equal participation, and cognitive diversity.',
+    dimMap: { engagement: ['Social Sensitivity'], capability: ['Collective Problem Solving'], portability: ['Conversational Turn-Taking'], opportunity: ['Factor C','Cognitive Diversity','Group Composition'] }
+  },
+  {
+    id: 'ce', name: 'The Collective Edge', author: 'Fisher', year: '2025',
+    scores: { engagement: 0.60, capability: 0.50, portability: 0.55, opportunity: 0.85 },
+    constructs: ['Collective Capability','Network Effects','Knowledge Flows','Learning Velocity','Organizational Learning Debt','Capability Infrastructure'],
+    evidence: 'emerging', effectSize: 'Practitioner framework',
+    insight: 'The gap between individual and collective capability is where most learning value is lost — and found.',
+    dimMap: { engagement: ['Learning Velocity'], capability: ['Collective Capability'], portability: ['Knowledge Flows','Network Effects'], opportunity: ['Capability Infrastructure','Organizational Learning Debt'] }
+  },
+  {
+    id: 'kirk', name: 'Four Levels of Evaluation', author: 'Kirkpatrick', year: '1959',
+    scores: { engagement: 0.40, capability: 0.50, portability: 0.75, opportunity: 0.35 },
+    constructs: ['Reaction','Learning','Behavior','Results','ROI','Leading Indicators','Chain of Evidence'],
+    evidence: 'strong', effectSize: 'Widely adopted evaluation framework',
+    insight: 'Satisfaction ≠ learning ≠ behavior change ≠ results. Each level requires different measurement and different evidence.',
+    dimMap: { engagement: ['Reaction'], capability: ['Learning','Behavior'], portability: ['Results','ROI','Chain of Evidence'], opportunity: ['Leading Indicators'] }
+  },
+  {
+    id: 'belong', name: 'Belonging Interventions', author: 'Walton & Cohen', year: '2011',
+    scores: { engagement: 0.75, capability: 0.30, portability: 0.20, opportunity: 0.70 },
+    constructs: ['Belonging Uncertainty','Social-Belonging Intervention','Wise Feedback','Growth Mindset Messages','Threat Reduction','Identity Safety'],
+    evidence: 'strong', effectSize: 'd = 0.30–0.50 (GPA gains)',
+    insight: 'Brief belonging interventions produce lasting effects because they break recursive cycles of doubt and disengagement.',
+    dimMap: { engagement: ['Belonging Uncertainty','Social-Belonging Intervention','Identity Safety'], capability: [], portability: [], opportunity: ['Wise Feedback','Growth Mindset Messages','Threat Reduction'] }
+  },
+  {
+    id: 'ttm', name: 'Transtheoretical Model', author: 'Prochaska & DiClemente', year: '1983',
+    scores: { engagement: 0.80, capability: 0.25, portability: 0.35, opportunity: 0.50 },
+    constructs: ['Precontemplation','Contemplation','Preparation','Action','Maintenance','Decisional Balance','Self-Efficacy','Processes of Change'],
+    evidence: 'strong', effectSize: 'Validated across 50+ behavior domains',
+    insight: 'People change in stages — pushing action on someone in contemplation backfires. Match the intervention to the stage.',
+    dimMap: { engagement: ['Precontemplation','Contemplation','Preparation','Action','Maintenance'], capability: ['Action'], portability: ['Decisional Balance'], opportunity: ['Processes of Change','Self-Efficacy'] }
+  }
+];
+
+const INTERVENTIONS = [
+  { dim: 'engagement', from: 'Disengaged', to: 'Compliant', strategy: 'Reduce barriers to entry; default enrollment; remove friction from first interaction.', theories: ['COM-B','TTM'], evidence: 'strong' },
+  { dim: 'engagement', from: 'Compliant', to: 'Interested', strategy: 'Trigger situational interest through novelty, relevance, and choice. Use belonging interventions to reduce threat.', theories: ['IDT','Belonging','SDT'], evidence: 'strong' },
+  { dim: 'engagement', from: 'Interested', to: 'Committed', strategy: 'Build autonomy support, connect to personal values, create mastery experiences.', theories: ['SDT','EVT','IDT'], evidence: 'strong' },
+  { dim: 'engagement', from: 'Committed', to: 'Agentic', strategy: 'Provide stretch goals, authentic challenges, community membership. Shift from consumer to producer of knowledge.', theories: ['SDT','CoP','Adaptive'], evidence: 'moderate' },
+  { dim: 'engagement', from: 'Agentic', to: 'Identity-Integrated', strategy: 'Support identity work through mentoring, legitimate participation in professional communities, teaching roles.', theories: ['CoP','SDT','IDT'], evidence: 'moderate' },
+  { dim: 'capability', from: 'No Capability', to: 'Recognition', strategy: 'Exposure to worked examples, advance organizers, clear mental models of the target skill.', theories: ['CLT','Bloom'], evidence: 'strong' },
+  { dim: 'capability', from: 'Recognition', to: 'Unconsolidated', strategy: 'Guided practice with scaffolding, immediate feedback, low-stakes attempts.', theories: ['CLT','Dreyfus','Bloom'], evidence: 'strong' },
+  { dim: 'capability', from: 'Unconsolidated', to: 'Consolidated', strategy: 'Spaced retrieval practice, interleaved practice, progressive removal of scaffolds.', theories: ['Spaced','CLT','Dreyfus'], evidence: 'strong' },
+  { dim: 'capability', from: 'Consolidated', to: 'Fluent', strategy: 'High-volume deliberate practice, automated feedback, varied contexts maintaining core skill.', theories: ['Spaced','Dreyfus','Adaptive'], evidence: 'moderate' },
+  { dim: 'capability', from: 'Fluent', to: 'Adaptive', strategy: 'Novel problem scenarios, cross-domain challenges, conceptual understanding emphasis over procedural.', theories: ['Adaptive','SOLO','Bloom'], evidence: 'moderate' },
+  { dim: 'capability', from: 'Adaptive', to: 'Generative', strategy: 'Research opportunities, teaching roles, innovation challenges, boundary-crossing projects.', theories: ['Adaptive','Double-Loop','CoP'], evidence: 'emerging' },
+  { dim: 'portability', from: 'Invisible', to: 'Tacit', strategy: 'Create reflection opportunities; journaling, retrospectives, structured debriefs.', theories: ['Tacit','Meta'], evidence: 'moderate' },
+  { dim: 'portability', from: 'Tacit', to: 'Articulable', strategy: 'Externalization exercises: teach-backs, explanation tasks, concept mapping, think-alouds.', theories: ['Tacit','Meta','SOLO'], evidence: 'moderate' },
+  { dim: 'portability', from: 'Articulable', to: 'Demonstrated', strategy: 'Portfolio development, performance assessments, authentic demonstrations of capability.', theories: ['Kirkpatrick','Bloom'], evidence: 'strong' },
+  { dim: 'portability', from: 'Demonstrated', to: 'Credentialed', strategy: 'Formal assessment pathways, micro-credentials, certification programs with quality assurance.', theories: ['Kirkpatrick'], evidence: 'strong' },
+  { dim: 'portability', from: 'Credentialed', to: 'Reputational', strategy: 'Visibility opportunities: conference speaking, publications, internal showcases, cross-team projects.', theories: ['CoP','Collective Edge'], evidence: 'moderate' },
+  { dim: 'portability', from: 'Reputational', to: 'Contributory', strategy: 'Teaching and mentoring roles, knowledge base contribution, community leadership.', theories: ['CoP','Tacit','Collective Edge'], evidence: 'moderate' },
+  { dim: 'opportunity', from: 'Absent', to: 'Available', strategy: 'Curate and publish learning resources; make existence known through communication channels.', theories: ['COM-B','LO'], evidence: 'moderate' },
+  { dim: 'opportunity', from: 'Available', to: 'Accessible', strategy: 'Remove access barriers: time, cost, prerequisites, technology. Ensure equity of access.', theories: ['COM-B','Belonging'], evidence: 'strong' },
+  { dim: 'opportunity', from: 'Accessible', to: 'Supported', strategy: 'Allocate dedicated time, provide mentoring, create psychological safety, manager buy-in.', theories: ['COM-B','SDT','LO'], evidence: 'strong' },
+  { dim: 'opportunity', from: 'Supported', to: 'Integrated', strategy: 'Embed learning in workflow: learning moments in daily tasks, on-the-job practice, peer learning.', theories: ['COM-B','CoP','LO'], evidence: 'moderate' },
+  { dim: 'opportunity', from: 'Integrated', to: 'Systemic', strategy: 'Build learning culture: leadership modeling, learning metrics in performance systems, knowledge management infrastructure.', theories: ['LO','Collective Edge','CI','Double-Loop'], evidence: 'emerging' }
+];
+
+
+// Build flat CONSTRUCTS list from THEORIES
+const CONSTRUCTS = [];
+THEORIES.forEach(t => {
+  Object.entries(t.dimMap).forEach(([dim, constructs]) => {
+    constructs.forEach(c => {
+      CONSTRUCTS.push({ construct: c, theory: t.name, theoryId: t.id, dimension: dim });
+    });
+  });
+});
+
+// ============================================
+// UTILITIES
+// ============================================
+const $ = s => document.querySelector(s);
+const $$ = s => [...document.querySelectorAll(s)];
+const dimColor = id => DIMENSIONS.find(d => d.id === id)?.color || '#999';
+
+function buildDropdowns() {
+  const selectors = ['#radar-sel-1','#radar-sel-2','#radar-sel-3','#alluvial-a','#alluvial-b','#compare-a','#compare-b'];
+  selectors.forEach(sel => {
+    const el = $(sel);
+    if (!el) return;
+    THEORIES.forEach(t => {
+      const o = document.createElement('option');
+      o.value = t.id; o.textContent = `${t.name} (${t.author})`;
+      el.appendChild(o);
+    });
+  });
+}
+
+// ============================================
+// APP SHELL: View Router
+// ============================================
+function initRouter() {
+  const tabs = $$('.nav-tab');
+  const views = $$('.view');
+
+  function showView(viewId) {
+    views.forEach(v => v.classList.toggle('active', v.dataset.view === viewId));
+    tabs.forEach(t => t.classList.toggle('active', t.dataset.view === viewId));
+    window.location.hash = viewId;
+  }
+
+  tabs.forEach(t => t.addEventListener('click', () => {
+    showView(t.dataset.view);
+    const navTabs = $('#nav-tabs');
+    if (navTabs.classList.contains('open')) navTabs.classList.remove('open');
+  }));
+
+  // Handle initial hash
+  const hash = window.location.hash.slice(1);
+  if (hash && document.querySelector(`[data-view="${hash}"]`)) showView(hash);
+}
+
+// ============================================
+// APP SHELL: Theme Toggle
+// ============================================
+function initTheme() {
+  const toggle = $('#theme-toggle');
+  const saved = localStorage.getItem('lva-theme');
+  if (saved === 'dark' || (!saved && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+    document.documentElement.setAttribute('data-theme', 'dark');
+    toggle.textContent = '☀';
+  }
+  toggle.addEventListener('click', () => {
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+    document.documentElement.setAttribute('data-theme', isDark ? 'light' : 'dark');
+    toggle.textContent = isDark ? '☽' : '☀';
+    localStorage.setItem('lva-theme', isDark ? 'light' : 'dark');
+  });
+}
+
+// ============================================
+// APP SHELL: Hamburger
+// ============================================
+function initHamburger() {
+  const btn = $('#hamburger');
+  const nav = $('#nav-tabs');
+  btn.addEventListener('click', () => nav.classList.toggle('open'));
+}
+
+// ============================================
+// APP SHELL: Tooltip
+// ============================================
+const tooltip = $('#tooltip');
+function showTooltip(evt, html) {
+  tooltip.innerHTML = html;
+  tooltip.classList.add('visible');
+  const x = Math.min(evt.clientX + 12, window.innerWidth - 300);
+  const y = evt.clientY + 12;
+  tooltip.style.left = x + 'px';
+  tooltip.style.top = y + 'px';
+}
+function hideTooltip() { tooltip.classList.remove('visible'); }
+
+// ============================================
+// CHART HELPERS: Radar
+// ============================================
+function drawRadar(container, datasets, size) {
+  const w = size || 400, h = w;
+  const cx = w / 2, cy = h / 2, r = w * 0.38;
+  const dims = ['engagement', 'capability', 'portability', 'opportunity'];
+  const labels = ['Engagement', 'Capability', 'Portability', 'Opportunity'];
+  const angleSlice = (Math.PI * 2) / dims.length;
+
+  const svg = d3.select(container).html('').append('svg')
+    .attr('viewBox', `0 0 ${w} ${h}`).attr('class', 'chart-svg');
+
+  const g = svg.append('g').attr('transform', `translate(${cx},${cy})`);
+
+  // Grid
+  [0.25, 0.5, 0.75, 1.0].forEach(level => {
+    const points = dims.map((_, i) => {
+      const a = angleSlice * i - Math.PI / 2;
+      return [r * level * Math.cos(a), r * level * Math.sin(a)];
+    });
+    g.append('polygon')
+      .attr('points', points.map(p => p.join(',')).join(' '))
+      .attr('fill', 'none').attr('stroke', 'var(--color-divider)').attr('stroke-width', 1);
+  });
+
+  // Axes
+  dims.forEach((_, i) => {
+    const a = angleSlice * i - Math.PI / 2;
+    g.append('line').attr('x1', 0).attr('y1', 0)
+      .attr('x2', r * Math.cos(a)).attr('y2', r * Math.sin(a))
+      .attr('stroke', 'var(--color-divider)').attr('stroke-width', 1);
+    g.append('text')
+      .attr('x', (r + 18) * Math.cos(a)).attr('y', (r + 18) * Math.sin(a))
+      .attr('text-anchor', 'middle').attr('dominant-baseline', 'middle')
+      .attr('fill', 'var(--color-text-muted)').attr('font-size', '11px').attr('font-family', 'var(--sans)')
+      .text(labels[i]);
+  });
+
+  // Data
+  const colors = ['var(--eng)', 'var(--cap)', 'var(--por)', 'var(--opp)', '#e91e63'];
+  datasets.forEach((ds, di) => {
+    const points = dims.map((d, i) => {
+      const a = angleSlice * i - Math.PI / 2;
+      const val = ds.scores[d] || 0;
+      return [r * val * Math.cos(a), r * val * Math.sin(a)];
+    });
+    g.append('polygon')
+      .attr('points', points.map(p => p.join(',')).join(' '))
+      .attr('fill', colors[di % colors.length]).attr('fill-opacity', 0.12)
+      .attr('stroke', colors[di % colors.length]).attr('stroke-width', 2);
+    points.forEach((p, i) => {
+      g.append('circle').attr('cx', p[0]).attr('cy', p[1]).attr('r', 4)
+        .attr('fill', colors[di % colors.length])
+        .on('mouseover', evt => showTooltip(evt, `<strong>${ds.name}</strong><br>${labels[i]}: ${(ds.scores[dims[i]] * 100).toFixed(0)}%`))
+        .on('mouseout', hideTooltip);
+    });
+  });
+}
+
+function drawMiniRadar(container, scores) {
+  const w = 120, h = 120, cx = 60, cy = 60, r = 42;
+  const dims = ['engagement', 'capability', 'portability', 'opportunity'];
+  const angleSlice = (Math.PI * 2) / dims.length;
+  const svg = d3.select(container).html('').append('svg')
+    .attr('viewBox', `0 0 ${w} ${h}`).attr('class', 'chart-svg');
+  const g = svg.append('g').attr('transform', `translate(${cx},${cy})`);
+
+  // Grid
+  g.append('polygon')
+    .attr('points', dims.map((_, i) => {
+      const a = angleSlice * i - Math.PI / 2;
+      return `${r * Math.cos(a)},${r * Math.sin(a)}`;
+    }).join(' '))
+    .attr('fill', 'none').attr('stroke', 'var(--color-divider)').attr('stroke-width', 0.5);
+
+  // Data
+  const points = dims.map((d, i) => {
+    const a = angleSlice * i - Math.PI / 2;
+    return [r * (scores[d] || 0) * Math.cos(a), r * (scores[d] || 0) * Math.sin(a)];
+  });
+  g.append('polygon')
+    .attr('points', points.map(p => p.join(',')).join(' '))
+    .attr('fill', 'var(--color-primary)').attr('fill-opacity', 0.15)
+    .attr('stroke', 'var(--color-primary)').attr('stroke-width', 1.5);
+  points.forEach(p => {
+    g.append('circle').attr('cx', p[0]).attr('cy', p[1]).attr('r', 2.5)
+      .attr('fill', 'var(--color-primary)');
+  });
+}
+
+
+// ============================================
+// VIEW: OVERVIEW
+// ============================================
+function renderOverview() {
+  // Dimension Cards
+  const cardsEl = $('#dim-cards');
+  cardsEl.innerHTML = DIMENSIONS.map(d => `
+    <div class="dim-card" data-dim="${d.id}" onclick="navigateTo('dimension-explorer')">
+      <div class="dim-name"><span class="dim-dot" style="background:${d.color}"></span>${d.name}</div>
+      <div class="dim-question">${d.question}</div>
+      <div class="dim-levels">${d.levels.length} levels</div>
+    </div>
+  `).join('');
+
+  // Theory Mini Cards
+  const grid = $('#theory-grid');
+  grid.innerHTML = THEORIES.map(t => `
+    <div class="theory-mini" onclick="navigateTo('profiles')">
+      <h4>${t.name}</h4>
+      <div class="theory-meta">${t.author}, ${t.year}</div>
+      <div class="mini-radar" id="mini-${t.id}"></div>
+    </div>
+  `).join('');
+  THEORIES.forEach(t => drawMiniRadar(`#mini-${t.id}`, t.scores));
+}
+
+function navigateTo(viewId) {
+  $$('.view').forEach(v => v.classList.toggle('active', v.dataset.view === viewId));
+  $$('.nav-tab').forEach(t => t.classList.toggle('active', t.dataset.view === viewId));
+  window.location.hash = viewId;
+  window.scrollTo(0, 0);
+}
+
+// ============================================
+// VIEW: DIMENSION EXPLORER
+// ============================================
+function initDimensionExplorer() {
+  // Radar Compare
+  function updateRadarCompare() {
+    const ids = ['#radar-sel-1','#radar-sel-2','#radar-sel-3'].map(s => $(s).value).filter(Boolean);
+    const datasets = ids.map(id => THEORIES.find(t => t.id === id)).filter(Boolean);
+    if (datasets.length) drawRadar('#radar-compare', datasets, 400);
+  }
+  ['#radar-sel-1','#radar-sel-2','#radar-sel-3'].forEach(s => $(s)?.addEventListener('change', updateRadarCompare));
+
+  // Stacked Bars
+  function drawStackedBars(sortBy) {
+    const container = d3.select('#stacked-bars').html('');
+    let sorted = [...THEORIES];
+    if (sortBy === 'name') sorted.sort((a, b) => a.name.localeCompare(b.name));
+    else sorted.sort((a, b) => (b.scores[sortBy] || 0) - (a.scores[sortBy] || 0));
+
+    const barH = 28, gap = 4, margin = { top: 10, right: 20, bottom: 30, left: 180 };
+    const w = 800, h = sorted.length * (barH + gap) + margin.top + margin.bottom;
+    const innerW = w - margin.left - margin.right;
+
+    const svg = container.append('svg').attr('viewBox', `0 0 ${w} ${h}`).attr('class', 'chart-svg');
+    const g = svg.append('g').attr('transform', `translate(${margin.left},${margin.top})`);
+
+    const dims = ['engagement', 'capability', 'portability', 'opportunity'];
+    const colors = { engagement: 'var(--eng)', capability: 'var(--cap)', portability: 'var(--por)', opportunity: 'var(--opp)' };
+    const x = d3.scaleLinear().domain([0, 4]).range([0, innerW]);
+
+    sorted.forEach((t, i) => {
+      const y = i * (barH + gap);
+      g.append('text').attr('x', -8).attr('y', y + barH / 2)
+        .attr('text-anchor', 'end').attr('dominant-baseline', 'middle')
+        .attr('fill', 'var(--color-text)').attr('font-size', '11px').attr('font-family', 'var(--sans)')
+        .text(t.name.length > 25 ? t.name.slice(0, 23) + '…' : t.name);
+
+      let cumX = 0;
+      dims.forEach(d => {
+        const val = t.scores[d] || 0;
+        g.append('rect').attr('x', x(cumX)).attr('y', y)
+          .attr('width', x(val)).attr('height', barH).attr('rx', 3)
+          .attr('fill', colors[d]).attr('opacity', 0.8)
+          .on('mouseover', evt => showTooltip(evt, `<strong>${t.name}</strong><br>${d}: ${(val * 100).toFixed(0)}%`))
+          .on('mouseout', hideTooltip);
+        cumX += val;
+      });
+    });
+
+    // Legend
+    const leg = svg.append('g').attr('transform', `translate(${margin.left}, ${h - 20})`);
+    dims.forEach((d, i) => {
+      leg.append('rect').attr('x', i * 120).attr('y', 0).attr('width', 12).attr('height', 12).attr('rx', 2).attr('fill', colors[d]);
+      leg.append('text').attr('x', i * 120 + 16).attr('y', 10)
+        .attr('fill', 'var(--color-text-muted)').attr('font-size', '10px').attr('font-family', 'var(--sans)')
+        .text(d.charAt(0).toUpperCase() + d.slice(1));
+    });
+  }
+
+  drawStackedBars('name');
+  $$('[data-sort]').forEach(btn => btn.addEventListener('click', () => {
+    $$('[data-sort]').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    drawStackedBars(btn.dataset.sort);
+  }));
+
+  // Alluvial
+  function drawAlluvial() {
+    const aId = $('#alluvial-a').value;
+    const bId = $('#alluvial-b').value;
+    if (!aId || !bId) { d3.select('#alluvial-chart').html('<p style="color:var(--color-text-faint);padding:40px;text-align:center">Select two theories to see shared constructs</p>'); return; }
+    const tA = THEORIES.find(t => t.id === aId);
+    const tB = THEORIES.find(t => t.id === bId);
+
+    const dims = ['engagement', 'capability', 'portability', 'opportunity'];
+    const links = [];
+    dims.forEach(dim => {
+      const consA = tA.dimMap[dim] || [];
+      const consB = tB.dimMap[dim] || [];
+      consA.forEach(c => { if (consB.includes(c)) links.push({ source: tA.name, target: tB.name, construct: c, dim }); });
+    });
+
+    const container = d3.select('#alluvial-chart').html('');
+    if (!links.length) {
+      container.html(`<p style="color:var(--color-text-faint);padding:40px;text-align:center">No shared constructs between these theories</p>`);
+      return;
+    }
+
+    const w = 700, h = 350, pad = 160;
+    const svg = container.append('svg').attr('viewBox', `0 0 ${w} ${h}`).attr('class', 'chart-svg');
+    const bandH = h / (links.length + 1);
+
+    svg.append('text').attr('x', 40).attr('y', 20).attr('fill', 'var(--color-text)').attr('font-size', '13px').attr('font-weight', '600').attr('font-family', 'var(--sans)').text(tA.name);
+    svg.append('text').attr('x', w - 40).attr('y', 20).attr('text-anchor', 'end').attr('fill', 'var(--color-text)').attr('font-size', '13px').attr('font-weight', '600').attr('font-family', 'var(--sans)').text(tB.name);
+
+    const colors = { engagement: 'var(--eng)', capability: 'var(--cap)', portability: 'var(--por)', opportunity: 'var(--opp)' };
+    links.forEach((link, i) => {
+      const y = 40 + (i + 0.5) * bandH;
+      svg.append('path')
+        .attr('d', `M 40,${y} C ${w / 2},${y} ${w / 2},${y} ${w - 40},${y}`)
+        .attr('fill', 'none').attr('stroke', colors[link.dim]).attr('stroke-width', 3).attr('opacity', 0.4);
+      svg.append('text').attr('x', w / 2).attr('y', y - 6).attr('text-anchor', 'middle')
+        .attr('fill', 'var(--color-text-muted)').attr('font-size', '10px').attr('font-family', 'var(--sans)').text(link.construct);
+      svg.append('text').attr('x', w / 2).attr('y', y + 12).attr('text-anchor', 'middle')
+        .attr('fill', colors[link.dim]).attr('font-size', '9px').attr('font-family', 'var(--sans)').text(link.dim);
+    });
+  }
+
+  $('#alluvial-a')?.addEventListener('change', drawAlluvial);
+  $('#alluvial-b')?.addEventListener('change', drawAlluvial);
+  $('#alluvial-swap')?.addEventListener('click', () => {
+    const a = $('#alluvial-a'), b = $('#alluvial-b');
+    const tmp = a.value; a.value = b.value; b.value = tmp;
+    drawAlluvial();
+  });
+}
+
+
+// ============================================
+// VIEW: PROFILES
+// ============================================
+function renderProfiles() {
+  const grid = $('#profile-grid');
+  grid.innerHTML = THEORIES.map(t => {
+    const tags = Object.entries(t.dimMap).flatMap(([dim, cs]) =>
+      cs.slice(0, 3).map(c => `<span class="construct-tag" data-dim="${dim}">${c}</span>`)
+    ).join('');
+    return `
+    <div class="profile-card">
+      <div class="profile-header">
+        <h4>${t.name}</h4>
+        <div class="profile-meta">${t.author}, ${t.year} · <span class="evidence-badge ${t.evidence}">${t.evidence}</span></div>
+      </div>
+      <div class="profile-radar" id="profile-radar-${t.id}"></div>
+      <div class="profile-body">
+        <div class="profile-insight">${t.insight}</div>
+        <div class="profile-evidence">Effect size: ${t.effectSize}</div>
+        <div class="construct-tags">${tags}</div>
+      </div>
+    </div>`;
+  }).join('');
+  THEORIES.forEach(t => drawRadar(`#profile-radar-${t.id}`, [t], 200));
+}
+
+// ============================================
+// VIEW: LEVEL MAP (Sunburst)
+// ============================================
+function renderSunburst() {
+  const container = d3.select('#sunburst-chart').html('');
+  const w = 500, h = 500;
+
+  // Build hierarchy
+  const root = {
+    name: 'LVA', children: DIMENSIONS.map(d => ({
+      name: d.name, dimId: d.id, color: d.color,
+      children: d.levels.map(l => {
+        const constructs = CONSTRUCTS.filter(c => c.dimension === d.id);
+        return {
+          name: l.label, desc: l.desc, dimId: d.id, color: d.color,
+          children: constructs.filter((c, i, arr) =>
+            arr.findIndex(x => x.construct === c.construct) === i
+          ).slice(0, 5).map(c => ({
+            name: c.construct, theory: c.theory, dimId: d.id, color: d.color, value: 1
+          }))
+        };
+      })
+    }))
+  };
+
+  const hierarchy = d3.hierarchy(root).sum(d => d.value || 0).sort((a, b) => b.value - a.value);
+  const partition = d3.partition().size([2 * Math.PI, w / 2]);
+  partition(hierarchy);
+
+  const svg = container.append('svg').attr('viewBox', `0 0 ${w} ${h}`).attr('class', 'chart-svg');
+  const g = svg.append('g').attr('transform', `translate(${w/2},${h/2})`);
+
+  const arc = d3.arc()
+    .startAngle(d => d.x0).endAngle(d => d.x1)
+    .innerRadius(d => d.y0 * 0.7).outerRadius(d => d.y1 * 0.7 - 1);
+
+  const nodes = hierarchy.descendants().filter(d => d.depth > 0);
+
+  g.selectAll('path').data(nodes).join('path')
+    .attr('d', arc)
+    .attr('fill', d => d.data.color || 'var(--color-surface-offset)')
+    .attr('fill-opacity', d => 0.9 - d.depth * 0.15)
+    .attr('stroke', 'var(--color-surface-2)').attr('stroke-width', 1)
+    .style('cursor', 'pointer')
+    .on('mouseover', (evt, d) => {
+      showTooltip(evt, `<strong>${d.data.name}</strong>${d.data.desc ? '<br>' + d.data.desc : ''}${d.data.theory ? '<br><em>' + d.data.theory + '</em>' : ''}`);
+    })
+    .on('mouseout', hideTooltip)
+    .on('click', (evt, d) => {
+      $('#sunburst-title').textContent = d.data.name;
+      const desc = d.data.desc || (d.data.theory ? `From: ${d.data.theory}` : `${d.children?.length || 0} children`);
+      $('#sunburst-detail').textContent = desc;
+      const path = d.ancestors().reverse().map(a => a.data.name);
+      $('#sunburst-breadcrumb').innerHTML = path.map((p, i) =>
+        `<span onclick="$('#sunburst-title').textContent='${p}'">${p}</span>`
+      ).join('');
+    });
+
+  // Center label
+  g.append('text').attr('text-anchor', 'middle').attr('dy', '0.35em')
+    .attr('fill', 'var(--color-text)').attr('font-size', '14px').attr('font-family', 'var(--serif)')
+    .text('LVA');
+}
+
+// ============================================
+// VIEW: EVIDENCE
+// ============================================
+function renderEvidence() {
+  // Evidence by Level
+  const tbody = $('#evidence-tbody');
+  const rows = [];
+  DIMENSIONS.forEach(d => {
+    d.levels.forEach(l => {
+      const supportingTheories = THEORIES.filter(t => (t.scores[d.id] || 0) > 0.4);
+      const avgEffect = supportingTheories.length > 2 ? 'strong' : supportingTheories.length > 0 ? 'moderate' : 'emerging';
+      rows.push(`<tr>
+        <td class="sticky-col">${l.label}</td>
+        <td><span style="color:${d.color};font-weight:600">${d.name}</span></td>
+        <td><span class="evidence-badge ${avgEffect}">${avgEffect}</span></td>
+        <td>${supportingTheories.map(t => t.name.split(' ').slice(0, 2).join(' ')).slice(0, 3).join(', ')}</td>
+        <td style="font-size:0.78rem;color:var(--color-text-faint)">${supportingTheories[0]?.effectSize || '—'}</td>
+      </tr>`);
+    });
+  });
+  tbody.innerHTML = rows.join('');
+
+  // Coverage Heatmap
+  const ctbody = $('#coverage-tbody');
+  ctbody.innerHTML = THEORIES.map(t => {
+    const dims = ['engagement', 'capability', 'portability', 'opportunity'];
+    const cells = dims.map(d => {
+      const val = t.scores[d] || 0;
+      const pct = (val * 100).toFixed(0);
+      const opacity = val * 0.5 + 0.05;
+      return `<td style="background:${dimColor(d)};background:rgba(${hexToRgb(dimColor(d))},${opacity});color:var(--color-text);font-weight:500;text-align:center">${pct}%</td>`;
+    }).join('');
+    return `<tr><td class="sticky-col">${t.name}</td>${cells}</tr>`;
+  }).join('');
+}
+
+function hexToRgb(hex) {
+  // Handle CSS variable fallback
+  const c = hex.replace('#', '');
+  if (c.length !== 6) return '128,128,128';
+  return [parseInt(c.slice(0,2), 16), parseInt(c.slice(2,4), 16), parseInt(c.slice(4,6), 16)].join(',');
+}
+
+// ============================================
+// VIEW: INTERVENTIONS
+// ============================================
+function renderInterventions() {
+  const list = $('#interventions-list');
+  list.innerHTML = INTERVENTIONS.map((int, i) => {
+    const color = dimColor(int.dim);
+    return `
+    <div class="intervention-row" data-dim="${int.dim}">
+      <div class="intervention-header" onclick="this.parentElement.classList.toggle('open')">
+        <span class="transition-label" style="color:${color}">${int.from} → ${int.to}</span>
+        <span style="font-size:0.82rem;color:var(--color-text-muted)">${int.strategy.slice(0, 80)}…</span>
+        <span class="evidence-badge ${int.evidence}">${int.evidence}</span>
+        <span style="font-size:0.75rem;color:var(--color-text-faint);text-transform:capitalize">${int.dim}</span>
+      </div>
+      <div class="intervention-detail">
+        <p><strong>Strategy:</strong> ${int.strategy}</p>
+        <p style="margin-top:8px"><strong>Supporting theories:</strong> ${int.theories.join(', ')}</p>
+      </div>
+    </div>`;
+  }).join('');
+
+  // Filter buttons
+  $$('[data-filter]').forEach(btn => btn.addEventListener('click', () => {
+    $$('[data-filter]').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    const f = btn.dataset.filter;
+    $$('.intervention-row').forEach(row => {
+      row.style.display = (f === 'all' || row.dataset.dim === f) ? '' : 'none';
+    });
+  }));
+}
+
+// ============================================
+// VIEW: COMPARE
+// ============================================
+function initCompare() {
+  function update() {
+    const aId = $('#compare-a').value;
+    const bId = $('#compare-b').value;
+    if (!aId || !bId) return;
+    const tA = THEORIES.find(t => t.id === aId);
+    const tB = THEORIES.find(t => t.id === bId);
+    if (!tA || !tB) return;
+
+    drawRadar('#compare-radar', [tA, tB], 400);
+    $('#compare-th-a').textContent = tA.name;
+    $('#compare-th-b').textContent = tB.name;
+
+    const dims = ['engagement', 'capability', 'portability', 'opportunity'];
+    $('#compare-tbody').innerHTML = dims.map(d => {
+      const vA = (tA.scores[d] * 100).toFixed(0);
+      const vB = (tB.scores[d] * 100).toFixed(0);
+      const diff = (tA.scores[d] - tB.scores[d]) * 100;
+      const diffStr = diff > 0 ? `+${diff.toFixed(0)}` : diff.toFixed(0);
+      const diffColor = diff > 0 ? 'var(--cap)' : diff < 0 ? 'var(--eng)' : 'var(--color-text-faint)';
+      return `<tr>
+        <td style="font-weight:600;color:${dimColor(d)};text-transform:capitalize">${d}</td>
+        <td>${vA}%</td><td>${vB}%</td>
+        <td style="color:${diffColor};font-weight:600">${diffStr}%</td>
+      </tr>`;
+    }).join('');
+
+    // Detail panels
+    $('#compare-details').innerHTML = [tA, tB].map(t => `
+      <div class="compare-panel">
+        <h4 style="font-family:var(--sans);font-size:0.95rem;font-weight:600">${t.name}</h4>
+        <p style="font-size:0.78rem;color:var(--color-text-faint)">${t.author}, ${t.year}</p>
+        <p style="font-size:0.85rem;color:var(--color-text-muted);margin-top:8px;font-style:italic">${t.insight}</p>
+        <div class="construct-tags" style="margin-top:12px">
+          ${t.constructs.slice(0, 8).map(c => `<span class="construct-tag" data-dim="engagement" style="background:var(--color-surface-offset);color:var(--color-text-muted)">${c}</span>`).join('')}
+        </div>
+      </div>
+    `).join('');
+  }
+
+  $('#compare-a')?.addEventListener('change', update);
+  $('#compare-b')?.addEventListener('change', update);
+  $('#compare-swap')?.addEventListener('click', () => {
+    const a = $('#compare-a'), b = $('#compare-b');
+    const tmp = a.value; a.value = b.value; b.value = tmp;
+    update();
+  });
+}
+
+// ============================================
+// VIEW: ABOUT
+// ============================================
+function renderAbout() {
+  // Level tables for each dimension
+  DIMENSIONS.forEach(d => {
+    const tableId = `about-${d.id.slice(0, 3)}-table`;
+    const table = $(`#${tableId}`);
+    if (!table) return;
+    table.innerHTML = `
+      <thead><tr><th>Level</th><th>Label</th><th>Description</th></tr></thead>
+      <tbody>${d.levels.map((l, i) => `
+        <tr><td style="font-weight:600;color:${d.color}">${i}</td><td style="font-weight:600">${l.label}</td><td>${l.desc}</td></tr>
+      `).join('')}</tbody>
+    `;
+  });
+
+  // Construct search table
+  const ctbody = $('#construct-tbody');
+  function renderConstructTable(filter) {
+    const filtered = filter
+      ? CONSTRUCTS.filter(c =>
+          c.construct.toLowerCase().includes(filter) ||
+          c.theory.toLowerCase().includes(filter) ||
+          c.dimension.toLowerCase().includes(filter)
+        )
+      : CONSTRUCTS;
+    ctbody.innerHTML = filtered.map(c => `
+      <tr>
+        <td style="font-weight:500">${c.construct}</td>
+        <td style="font-size:0.82rem;color:var(--color-text-muted)">${c.theory}</td>
+        <td><span class="construct-tag" data-dim="${c.dimension}">${c.dimension}</span></td>
+      </tr>
+    `).join('');
+  }
+  renderConstructTable('');
+  $('#construct-search')?.addEventListener('input', e => renderConstructTable(e.target.value.toLowerCase()));
+}
+
+// ============================================
+// INIT
+// ============================================
+document.addEventListener('DOMContentLoaded', () => {
+  initRouter();
+  initTheme();
+  initHamburger();
+  buildDropdowns();
+  renderOverview();
+  initDimensionExplorer();
+  renderProfiles();
+  renderSunburst();
+  renderEvidence();
+  renderInterventions();
+  initCompare();
+  renderAbout();
+});
+</script>
+</body>
+</html>
