@@ -861,6 +861,10 @@ h1 em, h2 em, h3 em { font-style: italic; color: var(--color-primary); }
     <p class="subtitle" style="margin-top:8px">Explore how theory constructs map onto LVA dimensions and levels</p>
     <div class="sunburst-container">
       <div class="chart-container sunburst-chart" id="sunburst-chart"></div>
+      <div class="sunburst-tree-toggle" style="text-align:center;margin-top:8px">
+        <button class="control-btn" id="toggle-sunburst-view" style="font-size:0.78rem">Switch to Tree View</button>
+      </div>
+      <div id="sunburst-tree-fallback" style="display:none;margin-top:16px"></div>
       <div class="sunburst-sidebar" id="sunburst-sidebar">
         <div class="breadcrumb" id="sunburst-breadcrumb"><span>LVA</span></div>
         <h4 id="sunburst-title">Learning Value Architecture</h4>
@@ -880,10 +884,31 @@ h1 em, h2 em, h3 em { font-style: italic; color: var(--color-primary); }
     <p class="subtitle" style="margin-top:8px">Mapping the strength of research evidence across all 25 LVA levels</p>
   </div>
 
+  <!-- Evidence Strength Radar -->
+  <div class="view-section">
+    <div class="chart-container">
+      <h3>Evidence Strength Radar</h3>
+      <div class="control-row">
+        <select class="control-select" id="evidence-radar-select" aria-label="Select theory for evidence radar">
+          <option value="">Select a theory to see evidence alignment</option>
+        </select>
+      </div>
+      <div id="evidence-radar" style="width:100%;max-width:500px;height:400px;margin:16px auto 0"></div>
+      <div id="evidence-radar-legend" style="text-align:center;font-size:0.78rem;color:var(--color-text-faint);margin-top:8px"></div>
+    </div>
+  </div>
+
   <!-- Master Evidence Heatmap -->
   <div class="view-section">
     <div class="chart-container">
       <h3>Evidence by Level</h3>
+      <div class="control-row" style="margin-bottom:12px">
+        <span style="font-size:0.75rem;color:var(--color-text-faint);text-transform:uppercase;letter-spacing:0.05em;font-weight:600;margin-right:4px">Filter:</span>
+        <button class="control-btn active" data-evidence-filter="all">All</button>
+        <button class="control-btn" data-evidence-filter="strong">Strong</button>
+        <button class="control-btn" data-evidence-filter="moderate">Moderate</button>
+        <button class="control-btn" data-evidence-filter="emerging">Emerging</button>
+      </div>
       <div class="heatmap-wrap">
         <table class="heatmap-table" id="evidence-table">
           <thead><tr>
@@ -943,6 +968,14 @@ h1 em, h2 em, h3 em { font-style: italic; color: var(--color-primary); }
       <button class="control-btn" data-scope="team">Team</button>
       <button class="control-btn" data-scope="organizational">Organizational</button>
     </div>
+    <div class="control-row" style="margin-top:8px">
+      <span style="font-size:0.75rem;color:var(--color-text-faint);text-transform:uppercase;letter-spacing:0.05em;font-weight:600;margin-right:4px">Context:</span>
+      <button class="control-btn active" data-context="all">All</button>
+      <button class="control-btn" data-context="Higher Ed">Higher Ed</button>
+      <button class="control-btn" data-context="Workforce">Workforce</button>
+      <button class="control-btn" data-context="K-12">K-12</button>
+      <button class="control-btn" data-context="EdTech">EdTech</button>
+    </div>
     <div id="interventions-list"></div>
   </div>
 </div>
@@ -982,11 +1015,17 @@ h1 em, h2 em, h3 em { font-style: italic; color: var(--color-primary); }
     <div id="compare-dimension-detail" style="margin-top:24px"></div>
 
     <div class="compare-grid" id="compare-details" style="margin-top:24px"></div>
+
+    <!-- Theory Similarity Matrix -->
+    <div class="chart-container" style="margin-top:32px">
+      <h3>Theory Similarity Matrix</h3>
+      <p style="font-size:0.82rem;color:var(--color-text-muted);margin-bottom:16px">20×20 heatmap showing pairwise similarity based on dimension alignment scores. Darker cells indicate greater overlap.</p>
+      <div style="overflow-x:auto">
+        <div id="similarity-matrix"></div>
+      </div>
+    </div>
   </div>
 </div>
-
-<!-- ============================================
-     VIEW 9: THEORY DETAIL (Deep Dive)
      ============================================ -->
 <div class="view" data-view="theory-detail" id="view-theory-detail" role="tabpanel">
   <div class="view-section">
@@ -1885,6 +1924,10 @@ const $ = s => document.querySelector(s);
 const $$ = s => [...document.querySelectorAll(s)];
 const dimColor = id => DIMENSIONS.find(d => d.id === id)?.color || '#999';
 const prefersReducedMotion = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+function debounce(fn, ms) { let t; return (...a) => { clearTimeout(t); t = setTimeout(() => fn(...a), ms); }; }
+
+// Lazy rendering: track which views have been rendered
+const renderedViews = new Set(['overview']);
 
 function buildDropdowns() {
   const selectors = ['#radar-sel-1','#radar-sel-2','#radar-sel-3','#alluvial-a','#alluvial-b','#compare-a','#compare-b'];
@@ -2146,20 +2189,38 @@ function navigateTo(viewId) {
   });
   if (viewId !== 'theory-detail') {
     window.location.hash = viewId;
-    // Hide theory tab when navigating away
     const theoryTab = $('#nav-theory-detail');
     if (theoryTab && viewId !== 'theory-detail') theoryTab.style.display = 'none';
+  }
+  // Lazy render on first visit
+  if (!renderedViews.has(viewId)) {
+    renderedViews.add(viewId);
+    const lazyMap = {
+      'dimension-explorer': () => initDimensionExplorer(),
+      'profiles': () => renderProfiles(),
+      'level-map': () => renderSunburst(),
+      'evidence': () => renderEvidence(),
+      'interventions': () => renderInterventions(),
+      'compare': () => initCompare(),
+      'about': () => renderAbout()
+    };
+    if (lazyMap[viewId]) lazyMap[viewId]();
   }
   window.scrollTo(0, 0);
 }
 
 function loadComparison(aId, bId) {
+  // Ensure compare view is initialized
+  if (!renderedViews.has('compare')) {
+    renderedViews.add('compare');
+    initCompare();
+  }
   const selA = $('#compare-a');
   const selB = $('#compare-b');
   if (selA) selA.value = aId;
   if (selB) selB.value = bId;
-  // Trigger the change event
   selA?.dispatchEvent(new Event('change'));
+  navigateTo('compare');
 }
 
 // ============================================
@@ -2824,6 +2885,50 @@ function renderSunburst() {
   }
 
   updateSidebar(null);
+
+  // Tree fallback toggle
+  let showingTree = false;
+  const toggleBtn = $('#toggle-sunburst-view');
+  const treeFallback = $('#sunburst-tree-fallback');
+  const sunburstChart = $('#sunburst-chart');
+  if (toggleBtn && treeFallback) {
+    function renderTree() {
+      treeFallback.innerHTML = DIMENSIONS.map(d => `
+        <div class="chart-container" style="margin-bottom:12px;border-top:3px solid ${d.color}">
+          <details>
+            <summary style="cursor:pointer;font-weight:600;color:${d.color};font-size:0.95rem;padding:8px 0">${d.name} <span style="font-size:0.78rem;color:var(--color-text-faint);font-weight:400">(${d.levels.length} levels)</span></summary>
+            <div style="padding-left:16px">
+              ${d.levels.map(l => {
+                const constructs = CONSTRUCTS.filter(c => c.dimension === d.id);
+                const unique = constructs.filter((c, i, a) => a.findIndex(x => x.construct === c.construct) === i).slice(0, 8);
+                return `<details style="margin:8px 0">
+                  <summary style="cursor:pointer;font-weight:500;font-size:0.88rem">${l.label} <span style="font-size:0.75rem;color:var(--color-text-faint)">${l.desc}</span>
+                  ${l.evidenceGrade ? ` <span class="evidence-badge ${l.evidenceGrade}" style="font-size:0.65rem;padding:1px 6px">${l.evidenceGrade}</span>` : ''}</summary>
+                  <div style="padding:8px 0 8px 16px">
+                    ${l.indicator ? `<p style="font-size:0.78rem;color:var(--color-text-faint);font-style:italic;margin-bottom:8px">${l.indicator}</p>` : ''}
+                    ${unique.length ? `<div class="construct-tags">${unique.map(c => `<span class="construct-tag" data-dim="${d.id}" style="font-size:0.72rem">${c.construct} <span style="color:var(--color-text-faint)">(${c.theory})</span></span>`).join('')}</div>` : '<p style="font-size:0.78rem;color:var(--color-text-faint)">No constructs mapped</p>'}
+                  </div>
+                </details>`;
+              }).join('')}
+            </div>
+          </details>
+        </div>
+      `).join('');
+    }
+    toggleBtn.addEventListener('click', () => {
+      showingTree = !showingTree;
+      if (showingTree) {
+        sunburstChart.style.display = 'none';
+        treeFallback.style.display = 'block';
+        toggleBtn.textContent = 'Switch to Sunburst View';
+        renderTree();
+      } else {
+        sunburstChart.style.display = '';
+        treeFallback.style.display = 'none';
+        toggleBtn.textContent = 'Switch to Tree View';
+      }
+    });
+  }
 }
 
 // ============================================
@@ -2832,22 +2937,113 @@ function renderSunburst() {
 function renderEvidence() {
   // Evidence by Level — uses EVIDENCE_TABLE
   const tbody = $('#evidence-tbody');
-  const rows = [];
-  EVIDENCE_TABLE.forEach(e => {
-    const dim = DIMENSIONS.find(d => d.id === e.dimension);
-    const color = dim ? dim.color : 'var(--color-text)';
-    const dimName = dim ? dim.name : e.dimension;
-    rows.push(`<tr>
-      <td class="sticky-col" style="border-left:3px solid ${color};padding-left:16px">${e.levelName}</td>
-      <td><span style="color:${color};font-weight:600">${dimName}</span></td>
-      <td><span class="evidence-badge ${e.evidenceGrade}">${e.evidenceGrade}</span></td>
-      <td style="font-size:0.82rem"><span style="cursor:pointer;color:var(--color-primary)" onclick="navigateToTheory('${THEORIES.find(t => t.name === e.primaryTheory)?.id || ''}')">${e.primaryTheory}</span></td>
-      <td style="font-size:0.78rem;font-weight:600">${e.effectSize}</td>
-      <td style="font-size:0.78rem;color:var(--color-text-faint)">${e.keySource}</td>
-      <td style="font-size:0.78rem;color:var(--color-text-faint)">${e.vulnerability}</td>
-    </tr>`);
-  });
-  tbody.innerHTML = rows.join('');
+  function renderEvidenceRows(filter) {
+    const filtered = filter === 'all' ? EVIDENCE_TABLE : EVIDENCE_TABLE.filter(e => e.evidenceGrade === filter);
+    tbody.innerHTML = filtered.map(e => {
+      const dim = DIMENSIONS.find(d => d.id === e.dimension);
+      const color = dim ? dim.color : 'var(--color-text)';
+      const dimName = dim ? dim.name : e.dimension;
+      return `<tr data-evidence-grade="${e.evidenceGrade}">
+        <td class="sticky-col" style="border-left:3px solid ${color};padding-left:16px">${e.levelName}</td>
+        <td><span style="color:${color};font-weight:600">${dimName}</span></td>
+        <td><span class="evidence-badge ${e.evidenceGrade}">${e.evidenceGrade}</span></td>
+        <td style="font-size:0.82rem"><span style="cursor:pointer;color:var(--color-primary)" onclick="navigateToTheory('${THEORIES.find(t => t.name === e.primaryTheory)?.id || ''}')">${e.primaryTheory}</span></td>
+        <td style="font-size:0.78rem;font-weight:600">${e.effectSize}</td>
+        <td style="font-size:0.78rem;color:var(--color-text-faint)">${e.keySource}</td>
+        <td style="font-size:0.78rem;color:var(--color-text-faint)">${e.vulnerability}</td>
+      </tr>`;
+    }).join('');
+  }
+  renderEvidenceRows('all');
+
+  // Evidence filter buttons
+  $$('[data-evidence-filter]').forEach(btn => btn.addEventListener('click', () => {
+    $$('[data-evidence-filter]').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    renderEvidenceRows(btn.dataset.evidenceFilter);
+  }));
+
+  // Evidence Strength Radar — select a theory and show evidence grades per dimension
+  const radarSel = $('#evidence-radar-select');
+  if (radarSel) {
+    THEORIES.forEach(t => {
+      const opt = document.createElement('option');
+      opt.value = t.id; opt.textContent = `${t.name} (${t.author})`;
+      radarSel.appendChild(opt);
+    });
+    radarSel.addEventListener('change', () => {
+      const t = THEORIES.find(th => th.id === radarSel.value);
+      if (!t) {
+        d3.select('#evidence-radar').html('');
+        $('#evidence-radar-legend').innerHTML = '';
+        return;
+      }
+      // Draw a custom radar overlaying evidence grades per dimension
+      const dims = ['engagement', 'capability', 'portability', 'opportunity'];
+      const labels = ['Engagement', 'Capability', 'Portability', 'Opportunity'];
+      const w = 400, h = 400, cx = w/2, cy = h/2, r = w * 0.35;
+      const angleSlice = (Math.PI * 2) / dims.length;
+      const svg = d3.select('#evidence-radar').html('').append('svg')
+        .attr('viewBox', `0 0 ${w} ${h}`).attr('class', 'chart-svg')
+        .attr('role', 'img').attr('aria-label', `Evidence strength radar for ${t.name}`);
+      const g = svg.append('g').attr('transform', `translate(${cx},${cy})`);
+
+      // Grid
+      [0.25, 0.5, 0.75, 1.0].forEach(level => {
+        const pts = dims.map((_, i) => {
+          const a = angleSlice * i - Math.PI / 2;
+          return [r * level * Math.cos(a), r * level * Math.sin(a)];
+        });
+        g.append('polygon').attr('points', pts.map(p => p.join(',')).join(' '))
+          .attr('fill', 'none').attr('stroke', 'var(--color-divider)').attr('stroke-width', 1);
+      });
+
+      // Axes + labels
+      dims.forEach((d, i) => {
+        const a = angleSlice * i - Math.PI / 2;
+        g.append('line').attr('x1', 0).attr('y1', 0)
+          .attr('x2', r * Math.cos(a)).attr('y2', r * Math.sin(a))
+          .attr('stroke', 'var(--color-divider)');
+        g.append('text').attr('x', (r + 20) * Math.cos(a)).attr('y', (r + 20) * Math.sin(a))
+          .attr('text-anchor', 'middle').attr('dominant-baseline', 'middle')
+          .attr('fill', dimColor(d)).attr('font-size', '11px').attr('font-weight', '600').attr('font-family', 'var(--sans)')
+          .text(labels[i]);
+      });
+
+      // Theory score polygon
+      const pts = dims.map((d, i) => {
+        const val = t.scores[d] || 0;
+        const a = angleSlice * i - Math.PI / 2;
+        return [r * val * Math.cos(a), r * val * Math.sin(a)];
+      });
+      g.append('polygon').attr('points', pts.map(p => p.join(',')).join(' '))
+        .attr('fill', 'var(--color-primary)').attr('fill-opacity', 0.15)
+        .attr('stroke', 'var(--color-primary)').attr('stroke-width', 2);
+
+      // Evidence grade markers at each axis
+      const gradeColors = { strong: '#2e7d32', moderate: '#e65100', emerging: '#7b1fa2' };
+      const gradeValues = { strong: 1.0, moderate: 0.65, emerging: 0.35 };
+      dims.forEach((d, i) => {
+        const evidence = EVIDENCE_TABLE.filter(e => e.dimension === d);
+        // Find the dominant evidence grade for this dimension
+        const grades = evidence.map(e => e.evidenceGrade);
+        const grade = grades.includes('strong') ? 'strong' : grades.includes('moderate') ? 'moderate' : 'emerging';
+        const val = gradeValues[grade];
+        const a = angleSlice * i - Math.PI / 2;
+        const x = r * val * Math.cos(a);
+        const y = r * val * Math.sin(a);
+        g.append('circle').attr('cx', x).attr('cy', y).attr('r', 6)
+          .attr('fill', gradeColors[grade]).attr('stroke', 'var(--color-surface-2)').attr('stroke-width', 2)
+          .on('mouseover', evt => showTooltip(evt, `<strong>${labels[i]}</strong><br>Evidence: ${grade}<br>Score: ${(t.scores[d] * 100).toFixed(0)}%`))
+          .on('mouseout', hideTooltip);
+      });
+
+      $('#evidence-radar-legend').innerHTML = Object.entries(gradeColors).map(([g, c]) =>
+        `<span style="display:inline-flex;align-items:center;gap:4px;margin:0 8px">` +
+        `<span style="width:10px;height:10px;border-radius:50%;background:${c};display:inline-block"></span> ${g}</span>`
+      ).join('');
+    });
+  }
 
   // Coverage Heatmap
   const ctbody = $('#coverage-tbody');
@@ -2901,13 +3097,14 @@ function renderInterventions() {
   }).join('');
 
   // Combined filter function
-  let dimFilter = 'all', scopeFilter = 'all';
+  let dimFilter = 'all', scopeFilter = 'all', contextFilter = 'all';
   function applyInterventionFilters() {
     $$('.intervention-row').forEach(row => {
       const dimMatch = dimFilter === 'all' || row.dataset.dim === dimFilter;
-      const contexts = (row.dataset.contexts || '').toLowerCase();
-      const scopeMatch = scopeFilter === 'all' || contexts.includes(scopeFilter);
-      row.style.display = (dimMatch && scopeMatch) ? '' : 'none';
+      const contexts = (row.dataset.contexts || '');
+      const scopeMatch = scopeFilter === 'all' || contexts.toLowerCase().includes(scopeFilter);
+      const contextMatch = contextFilter === 'all' || contexts.includes(contextFilter);
+      row.style.display = (dimMatch && scopeMatch && contextMatch) ? '' : 'none';
     });
   }
   // Dimension filter buttons
@@ -2922,6 +3119,13 @@ function renderInterventions() {
     $$('[data-scope]').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
     scopeFilter = btn.dataset.scope;
+    applyInterventionFilters();
+  }));
+  // Context filter buttons
+  $$('[data-context]').forEach(btn => btn.addEventListener('click', () => {
+    $$('[data-context]').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    contextFilter = btn.dataset.context;
     applyInterventionFilters();
   }));
 }
@@ -3085,6 +3289,84 @@ function initCompare() {
     const tmp = a.value; a.value = b.value; b.value = tmp;
     update();
   });
+
+  // Theory Similarity Matrix (20×20 heatmap)
+  const matrixEl = $('#similarity-matrix');
+  if (matrixEl) {
+    const dims = ['engagement', 'capability', 'portability', 'opportunity'];
+    // Cosine similarity between score vectors
+    function similarity(a, b) {
+      const va = dims.map(d => a.scores[d] || 0);
+      const vb = dims.map(d => b.scores[d] || 0);
+      const dot = va.reduce((s, v, i) => s + v * vb[i], 0);
+      const magA = Math.sqrt(va.reduce((s, v) => s + v * v, 0));
+      const magB = Math.sqrt(vb.reduce((s, v) => s + v * v, 0));
+      return magA && magB ? dot / (magA * magB) : 0;
+    }
+
+    const sorted = [...THEORIES].sort((a, b) => a.name.localeCompare(b.name));
+    const cellSize = 28, labelW = 140, labelH = 100;
+    const n = sorted.length;
+    const w = labelW + n * cellSize + 50;
+    const h = labelH + n * cellSize + 10;
+
+    const svg = d3.select(matrixEl).append('svg')
+      .attr('viewBox', `0 0 ${w} ${h}`).attr('class', 'chart-svg')
+      .attr('role', 'img').attr('aria-label', 'Theory similarity matrix showing pairwise cosine similarity');
+    const g = svg.append('g').attr('transform', `translate(${labelW},${labelH})`);
+
+    // Color scale: white to dark primary
+    const colorScale = d3.scaleSequential(d3.interpolateOranges).domain([0, 1]);
+
+    // Row labels (left)
+    sorted.forEach((t, i) => {
+      svg.append('text')
+        .attr('x', labelW - 4).attr('y', labelH + i * cellSize + cellSize / 2)
+        .attr('text-anchor', 'end').attr('dominant-baseline', 'middle')
+        .attr('fill', 'var(--color-text)').attr('font-size', '8px').attr('font-family', 'var(--sans)')
+        .text(t.name.length > 20 ? t.name.slice(0, 18) + '…' : t.name);
+    });
+
+    // Column labels (top, rotated)
+    sorted.forEach((t, j) => {
+      svg.append('text')
+        .attr('transform', `translate(${labelW + j * cellSize + cellSize / 2}, ${labelH - 4}) rotate(-55)`)
+        .attr('text-anchor', 'start').attr('dominant-baseline', 'middle')
+        .attr('fill', 'var(--color-text)').attr('font-size', '8px').attr('font-family', 'var(--sans)')
+        .text(t.name.length > 18 ? t.name.slice(0, 16) + '…' : t.name);
+    });
+
+    // Cells
+    sorted.forEach((tA, i) => {
+      sorted.forEach((tB, j) => {
+        const sim = i === j ? 1 : similarity(tA, tB);
+        g.append('rect')
+          .attr('x', j * cellSize).attr('y', i * cellSize)
+          .attr('width', cellSize - 1).attr('height', cellSize - 1)
+          .attr('rx', 2).attr('fill', colorScale(sim))
+          .attr('stroke', i === j ? 'var(--color-primary)' : 'none').attr('stroke-width', i === j ? 1.5 : 0)
+          .style('cursor', 'pointer')
+          .on('mouseover', evt => {
+            showTooltip(evt, `<strong>${tA.name} × ${tB.name}</strong><br>Similarity: ${(sim * 100).toFixed(0)}%`);
+          })
+          .on('mouseout', hideTooltip)
+          .on('click', () => {
+            if (i !== j) loadComparison(tA.id, tB.id);
+          });
+      });
+    });
+
+    // Legend
+    const legendW = 120, legendH = 10;
+    const legend = svg.append('g').attr('transform', `translate(${labelW + n * cellSize + 10}, ${labelH})`);
+    const defs = svg.append('defs');
+    const grad = defs.append('linearGradient').attr('id', 'sim-grad').attr('x1', '0').attr('y1', '0').attr('x2', '0').attr('y2', '1');
+    grad.append('stop').attr('offset', '0%').attr('stop-color', colorScale(1));
+    grad.append('stop').attr('offset', '100%').attr('stop-color', colorScale(0));
+    legend.append('rect').attr('width', legendH).attr('height', legendW).attr('fill', 'url(#sim-grad)').attr('rx', 2);
+    legend.append('text').attr('x', legendH + 4).attr('y', 8).attr('fill', 'var(--color-text-faint)').attr('font-size', '8px').attr('font-family', 'var(--sans)').text('100%');
+    legend.append('text').attr('x', legendH + 4).attr('y', legendW).attr('fill', 'var(--color-text-faint)').attr('font-size', '8px').attr('font-family', 'var(--sans)').text('0%');
+  }
 }
 
 // ============================================
@@ -3128,7 +3410,7 @@ function renderAbout() {
     `).join('');
   }
   renderConstructTable('');
-  $('#construct-search')?.addEventListener('input', e => renderConstructTable(e.target.value.toLowerCase()));
+  $('#construct-search')?.addEventListener('input', debounce(e => renderConstructTable(e.target.value.toLowerCase()), 200));
 }
 
 // ============================================
@@ -3143,13 +3425,9 @@ document.addEventListener('DOMContentLoaded', () => {
   initHamburger();
   buildDropdowns();
   renderOverview();
-  initDimensionExplorer();
-  renderProfiles();
-  renderSunburst();
-  renderEvidence();
-  renderInterventions();
-  initCompare();
-  renderAbout();
+
+  // Lazy-render: only render Overview eagerly; other views render on first visit.
+  // If we're deep-linking to a specific view, it'll be rendered by navigateTo().
 
   // Handle initial hash (including theory deep links)
   const hash = window.location.hash.slice(1);
@@ -3172,14 +3450,6 @@ document.addEventListener('DOMContentLoaded', () => {
       navigateTo(h);
     }
   });
-
-  // Pre-load first suggested comparison
-  setTimeout(() => {
-    if (SUGGESTED_COMPARISONS.length > 0) {
-      const first = SUGGESTED_COMPARISONS[0];
-      loadComparison(first.a, first.b);
-    }
-  }, 100);
 
   // Keyboard navigation
   document.addEventListener('keydown', (e) => {
