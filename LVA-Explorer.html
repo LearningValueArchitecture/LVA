@@ -803,6 +803,21 @@ h1 em, h2 em, h3 em { font-style: italic; color: var(--color-primary); }
       <div id="alluvial-chart" style="width:100%;height:400px"></div>
     </div>
   </div>
+
+  <!-- Compare by Dimension -->
+  <div class="view-section">
+    <div class="chart-container">
+      <h3>Compare by Dimension</h3>
+      <p style="font-size:0.82rem;color:var(--color-text-muted);margin-bottom:16px">Select a dimension to see all theories ranked by their alignment score, with level mapping detail.</p>
+      <div class="control-row">
+        <button class="control-btn active" data-dim-compare="engagement" style="border-color:var(--eng);color:var(--eng)">Engagement</button>
+        <button class="control-btn" data-dim-compare="capability" style="border-color:var(--cap);color:var(--cap)">Capability</button>
+        <button class="control-btn" data-dim-compare="portability" style="border-color:var(--por);color:var(--por)">Portability</button>
+        <button class="control-btn" data-dim-compare="opportunity" style="border-color:var(--opp);color:var(--opp)">Opportunity</button>
+      </div>
+      <div id="dim-compare-chart" style="width:100%;overflow-x:auto"></div>
+    </div>
+  </div>
 </div>
 
 <!-- ============================================
@@ -920,6 +935,13 @@ h1 em, h2 em, h3 em { font-style: italic; color: var(--color-primary); }
       <button class="control-btn" data-filter="capability" style="border-color:var(--cap);color:var(--cap)">Capability</button>
       <button class="control-btn" data-filter="portability" style="border-color:var(--por);color:var(--por)">Portability</button>
       <button class="control-btn" data-filter="opportunity" style="border-color:var(--opp);color:var(--opp)">Opportunity</button>
+    </div>
+    <div class="control-row" style="margin-top:8px">
+      <span style="font-size:0.75rem;color:var(--color-text-faint);text-transform:uppercase;letter-spacing:0.05em;font-weight:600;margin-right:4px">Scope:</span>
+      <button class="control-btn active" data-scope="all">All</button>
+      <button class="control-btn" data-scope="individual">Individual</button>
+      <button class="control-btn" data-scope="team">Team</button>
+      <button class="control-btn" data-scope="organizational">Organizational</button>
     </div>
     <div id="interventions-list"></div>
   </div>
@@ -1862,6 +1884,7 @@ const DIMENSION_RESEARCH = {
 const $ = s => document.querySelector(s);
 const $$ = s => [...document.querySelectorAll(s)];
 const dimColor = id => DIMENSIONS.find(d => d.id === id)?.color || '#999';
+const prefersReducedMotion = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 function buildDropdowns() {
   const selectors = ['#radar-sel-1','#radar-sel-2','#radar-sel-3','#alluvial-a','#alluvial-b','#compare-a','#compare-b'];
@@ -2194,7 +2217,8 @@ function initDimensionExplorer() {
     const w = 800, h = sorted.length * (barH + gap) + margin.top + margin.bottom;
     const innerW = w - margin.left - margin.right;
 
-    const svg = container.append('svg').attr('viewBox', `0 0 ${w} ${h}`).attr('class', 'chart-svg');
+    const svg = container.append('svg').attr('viewBox', `0 0 ${w} ${h}`).attr('class', 'chart-svg')
+      .attr('role', 'img').attr('aria-label', 'Stacked bar chart showing dimension alignment by theory');
     const g = svg.append('g').attr('transform', `translate(${margin.left},${margin.top})`);
 
     const dims = ['engagement', 'capability', 'portability', 'opportunity'];
@@ -2246,37 +2270,115 @@ function initDimensionExplorer() {
     const tB = THEORIES.find(t => t.id === bId);
 
     const dims = ['engagement', 'capability', 'portability', 'opportunity'];
-    const links = [];
+    const colors = { engagement: 'var(--eng)', capability: 'var(--cap)', portability: 'var(--por)', opportunity: 'var(--opp)' };
+
+    // Collect all constructs from both theories, grouped by dimension
+    const leftNodes = [], rightNodes = [], links = [];
     dims.forEach(dim => {
       const consA = tA.dimMap[dim] || [];
       const consB = tB.dimMap[dim] || [];
-      consA.forEach(c => { if (consB.includes(c)) links.push({ source: tA.name, target: tB.name, construct: c, dim }); });
+      consA.forEach(c => {
+        if (!leftNodes.find(n => n.name === c)) leftNodes.push({ name: c, dim });
+      });
+      consB.forEach(c => {
+        if (!rightNodes.find(n => n.name === c)) rightNodes.push({ name: c, dim });
+      });
+      consA.forEach(c => { if (consB.includes(c)) links.push({ construct: c, dim }); });
     });
 
     const container = d3.select('#alluvial-chart').html('');
-    if (!links.length) {
-      container.html(`<p style="color:var(--color-text-faint);padding:40px;text-align:center">No shared constructs between these theories</p>`);
+    if (!leftNodes.length && !rightNodes.length) {
+      container.html(`<p style="color:var(--color-text-faint);padding:40px;text-align:center">No constructs mapped for these theories</p>`);
       return;
     }
 
-    const w = 700, h = 350, pad = 160;
-    const svg = container.append('svg').attr('viewBox', `0 0 ${w} ${h}`).attr('class', 'chart-svg');
-    const bandH = h / (links.length + 1);
+    const w = 760, nodeW = 12, pad = { top: 40, bottom: 20, left: 160, right: 160 };
+    const maxNodes = Math.max(leftNodes.length, rightNodes.length, 1);
+    const nodeH = 20, nodeGap = 4;
+    const h = Math.max(300, pad.top + pad.bottom + maxNodes * (nodeH + nodeGap));
+    const svg = container.append('svg')
+      .attr('viewBox', `0 0 ${w} ${h}`)
+      .attr('class', 'chart-svg')
+      .attr('role', 'img')
+      .attr('aria-label', `Construct flow between ${tA.name} and ${tB.name}`);
 
-    svg.append('text').attr('x', 40).attr('y', 20).attr('fill', 'var(--color-text)').attr('font-size', '13px').attr('font-weight', '600').attr('font-family', 'var(--sans)').text(tA.name);
-    svg.append('text').attr('x', w - 40).attr('y', 20).attr('text-anchor', 'end').attr('fill', 'var(--color-text)').attr('font-size', '13px').attr('font-weight', '600').attr('font-family', 'var(--sans)').text(tB.name);
+    // Column positions
+    const leftX = pad.left;
+    const rightX = w - pad.right;
 
-    const colors = { engagement: 'var(--eng)', capability: 'var(--cap)', portability: 'var(--por)', opportunity: 'var(--opp)' };
-    links.forEach((link, i) => {
-      const y = 40 + (i + 0.5) * bandH;
+    // Position nodes vertically
+    leftNodes.forEach((n, i) => { n.y = pad.top + i * (nodeH + nodeGap); n.x = leftX; });
+    rightNodes.forEach((n, i) => { n.y = pad.top + i * (nodeH + nodeGap); n.x = rightX; });
+
+    // Theory labels
+    svg.append('text').attr('x', leftX + nodeW / 2).attr('y', 24)
+      .attr('text-anchor', 'middle').attr('fill', 'var(--color-text)').attr('font-size', '13px')
+      .attr('font-weight', '600').attr('font-family', 'var(--sans)').text(tA.name);
+    svg.append('text').attr('x', rightX + nodeW / 2).attr('y', 24)
+      .attr('text-anchor', 'middle').attr('fill', 'var(--color-text)').attr('font-size', '13px')
+      .attr('font-weight', '600').attr('font-family', 'var(--sans)').text(tB.name);
+
+    // Draw links (curved bezier paths)
+    links.forEach(link => {
+      const leftNode = leftNodes.find(n => n.name === link.construct);
+      const rightNode = rightNodes.find(n => n.name === link.construct);
+      if (!leftNode || !rightNode) return;
+      const y0 = leftNode.y + nodeH / 2;
+      const y1 = rightNode.y + nodeH / 2;
+      const x0 = leftX + nodeW;
+      const x1 = rightX;
+      const cp = (x1 - x0) * 0.4;
       svg.append('path')
-        .attr('d', `M 40,${y} C ${w / 2},${y} ${w / 2},${y} ${w - 40},${y}`)
-        .attr('fill', 'none').attr('stroke', colors[link.dim]).attr('stroke-width', 3).attr('opacity', 0.4);
-      svg.append('text').attr('x', w / 2).attr('y', y - 6).attr('text-anchor', 'middle')
-        .attr('fill', 'var(--color-text-muted)').attr('font-size', '10px').attr('font-family', 'var(--sans)').text(link.construct);
-      svg.append('text').attr('x', w / 2).attr('y', y + 12).attr('text-anchor', 'middle')
-        .attr('fill', colors[link.dim]).attr('font-size', '9px').attr('font-family', 'var(--sans)').text(link.dim);
+        .attr('d', `M${x0},${y0} C${x0 + cp},${y0} ${x1 - cp},${y1} ${x1},${y1}`)
+        .attr('fill', 'none').attr('stroke', colors[link.dim])
+        .attr('stroke-width', Math.max(2, nodeH * 0.6))
+        .attr('stroke-opacity', 0.25)
+        .on('mouseover', function(evt) {
+          d3.select(this).attr('stroke-opacity', 0.6);
+          showTooltip(evt, `<strong>${link.construct}</strong><br>Shared via <em>${link.dim}</em> dimension`);
+        })
+        .on('mouseout', function() {
+          d3.select(this).attr('stroke-opacity', 0.25);
+          hideTooltip();
+        });
     });
+
+    // Draw left nodes
+    leftNodes.forEach(n => {
+      const isShared = links.some(l => l.construct === n.name);
+      svg.append('rect').attr('x', n.x).attr('y', n.y).attr('width', nodeW).attr('height', nodeH)
+        .attr('rx', 3).attr('fill', colors[n.dim]).attr('opacity', isShared ? 0.9 : 0.35);
+      svg.append('text').attr('x', n.x - 6).attr('y', n.y + nodeH / 2)
+        .attr('text-anchor', 'end').attr('dominant-baseline', 'middle')
+        .attr('fill', isShared ? 'var(--color-text)' : 'var(--color-text-faint)')
+        .attr('font-size', '10px').attr('font-family', 'var(--sans)')
+        .attr('font-weight', isShared ? '500' : '400')
+        .text(n.name.length > 22 ? n.name.slice(0, 20) + '…' : n.name);
+    });
+
+    // Draw right nodes
+    rightNodes.forEach(n => {
+      const isShared = links.some(l => l.construct === n.name);
+      svg.append('rect').attr('x', n.x).attr('y', n.y).attr('width', nodeW).attr('height', nodeH)
+        .attr('rx', 3).attr('fill', colors[n.dim]).attr('opacity', isShared ? 0.9 : 0.35);
+      svg.append('text').attr('x', n.x + nodeW + 6).attr('y', n.y + nodeH / 2)
+        .attr('dominant-baseline', 'middle')
+        .attr('fill', isShared ? 'var(--color-text)' : 'var(--color-text-faint)')
+        .attr('font-size', '10px').attr('font-family', 'var(--sans)')
+        .attr('font-weight', isShared ? '500' : '400')
+        .text(n.name.length > 22 ? n.name.slice(0, 20) + '…' : n.name);
+    });
+
+    // Summary
+    if (links.length) {
+      svg.append('text').attr('x', w / 2).attr('y', h - 6).attr('text-anchor', 'middle')
+        .attr('fill', 'var(--color-text-faint)').attr('font-size', '10px').attr('font-family', 'var(--sans)')
+        .text(`${links.length} shared construct${links.length !== 1 ? 's' : ''} across ${[...new Set(links.map(l => l.dim))].length} dimension${[...new Set(links.map(l => l.dim))].length !== 1 ? 's' : ''}`);
+    } else {
+      svg.append('text').attr('x', w / 2).attr('y', h / 2).attr('text-anchor', 'middle')
+        .attr('fill', 'var(--color-text-faint)').attr('font-size', '12px').attr('font-family', 'var(--sans)')
+        .text('No shared constructs between these theories');
+    }
   }
 
   $('#alluvial-a')?.addEventListener('change', drawAlluvial);
@@ -2286,6 +2388,68 @@ function initDimensionExplorer() {
     const tmp = a.value; a.value = b.value; b.value = tmp;
     drawAlluvial();
   });
+
+  // Compare by Dimension
+  function drawDimCompare(dimId) {
+    const container = d3.select('#dim-compare-chart').html('');
+    const dim = DIMENSIONS.find(d => d.id === dimId);
+    if (!dim) return;
+    const sorted = [...THEORIES].sort((a, b) => (b.scores[dimId] || 0) - (a.scores[dimId] || 0));
+    const barH = 36, gap = 4, margin = { top: 10, right: 60, bottom: 20, left: 200 };
+    const w = 800, h = sorted.length * (barH + gap) + margin.top + margin.bottom;
+    const innerW = w - margin.left - margin.right;
+    const svg = container.append('svg').attr('viewBox', `0 0 ${w} ${h}`).attr('class', 'chart-svg')
+      .attr('role', 'img').attr('aria-label', `Theories ranked by ${dim.name} alignment`);
+    const g = svg.append('g').attr('transform', `translate(${margin.left},${margin.top})`);
+    const x = d3.scaleLinear().domain([0, 1]).range([0, innerW]);
+
+    sorted.forEach((t, i) => {
+      const y = i * (barH + gap);
+      const val = t.scores[dimId] || 0;
+      const constructs = (t.dimMap[dimId] || []).join(', ');
+      // Theory name
+      g.append('text').attr('x', -8).attr('y', y + barH / 2)
+        .attr('text-anchor', 'end').attr('dominant-baseline', 'middle')
+        .attr('fill', 'var(--color-text)').attr('font-size', '11px').attr('font-family', 'var(--sans)')
+        .attr('font-weight', '500').style('cursor', 'pointer')
+        .text(t.name.length > 28 ? t.name.slice(0, 26) + '…' : t.name)
+        .on('click', () => navigateToTheory(t.id));
+      // Background track
+      g.append('rect').attr('x', 0).attr('y', y).attr('width', innerW).attr('height', barH)
+        .attr('rx', 4).attr('fill', 'var(--color-surface-offset)').attr('opacity', 0.5);
+      // Fill bar
+      g.append('rect').attr('x', 0).attr('y', y).attr('width', x(val)).attr('height', barH)
+        .attr('rx', 4).attr('fill', dim.color).attr('opacity', 0.75)
+        .on('mouseover', evt => showTooltip(evt, `<strong>${t.name}</strong><br>${dim.name}: ${(val * 100).toFixed(0)}%<br><em>${constructs || 'No constructs mapped'}</em>`))
+        .on('mouseout', hideTooltip);
+      // Score label
+      g.append('text').attr('x', x(val) + 6).attr('y', y + barH / 2)
+        .attr('dominant-baseline', 'middle')
+        .attr('fill', 'var(--color-text)').attr('font-size', '11px').attr('font-weight', '600').attr('font-family', 'var(--sans)')
+        .text(`${(val * 100).toFixed(0)}%`);
+      // Construct chips inside bar
+      if (val > 0.3 && constructs) {
+        g.append('text').attr('x', 8).attr('y', y + barH / 2)
+          .attr('dominant-baseline', 'middle')
+          .attr('fill', 'var(--color-surface-2)').attr('font-size', '9px').attr('font-family', 'var(--sans)')
+          .attr('opacity', 0.9)
+          .text(constructs.length > 50 ? constructs.slice(0, 48) + '…' : constructs);
+      }
+    });
+
+    // Dimension levels reference
+    const refY = h - 4;
+    svg.append('text').attr('x', margin.left).attr('y', refY)
+      .attr('fill', 'var(--color-text-faint)').attr('font-size', '9px').attr('font-family', 'var(--sans)')
+      .text(`${dim.name} levels: ${dim.levels.map(l => l.label).join(' → ')}`);
+  }
+
+  drawDimCompare('engagement');
+  $$('[data-dim-compare]').forEach(btn => btn.addEventListener('click', () => {
+    $$('[data-dim-compare]').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    drawDimCompare(btn.dataset.dimCompare);
+  }));
 }
 
 
@@ -2494,64 +2658,172 @@ function renderTheoryDetail(theoryId) {
 // ============================================
 function renderSunburst() {
   const container = d3.select('#sunburst-chart').html('');
-  const w = 500, h = 500;
+  const w = 540, h = 540, radius = w / 2;
 
-  // Build hierarchy
+  // Build hierarchy: LVA → Dimensions → Levels → Constructs
   const root = {
     name: 'LVA', children: DIMENSIONS.map(d => ({
-      name: d.name, dimId: d.id, color: d.color,
+      name: d.name, dimId: d.id, color: d.color, desc: d.question,
       children: d.levels.map(l => {
         const constructs = CONSTRUCTS.filter(c => c.dimension === d.id);
+        const uniqueConstructs = constructs.filter((c, i, arr) =>
+          arr.findIndex(x => x.construct === c.construct) === i
+        ).slice(0, 5);
         return {
           name: l.label, desc: l.desc, dimId: d.id, color: d.color,
-          children: constructs.filter((c, i, arr) =>
-            arr.findIndex(x => x.construct === c.construct) === i
-          ).slice(0, 5).map(c => ({
+          indicator: l.indicator, evidenceGrade: l.evidenceGrade,
+          children: uniqueConstructs.length > 0 ? uniqueConstructs.map(c => ({
             name: c.construct, theory: c.theory, dimId: d.id, color: d.color, value: 1
-          }))
+          })) : [{ name: l.label, dimId: d.id, color: d.color, value: 1, isPlaceholder: true }]
         };
       })
     }))
   };
 
   const hierarchy = d3.hierarchy(root).sum(d => d.value || 0).sort((a, b) => b.value - a.value);
-  const partition = d3.partition().size([2 * Math.PI, w / 2]);
-  partition(hierarchy);
+  const partitionLayout = d3.partition().size([2 * Math.PI, radius]);
+  partitionLayout(hierarchy);
 
-  const svg = container.append('svg').attr('viewBox', `0 0 ${w} ${h}`).attr('class', 'chart-svg');
+  const svg = container.append('svg')
+    .attr('viewBox', `0 0 ${w} ${h}`)
+    .attr('class', 'chart-svg')
+    .attr('role', 'img')
+    .attr('aria-label', 'Sunburst chart showing LVA dimensions, levels, and constructs');
   const g = svg.append('g').attr('transform', `translate(${w/2},${h/2})`);
+
+  // Current zoom root
+  let currentRoot = hierarchy;
 
   const arc = d3.arc()
     .startAngle(d => d.x0).endAngle(d => d.x1)
-    .innerRadius(d => d.y0 * 0.7).outerRadius(d => d.y1 * 0.7 - 1);
+    .padAngle(d => Math.min((d.x1 - d.x0) / 2, 0.005))
+    .padRadius(radius / 2)
+    .innerRadius(d => d.y0).outerRadius(d => Math.max(d.y0, d.y1 - 1));
 
   const nodes = hierarchy.descendants().filter(d => d.depth > 0);
 
-  g.selectAll('path').data(nodes).join('path')
+  const paths = g.selectAll('path').data(nodes).join('path')
     .attr('d', arc)
-    .attr('fill', d => d.data.color || 'var(--color-surface-offset)')
-    .attr('fill-opacity', d => 0.9 - d.depth * 0.15)
-    .attr('stroke', 'var(--color-surface-2)').attr('stroke-width', 1)
-    .style('cursor', 'pointer')
-    .on('mouseover', (evt, d) => {
-      showTooltip(evt, `<strong>${d.data.name}</strong>${d.data.desc ? '<br>' + d.data.desc : ''}${d.data.theory ? '<br><em>' + d.data.theory + '</em>' : ''}`);
+    .attr('fill', d => {
+      if (d.data.isPlaceholder) return 'var(--color-surface-offset)';
+      return d.data.color || 'var(--color-surface-offset)';
     })
-    .on('mouseout', hideTooltip)
-    .on('click', (evt, d) => {
-      $('#sunburst-title').textContent = d.data.name;
-      const desc = d.data.desc || (d.data.theory ? `From: ${d.data.theory}` : `${d.children?.length || 0} children`);
-      $('#sunburst-detail').textContent = desc;
-      const path = d.ancestors().reverse().map(a => a.data.name);
-      const bcEl = document.getElementById('sunburst-breadcrumb');
-      bcEl.innerHTML = path.map(p =>
-        `<span>${p}</span>`
-      ).join('');
-    });
+    .attr('fill-opacity', d => d.data.isPlaceholder ? 0.15 : 0.9 - d.depth * 0.2)
+    .attr('stroke', 'var(--color-surface-2)').attr('stroke-width', 1.5)
+    .style('cursor', 'pointer')
+    .on('mouseover', function(evt, d) {
+      if (d.data.isPlaceholder) return;
+      d3.select(this).attr('fill-opacity', 1);
+      const parts = [`<strong>${d.data.name}</strong>`];
+      if (d.data.desc) parts.push(d.data.desc);
+      if (d.data.indicator) parts.push(`<em style="color:var(--color-text-faint)">${d.data.indicator}</em>`);
+      if (d.data.evidenceGrade) parts.push(`Evidence: <span class="evidence-badge ${d.data.evidenceGrade}" style="display:inline;padding:1px 6px;font-size:0.7rem">${d.data.evidenceGrade}</span>`);
+      if (d.data.theory) parts.push(`Theory: <em>${d.data.theory}</em>`);
+      showTooltip(evt, parts.join('<br>'));
+    })
+    .on('mouseout', function(evt, d) {
+      d3.select(this).attr('fill-opacity', d.data.isPlaceholder ? 0.15 : 0.9 - d.depth * 0.2);
+      hideTooltip();
+    })
+    .on('click', clicked);
+
+  // Arc labels for dimension ring (depth 1)
+  g.selectAll('.arc-label').data(nodes.filter(d => d.depth === 1)).join('text')
+    .attr('class', 'arc-label')
+    .attr('transform', d => {
+      const angle = (d.x0 + d.x1) / 2;
+      const r = (d.y0 + d.y1) / 2;
+      const x = Math.sin(angle) * r;
+      const y = -Math.cos(angle) * r;
+      const rotate = angle * 180 / Math.PI - 90 + (angle > Math.PI ? 180 : 0);
+      return `translate(${x},${y}) rotate(${rotate})`;
+    })
+    .attr('text-anchor', 'middle').attr('dominant-baseline', 'middle')
+    .attr('fill', 'var(--color-surface-2)').attr('font-size', '11px')
+    .attr('font-weight', '600').attr('font-family', 'var(--sans)')
+    .attr('pointer-events', 'none')
+    .text(d => d.data.name);
 
   // Center label
-  g.append('text').attr('text-anchor', 'middle').attr('dy', '0.35em')
-    .attr('fill', 'var(--color-text)').attr('font-size', '14px').attr('font-family', 'var(--serif)')
-    .text('LVA');
+  const centerText = g.append('text').attr('text-anchor', 'middle').attr('dy', '0.35em')
+    .attr('fill', 'var(--color-text)').attr('font-size', '15px').attr('font-family', 'var(--serif)')
+    .style('cursor', 'pointer').text('LVA')
+    .on('click', () => {
+      if (currentRoot !== hierarchy) clicked(null, currentRoot.parent || hierarchy);
+    });
+
+  function updateSidebar(d) {
+    const node = d || hierarchy;
+    $('#sunburst-title').textContent = node.data.name;
+    const desc = node.data.desc || (node.data.theory ? `From: ${node.data.theory}` :
+      node.children ? `${node.children.length} ${node.depth === 0 ? 'dimensions' : node.depth === 1 ? 'levels' : 'constructs'}` : '');
+    $('#sunburst-detail').innerHTML = desc +
+      (node.data.indicator ? `<br><span style="font-size:0.78rem;color:var(--color-text-faint);font-style:italic;margin-top:4px;display:inline-block">${node.data.indicator}</span>` : '') +
+      (node.data.evidenceGrade ? `<br><span class="evidence-badge ${node.data.evidenceGrade}" style="margin-top:6px;display:inline-block">${node.data.evidenceGrade}</span>` : '') +
+      (node.children && !node.data.isPlaceholder ? `<div style="margin-top:16px;font-size:0.82rem;color:var(--color-text-muted)"><strong>Contains:</strong> ${node.children.filter(c => !c.data.isPlaceholder).map(c => c.data.name).join(', ')}</div>` : '');
+
+    const path = node.ancestors().reverse().map(a => a.data.name);
+    const bcEl = document.getElementById('sunburst-breadcrumb');
+    bcEl.innerHTML = path.map((p, i) => `<span tabindex="0" data-bc-depth="${i}">${p}</span>`).join('');
+    // Breadcrumb click navigation
+    bcEl.querySelectorAll('[data-bc-depth]').forEach(span => {
+      span.addEventListener('click', () => {
+        const depth = parseInt(span.dataset.bcDepth);
+        let target = hierarchy;
+        const ancestors = node.ancestors().reverse();
+        if (depth < ancestors.length) target = ancestors[depth];
+        clicked(null, target);
+      });
+    });
+  }
+
+  function clicked(event, d) {
+    if (!d || d.data.isPlaceholder) return;
+    currentRoot = d;
+    updateSidebar(d);
+
+    // Zoom: animate arcs (respect reduced motion)
+    const dur = prefersReducedMotion() ? 0 : 500;
+    const t = d3.transition().duration(dur).ease(d3.easeCubicOut);
+    const newX = d3.scaleLinear().domain([d.x0, d.x1]).range([0, 2 * Math.PI]);
+    const newY = d3.scaleLinear().domain([d.y0, radius]).range([d.depth ? 60 : 0, radius]);
+
+    paths.transition(t)
+      .tween('data', node => {
+        const ix0 = d3.interpolate(node._current?.x0 ?? node.x0, Math.max(0, Math.min(2 * Math.PI, newX(node.x0))));
+        const ix1 = d3.interpolate(node._current?.x1 ?? node.x1, Math.max(0, Math.min(2 * Math.PI, newX(node.x1))));
+        const iy0 = d3.interpolate(node._current?.y0 ?? node.y0, Math.max(0, newY(node.y0)));
+        const iy1 = d3.interpolate(node._current?.y1 ?? node.y1, Math.max(0, newY(node.y1)));
+        return t => {
+          node._current = { x0: ix0(t), x1: ix1(t), y0: iy0(t), y1: iy1(t) };
+        };
+      })
+      .attrTween('d', node => () => {
+        if (!node._current) return '';
+        return d3.arc()
+          .startAngle(node._current.x0).endAngle(node._current.x1)
+          .padAngle(Math.min((node._current.x1 - node._current.x0) / 2, 0.005))
+          .padRadius(radius / 2)
+          .innerRadius(node._current.y0)
+          .outerRadius(Math.max(node._current.y0, node._current.y1 - 1))();
+      })
+      .attr('fill-opacity', node => {
+        if (node.data.isPlaceholder) return 0.1;
+        // Fade out nodes not under the current root
+        return node.ancestors().includes(d) || d.ancestors().includes(node) ? 0.9 - (node.depth - d.depth) * 0.15 : 0;
+      })
+      .attr('pointer-events', node =>
+        node.ancestors().includes(d) || d.ancestors().includes(node) ? 'auto' : 'none'
+      );
+
+    // Hide arc labels during zoom
+    g.selectAll('.arc-label').transition(t).attr('opacity', d.depth > 0 ? 0 : 1);
+
+    // Update center text
+    centerText.text(d.depth > 0 ? '← Back' : 'LVA');
+  }
+
+  updateSidebar(null);
 }
 
 // ============================================
@@ -2628,14 +2900,29 @@ function renderInterventions() {
     </div>`;
   }).join('');
 
-  // Filter buttons
+  // Combined filter function
+  let dimFilter = 'all', scopeFilter = 'all';
+  function applyInterventionFilters() {
+    $$('.intervention-row').forEach(row => {
+      const dimMatch = dimFilter === 'all' || row.dataset.dim === dimFilter;
+      const contexts = (row.dataset.contexts || '').toLowerCase();
+      const scopeMatch = scopeFilter === 'all' || contexts.includes(scopeFilter);
+      row.style.display = (dimMatch && scopeMatch) ? '' : 'none';
+    });
+  }
+  // Dimension filter buttons
   $$('[data-filter]').forEach(btn => btn.addEventListener('click', () => {
     $$('[data-filter]').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
-    const f = btn.dataset.filter;
-    $$('.intervention-row').forEach(row => {
-      row.style.display = (f === 'all' || row.dataset.dim === f) ? '' : 'none';
-    });
+    dimFilter = btn.dataset.filter;
+    applyInterventionFilters();
+  }));
+  // Scope filter buttons
+  $$('[data-scope]').forEach(btn => btn.addEventListener('click', () => {
+    $$('[data-scope]').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    scopeFilter = btn.dataset.scope;
+    applyInterventionFilters();
   }));
 }
 
