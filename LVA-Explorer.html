@@ -409,6 +409,101 @@ h1 em, h2 em, h3 em { font-style: italic; color: var(--color-primary); }
 }
 
 /* ============================================
+   NARRATIVE / RESEARCH TEXT
+   ============================================ */
+.narrative-section { margin-bottom: 24px; }
+.narrative-section h4 {
+  font-family: var(--sans); font-size: 0.88rem; font-weight: 600;
+  margin-bottom: 8px; display: flex; align-items: center; gap: 8px;
+}
+.narrative-section h4 .dot {
+  width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0;
+}
+.narrative-section p, .narrative-section li {
+  font-size: 0.85rem; color: var(--color-text-muted); line-height: 1.7;
+  max-width: 80ch; text-wrap: pretty;
+}
+.narrative-section p + p { margin-top: 10px; }
+.narrative-section ul { list-style: none; padding: 0; margin-top: 8px; }
+.narrative-section li {
+  padding: 6px 0 6px 18px; position: relative;
+}
+.narrative-section li::before {
+  content: ''; position: absolute; left: 0; top: 14px;
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--color-primary); opacity: 0.5;
+}
+.narrative-callout {
+  padding: 16px 20px; border-radius: var(--radius-md);
+  background: var(--color-surface-offset); margin-top: 12px;
+  border-left: 3px solid var(--color-primary);
+}
+.narrative-callout p { font-size: 0.82rem; color: var(--color-text-muted); }
+.narrative-callout strong { color: var(--color-text); }
+.dim-detail-card {
+  background: var(--color-surface-2); border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg); padding: 20px; margin-bottom: 16px;
+  border-top: 3px solid var(--color-primary);
+}
+.dim-detail-card h4 { font-family: var(--sans); font-size: 0.95rem; font-weight: 600; margin-bottom: 4px; }
+.dim-detail-card .dim-meta { font-size: 0.78rem; color: var(--color-text-faint); margin-bottom: 10px; }
+.dim-detail-card .bar-row { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+.dim-detail-card .bar-label { font-size: 0.78rem; font-weight: 600; width: 80px; flex-shrink: 0; }
+.dim-detail-card .bar-track {
+  flex: 1; height: 8px; background: var(--color-surface-offset);
+  border-radius: 4px; overflow: hidden;
+}
+.dim-detail-card .bar-fill {
+  height: 100%; border-radius: 4px;
+  transition: width 400ms var(--ease);
+}
+.dim-detail-card .research-text {
+  font-size: 0.82rem; color: var(--color-text-muted); line-height: 1.7;
+  margin-top: 8px; padding-top: 12px; border-top: 1px solid var(--color-divider);
+}
+.dim-detail-card .evidence-note {
+  font-size: 0.75rem; color: var(--color-text-faint); margin-top: 8px;
+  font-style: italic;
+}
+.theory-research-panel {
+  background: var(--color-surface-2); border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg); padding: 24px;
+}
+.theory-research-panel h4 {
+  font-family: var(--sans); font-size: 1rem; font-weight: 600; margin-bottom: 6px;
+}
+.theory-research-panel .meta {
+  font-size: 0.78rem; color: var(--color-text-faint); margin-bottom: 16px;
+}
+.theory-research-panel .summary {
+  font-size: 0.88rem; line-height: 1.7; color: var(--color-text-muted);
+  margin-bottom: 16px; text-wrap: pretty;
+}
+.theory-research-panel .findings-list { list-style: none; padding: 0; }
+.theory-research-panel .findings-list li {
+  font-size: 0.82rem; color: var(--color-text-muted); line-height: 1.6;
+  padding: 8px 0 8px 20px; border-bottom: 1px solid var(--color-divider);
+  position: relative;
+}
+.theory-research-panel .findings-list li::before {
+  content: '→'; position: absolute; left: 0; color: var(--color-primary); font-weight: 600;
+}
+.theory-research-panel .findings-list li:last-child { border-bottom: none; }
+.theory-research-panel .limitations, .theory-research-panel .implications {
+  font-size: 0.82rem; line-height: 1.6; margin-top: 12px;
+  padding: 12px 16px; border-radius: var(--radius-sm);
+}
+.theory-research-panel .limitations {
+  background: rgba(198,40,40,0.05); color: var(--color-text-muted);
+}
+.theory-research-panel .implications {
+  background: var(--color-primary-highlight); color: var(--color-text-muted);
+}
+.theory-research-panel .limitations strong, .theory-research-panel .implications strong {
+  color: var(--color-text); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em;
+}
+
+/* ============================================
    ABOUT VIEW
    ============================================ */
 .about-content { max-width: 800px; }
@@ -600,6 +695,18 @@ h1 em, h2 em, h3 em { font-style: italic; color: var(--color-primary); }
     <p class="subtitle" style="margin-top:8px">Compare how theories emphasize different LVA dimensions</p>
   </div>
 
+  <!-- Dimension Deep Dive -->
+  <div class="view-section">
+    <div class="control-row">
+      <button class="control-btn active" data-dim-focus="all">All Dimensions</button>
+      <button class="control-btn" data-dim-focus="engagement" style="border-color:var(--eng);color:var(--eng)">Engagement</button>
+      <button class="control-btn" data-dim-focus="capability" style="border-color:var(--cap);color:var(--cap)">Capability</button>
+      <button class="control-btn" data-dim-focus="portability" style="border-color:var(--por);color:var(--por)">Portability</button>
+      <button class="control-btn" data-dim-focus="opportunity" style="border-color:var(--opp);color:var(--opp)">Opportunity</button>
+    </div>
+    <div id="dimension-deep-dive"></div>
+  </div>
+
   <!-- Radar Comparison -->
   <div class="view-section">
     <div class="chart-container">
@@ -755,6 +862,13 @@ h1 em, h2 em, h3 em { font-style: italic; color: var(--color-primary); }
       <select class="control-select" id="compare-b" aria-label="Theory B for comparison"><option value="">Select Theory B</option></select>
     </div>
     <div id="compare-radar" style="width:100%;max-width:500px;height:400px;margin:24px auto 0"></div>
+
+    <!-- Comparison Narrative -->
+    <div id="compare-narrative" class="chart-container" style="margin-top:24px;display:none">
+      <h3>Comparison Analysis</h3>
+      <div id="compare-narrative-content"></div>
+    </div>
+
     <div class="chart-container" style="margin-top:24px">
       <h3>Dimension-by-Dimension Comparison</h3>
       <table class="heatmap-table" id="compare-table">
@@ -762,6 +876,10 @@ h1 em, h2 em, h3 em { font-style: italic; color: var(--color-primary); }
         <tbody id="compare-tbody"></tbody>
       </table>
     </div>
+
+    <!-- Dimension Deep-Dive -->
+    <div id="compare-dimension-detail" style="margin-top:24px"></div>
+
     <div class="compare-grid" id="compare-details" style="margin-top:24px"></div>
   </div>
 </div>
@@ -1050,28 +1168,94 @@ const THEORIES = [
 ];
 
 const INTERVENTIONS = [
-  { dim: 'engagement', from: 'Disengaged', to: 'Compliant', strategy: 'Reduce barriers to entry; default enrollment; remove friction from first interaction.', theories: ['COM-B','TTM'], evidence: 'strong' },
-  { dim: 'engagement', from: 'Compliant', to: 'Interested', strategy: 'Trigger situational interest through novelty, relevance, and choice. Use belonging interventions to reduce threat.', theories: ['IDT','Belonging','SDT'], evidence: 'strong' },
-  { dim: 'engagement', from: 'Interested', to: 'Committed', strategy: 'Build autonomy support, connect to personal values, create mastery experiences.', theories: ['SDT','EVT','IDT'], evidence: 'strong' },
-  { dim: 'engagement', from: 'Committed', to: 'Agentic', strategy: 'Provide stretch goals, authentic challenges, community membership. Shift from consumer to producer of knowledge.', theories: ['SDT','CoP','Adaptive'], evidence: 'moderate' },
-  { dim: 'engagement', from: 'Agentic', to: 'Identity-Integrated', strategy: 'Support identity work through mentoring, legitimate participation in professional communities, teaching roles.', theories: ['CoP','SDT','IDT'], evidence: 'moderate' },
-  { dim: 'capability', from: 'No Capability', to: 'Recognition', strategy: 'Exposure to worked examples, advance organizers, clear mental models of the target skill.', theories: ['CLT','Bloom'], evidence: 'strong' },
-  { dim: 'capability', from: 'Recognition', to: 'Unconsolidated', strategy: 'Guided practice with scaffolding, immediate feedback, low-stakes attempts.', theories: ['CLT','Dreyfus','Bloom'], evidence: 'strong' },
-  { dim: 'capability', from: 'Unconsolidated', to: 'Consolidated', strategy: 'Spaced retrieval practice, interleaved practice, progressive removal of scaffolds.', theories: ['Spaced','CLT','Dreyfus'], evidence: 'strong' },
-  { dim: 'capability', from: 'Consolidated', to: 'Fluent', strategy: 'High-volume deliberate practice, automated feedback, varied contexts maintaining core skill.', theories: ['Spaced','Dreyfus','Adaptive'], evidence: 'moderate' },
-  { dim: 'capability', from: 'Fluent', to: 'Adaptive', strategy: 'Novel problem scenarios, cross-domain challenges, conceptual understanding emphasis over procedural.', theories: ['Adaptive','SOLO','Bloom'], evidence: 'moderate' },
-  { dim: 'capability', from: 'Adaptive', to: 'Generative', strategy: 'Research opportunities, teaching roles, innovation challenges, boundary-crossing projects.', theories: ['Adaptive','Double-Loop','CoP'], evidence: 'emerging' },
-  { dim: 'portability', from: 'Invisible', to: 'Tacit', strategy: 'Create reflection opportunities; journaling, retrospectives, structured debriefs.', theories: ['Tacit','Meta'], evidence: 'moderate' },
-  { dim: 'portability', from: 'Tacit', to: 'Articulable', strategy: 'Externalization exercises: teach-backs, explanation tasks, concept mapping, think-alouds.', theories: ['Tacit','Meta','SOLO'], evidence: 'moderate' },
-  { dim: 'portability', from: 'Articulable', to: 'Demonstrated', strategy: 'Portfolio development, performance assessments, authentic demonstrations of capability.', theories: ['Kirkpatrick','Bloom'], evidence: 'strong' },
-  { dim: 'portability', from: 'Demonstrated', to: 'Credentialed', strategy: 'Formal assessment pathways, micro-credentials, certification programs with quality assurance.', theories: ['Kirkpatrick'], evidence: 'strong' },
-  { dim: 'portability', from: 'Credentialed', to: 'Reputational', strategy: 'Visibility opportunities: conference speaking, publications, internal showcases, cross-team projects.', theories: ['CoP','Collective Edge'], evidence: 'moderate' },
-  { dim: 'portability', from: 'Reputational', to: 'Contributory', strategy: 'Teaching and mentoring roles, knowledge base contribution, community leadership.', theories: ['CoP','Tacit','Collective Edge'], evidence: 'moderate' },
-  { dim: 'opportunity', from: 'Absent', to: 'Available', strategy: 'Curate and publish learning resources; make existence known through communication channels.', theories: ['COM-B','LO'], evidence: 'moderate' },
-  { dim: 'opportunity', from: 'Available', to: 'Accessible', strategy: 'Remove access barriers: time, cost, prerequisites, technology. Ensure equity of access.', theories: ['COM-B','Belonging'], evidence: 'strong' },
-  { dim: 'opportunity', from: 'Accessible', to: 'Supported', strategy: 'Allocate dedicated time, provide mentoring, create psychological safety, manager buy-in.', theories: ['COM-B','SDT','LO'], evidence: 'strong' },
-  { dim: 'opportunity', from: 'Supported', to: 'Integrated', strategy: 'Embed learning in workflow: learning moments in daily tasks, on-the-job practice, peer learning.', theories: ['COM-B','CoP','LO'], evidence: 'moderate' },
-  { dim: 'opportunity', from: 'Integrated', to: 'Systemic', strategy: 'Build learning culture: leadership modeling, learning metrics in performance systems, knowledge management infrastructure.', theories: ['LO','Collective Edge','CI','Double-Loop'], evidence: 'emerging' }
+  { dim: 'engagement', from: 'Disengaged', to: 'Compliant', strategy: 'Reduce barriers to entry; default enrollment; remove friction from first interaction.', theories: ['COM-B','TTM'], evidence: 'strong',
+    detail: 'The primary barrier at this level is environmental, not motivational. Learners in the Disengaged state have not yet encountered a reason to participate. COM-B research shows that reducing physical and psychological barriers to first contact is the most effective strategy. Default enrollment (opt-out rather than opt-in) leverages behavioral economics. TTM\'s precontemplation stage tells us that direct persuasion is counterproductive here — awareness-raising and barrier removal are the correct interventions.',
+    indicators: 'Non-attendance, non-registration, early dropout within first session, no interaction with materials.',
+    effectSize: 'Barrier removal interventions show consistent positive effects across contexts; default enrollment increases participation 20–40%.' },
+  { dim: 'engagement', from: 'Compliant', to: 'Interested', strategy: 'Trigger situational interest through novelty, relevance, and choice. Use belonging interventions to reduce threat.', theories: ['IDT','Belonging','SDT'], evidence: 'strong',
+    detail: 'This transition requires triggering situational interest (Hidi & Renninger Phase 1→2). The learner is present but uninvested. Three evidence-based strategies: (1) Novelty and surprise in content presentation, (2) Explicit relevance connections to the learner\'s context (utility value interventions, d = 0.40–0.60, with larger effects for first-generation students), (3) Belonging interventions (d = 0.30–0.50) to reduce social threat that may suppress curiosity. SDT\'s autonomy support — offering meaningful choices within structure — shifts the locus of control from external to internal.',
+    indicators: 'Attendance without participation, minimal questions, surface-level task completion, clock-watching behavior.',
+    effectSize: 'Utility value interventions d = 0.40–0.60; belonging interventions d = 0.30–0.50 on engagement and GPA.' },
+  { dim: 'engagement', from: 'Interested', to: 'Committed', strategy: 'Build autonomy support, connect to personal values, create mastery experiences.', theories: ['SDT','EVT','IDT'], evidence: 'strong',
+    detail: 'The critical shift from interest to commitment requires the learner to connect learning to personal identity and values. SDT\'s identified regulation means the learner sees learning as personally important, not just interesting. EVT research shows both expectancy ("I can succeed") and value ("this matters to me") must be present. Mastery experiences (Bandura) build the self-efficacy that sustains effort through difficulty. Progressive autonomy (Patall et al., 2008) — gradually increasing learner control over goals, methods, and pace — is the primary structural intervention.',
+    indicators: 'Voluntary engagement beyond requirements, self-initiated questions, connection-making between topics, expressed personal relevance.',
+    effectSize: 'Autonomy-supportive teaching: consistent positive effects across cultures; mastery goal orientations: d = 0.35–0.55.' },
+  { dim: 'engagement', from: 'Committed', to: 'Agentic', strategy: 'Provide stretch goals, authentic challenges, community membership. Shift from consumer to producer of knowledge.', theories: ['SDT','CoP','Adaptive'], evidence: 'moderate',
+    detail: 'This is one of the hardest transitions in the framework. The learner must shift from being a motivated consumer of learning to being a driver of their own learning agenda. Communities of Practice theory provides the mechanism: as learners move from peripheral to full participation, they begin to shape the practice itself. Stretch goals with appropriate support (Vygotsky\'s Zone of Proximal Development) create the productive struggle that builds agency. The key indicator is when learners begin asking questions that go beyond the curriculum.',
+    indicators: 'Self-directed learning projects, teaching peers, questioning established practices, seeking challenges beyond requirements.',
+    effectSize: 'Evidence is moderate — individual components (stretch goals, CoP participation) are well-supported but the combined agency mechanism is less studied.' },
+  { dim: 'engagement', from: 'Agentic', to: 'Identity-Integrated', strategy: 'Support identity work through mentoring, legitimate participation in professional communities, teaching roles.', theories: ['CoP','SDT','IDT'], evidence: 'moderate',
+    detail: 'Identity integration represents the deepest form of engagement — learning has become part of who the person is, not just something they do. This requires sustained participation in professional communities where the learner\'s identity as a practitioner/scholar is reinforced. Mentoring relationships, teaching roles, and legitimate participation in knowledge creation are the primary mechanisms. Flow states (Csikszentmihalyi) — where challenge and skill are optimally matched — characterize this level of engagement. Self-concordance (Sheldon & Elliot, 2000) — pursuing goals that align with authentic interests and values — sustains this state.',
+    indicators: 'Learning is pursued without external reward, professional identity includes "learner" as core element, flow experiences are regular, teaches and mentors others.',
+    effectSize: 'Evidence is moderate/emerging — identity-integrated engagement is conceptually clear but difficult to distinguish from L4 empirically.' },
+  { dim: 'capability', from: 'No Capability', to: 'Recognition', strategy: 'Exposure to worked examples, advance organizers, clear mental models of the target skill.', theories: ['CLT','Bloom'], evidence: 'strong',
+    detail: 'At this transition, the learner has no prior knowledge or their prior learning has completely decayed. Cognitive Load Theory provides the primary guidance: worked examples reduce extraneous cognitive load, allowing learners to build initial schemas. Advance organizers (Ausubel) provide the scaffolding structure for new information. The goal is not performance but pattern recognition — the learner should be able to identify relevant concepts when they encounter them. Bloom\'s Remember level is the initial target.',
+    indicators: 'Cannot identify relevant concepts, no prior mental models, fails recognition tasks.',
+    effectSize: 'Worked example effect: d = 0.50–0.80 for novice learners (CLT meta-analyses).' },
+  { dim: 'capability', from: 'Recognition', to: 'Unconsolidated', strategy: 'Guided practice with scaffolding, immediate feedback, low-stakes attempts.', theories: ['CLT','Dreyfus','Bloom'], evidence: 'strong',
+    detail: 'The learner can recognize concepts but cannot yet perform independently. Guided practice with immediate corrective feedback is the primary intervention. Scaffolding should be substantial — the fading sequence (Pearson & Gallagher, 1983) starts with full modeling, then joint practice, then guided practice before independent practice. Low stakes are critical: fear of failure at this stage inhibits the risk-taking necessary for skill development. Dreyfus\' Novice stage applies — learners need explicit rules and step-by-step procedures.',
+    indicators: 'Can identify concepts but fails application tasks, requires constant support, performance is inconsistent.',
+    effectSize: 'Scaffolded instruction: d = 0.55–0.75; immediate feedback: d = 0.40–0.70.' },
+  { dim: 'capability', from: 'Unconsolidated', to: 'Consolidated', strategy: 'Spaced retrieval practice, interleaved practice, progressive removal of scaffolds.', theories: ['Spaced','CLT','Dreyfus'], evidence: 'strong',
+    detail: 'This is where most training fails. Brinkerhoff\'s research shows 60–90% of training produces learners who never consolidate — they can perform during training but the learning decays rapidly afterward. Spaced retrieval practice (d = 0.50–0.70) is the most evidence-based intervention: retrieve after 1 day, 3 days, 7 days, 14 days, 30 days. Interleaving different problem types enhances discrimination and durable storage. Scaffolds must be progressively removed — if support continues too long, learners become dependent.',
+    indicators: 'Performs during training but fails on delayed tests, needs support in new contexts, skill is fragile under pressure.',
+    effectSize: 'Spaced retrieval: d = 0.50–0.70; interleaving: d = 0.30–0.50; Ebbinghaus baseline: 75% forgotten in 6 days without spacing.' },
+  { dim: 'capability', from: 'Consolidated', to: 'Fluent', strategy: 'High-volume deliberate practice, automated feedback, varied contexts maintaining core skill.', theories: ['Spaced','Dreyfus','Adaptive'], evidence: 'moderate',
+    detail: 'Consolidated learners can perform reliably in trained contexts but are not yet automatic. Fluency requires high-volume deliberate practice with specific characteristics: (1) practice at the edge of current ability, (2) immediate, specific feedback, (3) varied contexts that maintain the core skill pattern. The goal is automation — the skill should execute with minimal cognitive load, freeing working memory for higher-order tasks. Dreyfus\' Proficient stage describes learners who begin to perceive situations holistically rather than processing features sequentially.',
+    indicators: 'Reliable in trained contexts but slow, conscious effort required, dual-task performance degrades.',
+    effectSize: 'Deliberate practice effects are well-documented but vary by domain; automaticity typically requires 50+ hours of targeted practice.' },
+  { dim: 'capability', from: 'Fluent', to: 'Adaptive', strategy: 'Novel problem scenarios, cross-domain challenges, conceptual understanding emphasis over procedural.', theories: ['Adaptive','SOLO','Bloom'], evidence: 'moderate',
+    detail: 'This transition is the critical distinction between routine and adaptive expertise (Hatano & Inagaki). Routine experts are fast and accurate but rigid — they fail when the problem doesn\'t match their pattern library. Adaptive experts understand the underlying principles well enough to generate new approaches. Three conditions are required: (1) varied and random practice contexts (not blocked), (2) psychologically safe environment for experimentation, (3) emphasis on "why" over "how." SOLO\'s Extended Abstract level — where learners generalize beyond the given context — is the assessment target.',
+    indicators: 'Performs well in trained contexts but struggles with novel variations, cannot explain underlying principles, relies on procedures.',
+    effectSize: 'Adaptive expertise training: d = 0.40–0.65 on transfer tasks; near transfer: d = 0.5–0.8; far transfer: d = 0.1–0.3.' },
+  { dim: 'capability', from: 'Adaptive', to: 'Generative', strategy: 'Research opportunities, teaching roles, innovation challenges, boundary-crossing projects.', theories: ['Adaptive','Double-Loop','CoP'], evidence: 'emerging',
+    detail: 'Generativity means the learner creates new knowledge, methods, or approaches that advance the domain. This requires deep conceptual understanding combined with the disposition to question assumptions (Argyris\' double-loop learning). Teaching roles paradoxically help — the expert blind spot (Nathan & Petrosino, 2003) can be turned into a learning mechanism when experts must externalize their automated knowledge. Boundary-crossing projects (working at the intersection of domains) are the most common catalyst for generative breakthrough.',
+    indicators: 'Invents new approaches, publishes or teaches, challenges established methods, cross-domain insight.',
+    effectSize: 'Evidence is emerging — generativity is the least studied capability level. Knowledge creation processes are documented (Nonaka\'s SECI) but effect sizes are not established.' },
+  { dim: 'portability', from: 'Invisible', to: 'Tacit', strategy: 'Create reflection opportunities; journaling, retrospectives, structured debriefs.', theories: ['Tacit','Meta'], evidence: 'moderate',
+    detail: 'At the Invisible level, neither the learner nor anyone else can see that learning has occurred. The transition to Tacit means the learner becomes aware that they have gained something, even if they can\'t articulate what. Metacognitive strategies — particularly self-reflection and calibration exercises (predict performance, then compare to actual) — build this awareness. Structured debriefs and journaling create the reflective space where tacit knowing emerges into consciousness.',
+    indicators: 'Learner is unaware of own growth, cannot identify what changed, no evidence of learning exists.',
+    effectSize: 'Metacognitive strategy instruction: d = 0.55–0.70; reflective journaling shows moderate effects on self-awareness.' },
+  { dim: 'portability', from: 'Tacit', to: 'Articulable', strategy: 'Externalization exercises: teach-backs, explanation tasks, concept mapping, think-alouds.', theories: ['Tacit','Meta','SOLO'], evidence: 'moderate',
+    detail: 'The learner knows they have capability but cannot explain it — Polanyi\'s "we know more than we can tell." The SECI model\'s Externalization phase provides the mechanism: tacit knowledge becomes explicit through metaphor, analogy, concept mapping, and narrative. Teach-backs are particularly effective: asking the learner to teach what they know to a novice forces externalization. Think-alouds (verbalizing reasoning while performing) make the implicit explicit. This transition is essential for knowledge transfer and organizational learning.',
+    indicators: 'Performs well but says "I just know" when asked to explain, cannot teach others, knowledge is locked inside individual performance.',
+    effectSize: 'Teach-back effectiveness is well-documented in medical education and corporate training; think-alouds show moderate effects on metacognitive awareness.' },
+  { dim: 'portability', from: 'Articulable', to: 'Demonstrated', strategy: 'Portfolio development, performance assessments, authentic demonstrations of capability.', theories: ['Kirkpatrick','Bloom'], evidence: 'strong',
+    detail: 'The learner can describe their capability but external evidence does not yet confirm it. Portfolio development creates tangible artifacts — work samples, case studies, project outcomes — that demonstrate capability to external audiences. Performance assessments in authentic contexts (Kirkpatrick Level 3) provide behavioral evidence. The key shift: moving from self-report ("I can do this") to observable evidence ("here is proof I can do this"). Assessment design must be authentic — it should mirror real-world performance conditions.',
+    indicators: 'Can describe capability verbally but has no portfolio, no external validation, no performance record.',
+    effectSize: 'Portfolio-based assessment shows strong effects on both learning and employability outcomes; authentic assessment: moderate-to-strong effects.' },
+  { dim: 'portability', from: 'Demonstrated', to: 'Credentialed', strategy: 'Formal assessment pathways, micro-credentials, certification programs with quality assurance.', theories: ['Kirkpatrick'], evidence: 'strong',
+    detail: 'Credentials provide institutional recognition that travels across contexts. The learner has evidence of capability, but it is not yet formally recognized in a way that external stakeholders trust. Micro-credentials (digital badges, nanodegrees) offer modular credentialing. Traditional certifications provide broader recognition. Quality assurance is critical — credentials without rigor devalue the system. The credential should signal to employers, institutions, or communities that the learner has met a defined standard.',
+    indicators: 'Has portfolio/evidence but no formal recognition, capability is context-dependent on personal demonstration.',
+    effectSize: 'Credentialing effects on employability are well-documented; micro-credentials show growing acceptance but quality varies significantly.' },
+  { dim: 'portability', from: 'Credentialed', to: 'Reputational', strategy: 'Visibility opportunities: conference speaking, publications, internal showcases, cross-team projects.', theories: ['CoP','Collective Edge'], evidence: 'moderate',
+    detail: 'The learner has formal credentials but is not yet known for this capability. Reputation requires visibility — others must encounter and recognize the learner\'s expertise. Conference speaking, publications, internal showcases, and cross-team projects all create visibility. Communities of Practice theory explains the mechanism: boundary objects (artifacts that cross community boundaries) carry reputation across groups. Fisher\'s Collective Edge framework adds that network effects amplify reputation — each visible contribution makes the next more impactful.',
+    indicators: 'Has credentials but is not sought out for expertise, capability is verified but not visible to broader community.',
+    effectSize: 'Evidence is moderate and largely qualitative — reputational capital is studied in sociology and organizational behavior but intervention effects are context-dependent.' },
+  { dim: 'portability', from: 'Reputational', to: 'Contributory', strategy: 'Teaching and mentoring roles, knowledge base contribution, community leadership.', theories: ['CoP','Tacit','Collective Edge'], evidence: 'moderate',
+    detail: 'The highest portability level: the learner\'s capability actively produces value for others. Teaching and mentoring roles formalize this contribution. Knowledge base contributions (documentation, guides, frameworks) scale the learner\'s impact beyond direct relationships. Community leadership — chairing practice groups, editing publications, organizing conferences — institutionalizes contributory expertise. At this level, the learner\'s portability feeds directly into others\' Capability and Opportunity dimensions.',
+    indicators: 'Known for expertise but does not yet teach, mentor, or contribute to knowledge infrastructure.',
+    effectSize: 'Community leadership and mentoring effects are well-documented in CoP literature; knowledge contribution effects on organizational learning are studied in KM research.' },
+  { dim: 'opportunity', from: 'Absent', to: 'Available', strategy: 'Curate and publish learning resources; make existence known through communication channels.', theories: ['COM-B','LO'], evidence: 'moderate',
+    detail: 'When opportunity is Absent, no learning resources, programs, or support structures exist. The first step is creation and visibility — curating relevant resources and making their existence known. COM-B\'s physical opportunity construct applies: without materials, tools, and information, learning cannot begin. This is an organizational or systemic intervention, not an individual one. Communication through multiple channels ensures awareness reaches the target population.',
+    indicators: 'No learning resources available, no programs offered, no support structures exist in the environment.',
+    effectSize: 'Resource availability is a necessary but not sufficient condition; effects are foundational rather than measurable in isolation.' },
+  { dim: 'opportunity', from: 'Available', to: 'Accessible', strategy: 'Remove access barriers: time, cost, prerequisites, technology. Ensure equity of access.', theories: ['COM-B','Belonging'], evidence: 'strong',
+    detail: 'Resources exist but the learner cannot realistically access them. The five common barriers: (1) Time — no protected learning time, (2) Cost — fees or opportunity costs, (3) Prerequisites — gatekeeping requirements, (4) Technology — platform access or digital literacy, (5) Psychological safety — fear of being seen as incompetent. Belonging interventions address the psychological barrier; structural changes address the others. Equity of access is the key concern — access barriers often disproportionately affect underrepresented populations.',
+    indicators: 'Resources exist but utilization is low, certain populations are underrepresented, learners cite time/cost/access as barriers.',
+    effectSize: 'Barrier removal shows consistent positive effects; belonging interventions: d = 0.30–0.50 on participation rates.' },
+  { dim: 'opportunity', from: 'Accessible', to: 'Supported', strategy: 'Allocate dedicated time, provide mentoring, create psychological safety, manager buy-in.', theories: ['COM-B','SDT','LO'], evidence: 'strong',
+    detail: 'The critical transition from passive availability to active support. Supervisor support is the single strongest predictor of training transfer (r = +0.50, Blume et al., 2010). Manager buy-in means learning is not just permitted but expected and valued. Dedicated time (protected from operational demands) signals organizational commitment. Mentoring provides the relational support that SDT\'s relatedness need requires. Psychological safety (Edmondson, 1999) — the belief that one won\'t be punished for mistakes — enables the risk-taking that learning requires.',
+    indicators: 'Resources are accessible but learners feel unsupported, no dedicated learning time, managers prioritize operations over development.',
+    effectSize: 'Supervisor support: r = +0.50 for training transfer; psychological safety: significant effects on learning behavior and team performance.' },
+  { dim: 'opportunity', from: 'Supported', to: 'Integrated', strategy: 'Embed learning in workflow: learning moments in daily tasks, on-the-job practice, peer learning.', theories: ['COM-B','CoP','LO'], evidence: 'moderate',
+    detail: 'Learning is supported but still separate from work. Integration means learning happens as part of daily workflow, not in isolated training events. On-the-job practice with reflection, peer learning circles, knowledge-sharing routines, and embedded practice opportunities transform learning from event to process. Communities of Practice provide the social structure; the 70-20-10 model (70% on-the-job, 20% social, 10% formal) describes the target ratio. The key indicator: learning happens without being scheduled.',
+    indicators: 'Learning happens in formal sessions but not in daily work, training is an event not a process, no peer learning structures.',
+    effectSize: 'Evidence is moderate — workflow-integrated learning is a growing area; on-the-job learning effects are well-documented but measurement tools are still developing.' },
+  { dim: 'opportunity', from: 'Integrated', to: 'Systemic', strategy: 'Build learning culture: leadership modeling, learning metrics in performance systems, knowledge management infrastructure.', theories: ['LO','Collective Edge','CI','Double-Loop'], evidence: 'emerging',
+    detail: 'The highest Opportunity level: learning is embedded in organizational systems, not just individual workflows. Senge\'s five disciplines (personal mastery, mental models, shared vision, team learning, systems thinking) describe the target state. Leadership modeling is the single strongest lever — when leaders visibly learn and admit mistakes, it gives permission for the whole organization. Learning metrics in performance systems (not just completion rates but capability growth) create accountability. Knowledge management infrastructure enables collective learning. Double-loop learning becomes the organizational norm, not the exception.',
+    indicators: 'Learning is embedded in workflows but not in organizational systems; no learning metrics in performance reviews; leadership does not model learning behavior.',
+    effectSize: 'Evidence is emerging — systemic learning culture is aspirational for most organizations. Case studies of high-performing organizations (Google, Toyota, Bridgewater) provide qualitative evidence.' }
 ];
 
 
@@ -1084,6 +1268,362 @@ THEORIES.forEach(t => {
     });
   });
 });
+
+// ============================================
+// ENRICHED RESEARCH TEXT DATA
+// ============================================
+
+// Extended theory descriptions grounded in research
+const THEORY_RESEARCH = {
+  sdt: {
+    summary: 'Self-Determination Theory proposes that human motivation exists on a continuum from amotivation through external regulation to fully integrated, intrinsic motivation. The key insight is that three basic psychological needs — autonomy, competence, and relatedness — must be satisfied for motivation to become self-determined. When these needs are met, learners move from compliance to identity-integrated engagement.',
+    keyFindings: [
+      'Competence is the primary predictor of self-determined motivation, with an effect size of g = 0.58 on intrinsic motivation (Howard et al., 2025 meta-analysis).',
+      'SDT\'s internalization continuum (external → introjected → identified → integrated) maps directly onto LVA Engagement levels L2–L6.',
+      'Autonomy support from instructors produces consistent positive effects across cultures and age groups.',
+      'The L4→L5 transition (Strategic to Committed) maps to the shift from identified to integrated regulation — the hardest motivational shift because it requires belonging and identity work, not just value recognition.'
+    ],
+    limitations: 'SDT emphasizes reflective motivation and largely excludes automatic/emotional motivation mechanisms. The theory also has limited guidance on environmental barriers (opportunity).',
+    practicalImplications: 'Design learning environments that satisfy autonomy (choice), competence (optimal challenge + feedback), and relatedness (belonging). These three levers are the primary intervention targets for Engagement L1–L5.'
+  },
+  evt: {
+    summary: 'Expectancy-Value Theory proposes that motivation is the product of two factors: expectancy of success ("Can I do this?") and subjective task value ("Why should I?"). Value has four components — attainment value, intrinsic value, utility value, and cost. Both expectancy AND value must be present for sustained engagement.',
+    keyFindings: [
+      'Effect sizes of d = 0.40–0.60 for utility value interventions, with larger effects for first-generation students (Simpkins et al., 2024).',
+      'Study values can compensate for low expectancy in preventing dropout — a compensatory relationship that requires both constructs.',
+      'Critical gap identified: LVA Engagement tracks VALUE progression but does not explicitly capture EXPECTANCY. A learner can have high utility value with low self-efficacy.',
+      'Utility value interventions are among the most cost-effective engagement strategies available.'
+    ],
+    limitations: 'EVT is primarily an individual-level theory and does not address collective or organizational motivation. The cost component (what must be given up to learn) is the least studied aspect.',
+    practicalImplications: 'Interventions should target both expectancy (build confidence through mastery experiences) and value (connect learning to personal goals and identity). Neither alone is sufficient.'
+  },
+  idt: {
+    summary: 'Interest Development Theory traces how interest evolves through four phases: triggered situational interest, maintained situational interest, emerging individual interest, and well-developed individual interest. Each phase requires different environmental support, and the transition from situational to individual interest is where most learners drop off.',
+    keyFindings: [
+      'Interest is topic-granular — the same learner can be at different interest phases across different topics. This means engagement level should be assessed per topic, not per learner.',
+      'Effect sizes of d = 0.35–0.55 for interest-triggering interventions.',
+      'The transition from maintained situational interest to emerging individual interest requires the learner to begin generating their own questions and seeking out the topic independently.',
+      'Environmental triggers (novelty, relevance, social interaction) are necessary but not sufficient for interest development beyond Phase 2.'
+    ],
+    limitations: 'The theory provides limited guidance on what causes interest to regress. The distinction between maintained situational and emerging individual interest can be difficult to measure.',
+    practicalImplications: 'Match instructional strategies to the learner\'s interest phase. Early phases need environmental triggers and novelty; later phases need autonomy and depth.'
+  },
+  comb: {
+    summary: 'The COM-B model proposes that behavior is a function of three interacting components: Capability (physical and psychological), Opportunity (physical and social), and Motivation (automatic and reflective). This was the primary theoretical justification for adding the Opportunity dimension to LVA v2.0 — without environmental enablement, even capable and motivated learners cannot progress.',
+    keyFindings: [
+      'COM-B\'s Opportunity construct had no equivalent in LVA v1.0 — this was identified as the most critical gap in the original framework.',
+      'The Behavior Change Wheel (BCW) provides 9 intervention functions (education, persuasion, incentivization, coercion, training, restriction, environmental restructuring, modeling, enablement) mapped to COM-B components.',
+      'COM-B Capability maps to LVA Capability dimension at approximately 60–70% overlap. The remaining 30% relates to physical capability, which LVA does not address.',
+      'Automatic motivation (habits, emotions) was identified as underrepresented in LVA\'s Engagement dimension, which emphasizes reflective processes.'
+    ],
+    limitations: 'COM-B is designed for behavior change, not learning specifically. The model does not distinguish levels of capability or stages of learning.',
+    practicalImplications: 'Always assess Opportunity before designing capability interventions. The most common failure mode is building capability without creating environmental conditions for its application.'
+  },
+  dreyfus: {
+    summary: 'The Dreyfus Skill Acquisition Model describes five stages of expertise development from novice to expert, characterized by a qualitative shift in perception — from rule-following to intuitive pattern recognition. The LVA extends this model both downward (capturing pre-skill decay at L1) and upward (adding generativity at L7, where experts create new knowledge).',
+    keyFindings: [
+      'Expertise develops through qualitative shifts, not just quantitative improvement. Proficient performers perceive situations holistically; novices process features sequentially.',
+      'The model predicts the expertise reversal effect: instructional methods that help novices actively harm experts by constraining their holistic perception.',
+      'Intuitive judgment at the expert level is not guessing — it is rapid pattern recognition based on thousands of case experiences.',
+      'The transition from competent to proficient is where emotional engagement becomes critical — the learner must care about outcomes to develop situational recognition.'
+    ],
+    limitations: 'The original model is qualitative with no quantitative metrics. The stages are described rather than operationally defined. The model focuses on individual skill and does not address collective expertise.',
+    practicalImplications: 'Match instructional scaffolding to expertise level. Worked examples for novices, fading scaffolds for competent performers, and minimal constraints for proficient/expert learners.'
+  },
+  bloom: {
+    summary: 'Bloom\'s Revised Taxonomy organizes cognitive processes into six hierarchical levels: remember, understand, apply, analyze, evaluate, and create. The 2001 revision added a knowledge dimension (factual, conceptual, procedural, metacognitive) creating a two-dimensional classification. Where LVA emphasizes durability and transfer, Bloom emphasizes cognitive complexity.',
+    keyFindings: [
+      'The taxonomy is the most widely adopted framework for learning objective design, with validated application across K-12, higher education, and workforce training.',
+      'Higher-order thinking (analyze, evaluate, create) indicates deeper capability in LVA terms, but does not guarantee durability or transfer.',
+      'The metacognitive knowledge dimension bridges LVA\'s Capability and Portability dimensions — knowing what you know (Portability) vs. regulating your learning (Capability).',
+      'Common misapplication: treating the levels as strictly sequential. Analysis can occur without application in some domains.'
+    ],
+    limitations: 'Bloom does not address motivation, environmental factors, or the durability of learning. A learner can demonstrate "create" level thinking in a classroom and still be L1 (Unconsolidated) in LVA terms if the learning is not retained.',
+    practicalImplications: 'Use Bloom to design assessment items that test different cognitive levels. Use LVA to diagnose whether the learning is durable, transferable, and portable.'
+  },
+  solo: {
+    summary: 'The SOLO (Structure of Observed Learning Outcomes) Taxonomy classifies learner responses by their structural complexity: prestructural, unistructural, multistructural, relational, and extended abstract. It reveals whether learners are connecting ideas and generalizing — mapping closely to LVA Capability levels L3–L6.',
+    keyFindings: [
+      'SOLO reveals structural complexity of understanding — from disconnected pieces to integrated, transferable knowledge.',
+      'The relational level (connecting multiple ideas into a coherent structure) maps to LVA Capability L4 (Context-Bound to Fluent).',
+      'Extended abstract responses (generalizing beyond the given context) map to LVA Capability L5–L6 (Adaptive to Generative).',
+      'SOLO is particularly useful as an assessment rubric because it can be applied to any student response regardless of domain.'
+    ],
+    limitations: 'SOLO classifies responses, not learners — a learner may produce relational responses on one topic and unistructural on another. Does not address motivation or portability.',
+    practicalImplications: 'Use SOLO rubrics for formative assessment to diagnose structural quality of understanding. Multistructural responses indicate knowledge that may be fragile; relational responses indicate integrated understanding.'
+  },
+  adaptive: {
+    summary: 'Adaptive Expertise theory distinguishes between routine experts (fast and accurate in familiar situations but rigid) and adaptive experts (who understand deeply enough to invent new strategies for novel problems). This maps to the critical LVA distinction between L5 (Fluent — automated but context-bound) and L6 (Adaptive — flexible transfer).',
+    keyFindings: [
+      'Routine expertise and adaptive expertise develop through fundamentally different learning conditions. Routine expertise comes from repetition in consistent contexts; adaptive expertise requires varied contexts with emphasis on understanding.',
+      'Effect sizes of d = 0.40–0.65 for adaptive expertise development on transfer tasks.',
+      'Three conditions required for adaptive expertise: (1) random/varied practice contexts, (2) psychologically safe environment for exploration, (3) emphasis on conceptual understanding over procedural speed.',
+      'The critical question for organizations: are you building routine experts or adaptive experts? One-size-fits-all training produces routine expertise.'
+    ],
+    limitations: 'The adaptive-routine distinction is clear conceptually but difficult to measure. Assessment requires novel transfer tasks, which are expensive to design and administer.',
+    practicalImplications: 'For roles requiring innovation and judgment, design learning that varies contexts, encourages experimentation, and asks "why" rather than "how." For roles requiring consistent execution, routine expertise may be sufficient.'
+  },
+  clt: {
+    summary: 'Cognitive Load Theory explains why learning fails when instructional design overloads working memory. Three types of cognitive load — intrinsic (inherent complexity), extraneous (poor design), and germane (schema formation) — must be managed for effective learning. The theory provides the most precise guidance on instructional sequencing in the LVA framework.',
+    keyFindings: [
+      'Effect sizes of d = 0.50–0.80 for cognitive load management interventions.',
+      'The expertise reversal effect: worked examples help novices (reducing extraneous load) but harm experts (wasting working memory capacity on redundant information).',
+      'Scaffolding helps L3 learners but constrains L6+ learners by fragmenting their integrated knowledge representations.',
+      'Schema acquisition is the mechanism by which learning becomes durable — schemas bypass working memory limitations by chunking information.'
+    ],
+    limitations: 'CLT focuses on instructional design for capability building but does not address motivation, portability, or environmental factors. Measuring cognitive load directly remains methodologically challenging.',
+    practicalImplications: 'Reduce extraneous load (simplify presentation), manage intrinsic load (sequence complexity), and maximize germane load (encourage active processing and schema construction).'
+  },
+  spaced: {
+    summary: 'Spaced Retrieval Practice combines two of the most robust findings in learning science: the spacing effect (distributing practice over time) and the testing effect (retrieval practice strengthens memory more than re-study). Together, they are the most evidence-based strategy for moving learners from LVA Capability L1 (Unconsolidated) to L3 (Consolidated).',
+    keyFindings: [
+      'Effect sizes of d = 0.50–0.70 for spaced retrieval practice, making it one of the highest-impact learning strategies available.',
+      'Memory is strengthened by effortful retrieval at expanding intervals — the harder the retrieval, the stronger the subsequent storage.',
+      'Ebbinghaus forgetting curve: 75% of learning is forgotten within 6 days without retrieval practice or spacing.',
+      'Interleaving (mixing different problem types) enhances discrimination and transfer but feels harder to learners, creating a metacognitive illusion that it is less effective.'
+    ],
+    limitations: 'Spaced retrieval primarily addresses memory consolidation (L1→L3). It does not directly build transfer capability (L4+) or address motivation. Learners often resist the approach because it feels more difficult than massed practice.',
+    practicalImplications: 'Build spaced retrieval into every learning design. The minimum effective protocol: retrieve after 1 day, 3 days, 7 days, 14 days, 30 days. Interleave problem types rather than blocking by topic.'
+  },
+  tacit: {
+    summary: 'Polanyi\'s concept of tacit knowledge ("we know more than we can tell") combined with Nonaka & Takeuchi\'s SECI model provides the theoretical foundation for LVA\'s Portability dimension. The SECI cycle — Socialization, Externalization, Combination, Internalization — describes how knowledge moves between tacit and explicit forms, which maps directly to Portability L1–L6.',
+    keyFindings: [
+      'Much valuable knowledge is tacit — felt but not spoken. This is why traditional assessment misses much of what learners actually know.',
+      'The SECI cycle maps directly to Portability transitions: Socialization (L1→L2), Externalization (L2→L3), Combination (L3→L4), Internalization (L4→L5/L6).',
+      'Ba (shared space) — the concept of a shared context for knowledge creation — maps to LVA Opportunity dimension.',
+      'Expert knowledge becomes increasingly tacit through automation, creating the teaching paradox: the best practitioners are often the worst at explaining what they do.'
+    ],
+    limitations: 'The SECI model was developed in organizational contexts and may not fully apply to individual learning. Measuring tacit knowledge remains methodologically difficult — by definition, it resists explicit measurement.',
+    practicalImplications: 'Use externalization techniques (teach-backs, think-alouds, concept mapping) to make tacit knowledge portable. Create "ba" (shared spaces) where tacit knowledge can be transmitted through observation and practice.'
+  },
+  meta: {
+    summary: 'Metacognition ("thinking about thinking") and Self-Regulated Learning (SRL) bridge LVA\'s Capability and Portability dimensions. Metacognitive knowledge (knowing what you know) belongs in Portability; metacognitive regulation (planning, monitoring, evaluating your own learning) belongs in Capability. This distinction resolves the strongest MECE challenge in the framework.',
+    keyFindings: [
+      'Effect sizes of d = 0.55–0.70 for metacognitive strategy instruction.',
+      'The three-phase SRL cycle — forethought, performance, self-reflection — provides the mechanism for self-directed learning at LVA Engagement L5+.',
+      'Metacognitive knowledge is the engine of self-regulated learning — it bridges capability and portability by allowing learners to assess their own competence.',
+      'Self-efficacy (belief in one\'s ability) is both a metacognitive judgment and an engagement driver, creating a productive cross-dimensional interaction.'
+    ],
+    limitations: 'Metacognition straddles the Capability-Portability boundary, creating the strongest MECE challenge. The distinction between metacognitive knowledge and metacognitive regulation requires careful operationalization.',
+    practicalImplications: 'Teach metacognitive strategies explicitly: planning before tasks, monitoring during tasks, evaluating after tasks. Use calibration exercises (predict performance, then compare to actual) to develop metacognitive accuracy.'
+  },
+  cop: {
+    summary: 'Communities of Practice theory describes learning as fundamentally social — newcomers learn by gradually moving from legitimate peripheral participation to full participation in community practice. This theory bridges all four LVA dimensions: Engagement (mutual engagement, identity), Capability (shared repertoire), Portability (boundary objects, reification), and Opportunity (access to participation).',
+    keyFindings: [
+      'Learning is not just knowledge acquisition — it is identity transformation through participation in social practice.',
+      'Legitimate peripheral participation provides the mechanism for the LVA Engagement L4→L5 transition: the learner shifts from strategic engagement to committed participation as community membership becomes part of identity.',
+      'Boundary objects (artifacts that bridge different communities) are the primary mechanism for Portability L5 (Translated) — they allow capability to cross organizational boundaries.',
+      'Access to community participation is an Opportunity dimension issue — structural barriers to peripheral participation prevent learning regardless of individual motivation.'
+    ],
+    limitations: 'The theory focuses on informal learning in practice communities and provides limited guidance for formal educational settings. Power dynamics within communities are acknowledged but not well theorized.',
+    practicalImplications: 'Create authentic opportunities for peripheral participation. Design onboarding as gradual movement toward full participation, not information delivery. Build communities around practice, not just topics.'
+  },
+  lo: {
+    summary: 'The Learning Organization framework (Senge, 1990) describes five disciplines — personal mastery, mental models, shared vision, team learning, and systems thinking — required for organizational learning. This theory is the primary grounding for LVA Opportunity L5 (Systemic): the idea that learning can be embedded in organizational systems rather than residing only in individuals.',
+    keyFindings: [
+      'Organizations that learn fastest gain competitive advantage, but organizational learning requires systemic structures, not individual heroics.',
+      'Systems thinking is the integrative discipline — without it, the other four disciplines remain fragmented improvement efforts.',
+      'Team learning (dialogue and discussion disciplines) is the mechanism for collective capability development, bridging individual and organizational levels.',
+      'The gap between espoused theory and theory-in-use (Argyris) is where most organizational learning failures occur.'
+    ],
+    limitations: 'The framework is aspirational rather than diagnostic. Measuring "organizational learning" remains methodologically challenging. Most implementations focus on training programs rather than systemic change.',
+    practicalImplications: 'Build learning into organizational systems: performance management, knowledge management, meeting structures, decision-making processes. Leadership modeling is the single strongest lever.'
+  },
+  dbl: {
+    summary: 'Argyris\'s Double-Loop Learning theory distinguishes between single-loop learning (adjusting actions within existing assumptions) and double-loop learning (questioning the assumptions themselves). In LVA terms, single-loop learning operates at Capability L3–L4 (improving within known contexts) while double-loop learning operates at L5–L7 (questioning frameworks and generating new approaches).',
+    keyFindings: [
+      'Single-loop institutions systematically produce single-loop learners. The organizational context constrains the level of learning that is possible.',
+      'Defensive routines (organizational patterns that prevent embarrassment) are the primary barrier to double-loop learning.',
+      'Model I behavior (unilateral control, face-saving) prevents double-loop learning. Model II behavior (valid information, free choice, internal commitment) enables it.',
+      'The espoused theory vs. theory-in-use distinction maps to LVA Portability — what people say they know vs. what their behavior reveals they actually know.'
+    ],
+    limitations: 'The theory is primarily qualitative and diagnostic. Intervention strategies for moving from Model I to Model II are described but difficult to implement at scale.',
+    practicalImplications: 'Create psychological safety for questioning assumptions. Use after-action reviews that ask "what assumptions were we operating on?" not just "what went wrong?"'
+  },
+  ci: {
+    summary: 'Woolley et al.\'s research on Collective Intelligence demonstrated that group intelligence (Factor C) is not the sum of individual IQs. Instead, it emerges from social sensitivity, equal conversational turn-taking, and cognitive diversity. This challenges the assumption that building individual capability automatically produces team capability.',
+    keyFindings: [
+      'Factor C (collective intelligence) correlates r = 0.40–0.50 with group task performance — a strong, replicable finding.',
+      'Social sensitivity (reading others\' emotions) is the strongest individual-level predictor of group intelligence.',
+      'Equal conversational turn-taking matters more than having one dominant expert. Groups with one person doing most of the talking perform worse.',
+      'Cognitive diversity (different perspectives and problem-solving approaches) contributes more to group intelligence than cognitive ability homogeneity.'
+    ],
+    limitations: 'Research has primarily used laboratory tasks. Generalization to long-term organizational teams with established power dynamics is less clear.',
+    practicalImplications: 'Design teams for cognitive diversity, not just talent. Train social sensitivity. Structure meetings to ensure equal participation. Monitor conversational turn-taking as a leading indicator of team learning capacity.'
+  },
+  ce: {
+    summary: 'Fisher\'s Collective Edge framework (2025) argues that the gap between individual and collective capability is where most learning value is lost — and found. The framework introduces concepts of organizational learning debt, capability infrastructure, and knowledge flows to explain why organizations with talented individuals still fail to learn collectively.',
+    keyFindings: [
+      'Organizational Learning Debt: the accumulated cost of learning that should have happened but didn\'t — analogous to technical debt in software.',
+      'Network Effects in learning: each person who develops a capability makes it easier for others to develop it, but only if knowledge flows are functioning.',
+      'Capability Infrastructure (the systems that enable learning) is an Opportunity dimension concern that most organizations neglect.',
+      'Learning Velocity — the rate at which an organization converts individual learning into collective capability — is the key competitive metric.'
+    ],
+    limitations: 'As a practitioner framework (2025), the empirical evidence base is still developing. The concepts are theoretically grounded but not yet independently validated.',
+    practicalImplications: 'Audit organizational learning debt. Build capability infrastructure before investing in individual training. Measure knowledge flows, not just knowledge stocks.'
+  },
+  kirk: {
+    summary: 'Kirkpatrick\'s Four Levels of Evaluation (1959) — Reaction, Learning, Behavior, Results — is the most widely adopted evaluation framework in L&D. Its key insight maps directly to LVA: satisfaction (Reaction) does not equal learning (Learning) does not equal behavior change (Behavior) does not equal organizational impact (Results). Each requires different measurement.',
+    keyFindings: [
+      'Most organizations measure only Level 1 (Reaction/satisfaction). Research consistently shows weak correlation between satisfaction and actual learning (r ≈ 0.09).',
+      'The chain of evidence from Level 1 to Level 4 requires different measurement approaches and different timescales.',
+      'Kirkpatrick\'s levels map to LVA dimensions: Reaction → Engagement, Learning → Capability, Behavior → Capability + Opportunity (transfer requires environmental support), Results → Portability (visible organizational impact).',
+      'The framework was updated (2016) to add Leading Indicators, addressing the need for early prediction of downstream results.'
+    ],
+    limitations: 'The four levels imply a causal chain that research does not fully support. Reaction does not reliably predict Learning, and Learning does not reliably predict Behavior. The framework evaluates programs, not individual learners.',
+    practicalImplications: 'Move evaluation beyond satisfaction surveys. Measure actual behavior change at 60-90 days. Use the LVA to diagnose WHY evaluation at one level does not predict the next.'
+  },
+  belong: {
+    summary: 'Walton & Cohen\'s belonging interventions demonstrate that brief, targeted interventions addressing belonging uncertainty can produce lasting effects on academic performance and engagement. The mechanism: belonging uncertainty creates recursive cycles of doubt and disengagement. A single intervention that reframes social adversity as normal (not evidence of not belonging) can break the cycle.',
+    keyFindings: [
+      'Effect sizes of d = 0.30–0.50 on GPA gains, sustained over multiple years from a single brief intervention.',
+      'Effects are largest for underrepresented students who experience the most belonging uncertainty.',
+      'The mechanism is recursive: belonging uncertainty → withdrawal → fewer connections → more uncertainty. Breaking the cycle at any point can produce cascading positive effects.',
+      'Wise feedback (critical feedback combined with assurance of high standards and belief in the student\'s ability) is a related intervention with strong effects.'
+    ],
+    limitations: 'The interventions work by addressing a specific psychological barrier (belonging uncertainty). They do not build capability directly and are less effective for learners whose barriers are primarily structural or capability-related.',
+    practicalImplications: 'Address belonging uncertainty explicitly, especially for underrepresented populations. Frame social difficulty as normal ("everyone feels this way at first"). Combine with structural access improvements for maximum effect.'
+  },
+  ttm: {
+    summary: 'The Transtheoretical Model describes behavior change as occurring in stages: precontemplation, contemplation, preparation, action, and maintenance. Its critical insight for LVA: pushing action on someone in contemplation backfires. Interventions must match the learner\'s stage of readiness, which maps directly to Engagement levels.',
+    keyFindings: [
+      'Validated across 50+ behavior change domains — one of the most replicated models in behavioral science.',
+      'Stage-matched interventions are significantly more effective than one-size-fits-all approaches.',
+      'Decisional balance (weighing pros and cons) peaks at the contemplation stage and maps to LVA Portability (self-awareness of learning state).',
+      'The preparation stage requires both motivation AND a specific plan — many learners stall here because they have motivation without a clear pathway.'
+    ],
+    limitations: 'The stages may not be as discrete as the model implies — change can be non-linear. The model describes readiness to change but provides limited guidance on maintaining change over time.',
+    practicalImplications: 'Assess readiness before intervening. For precontemplators, raise awareness. For contemplators, tip the decisional balance. For preparers, provide concrete plans and first steps. For those in action, provide support and prevent relapse.'
+  }
+};
+
+// Cross-theory comparison narratives
+const THEORY_COMPARISONS = {};
+
+function getComparisonKey(a, b) {
+  return [a, b].sort().join('_');
+}
+
+function generateComparison(tA, tB) {
+  const dims = ['engagement', 'capability', 'portability', 'opportunity'];
+  const dimNames = { engagement: 'Engagement', capability: 'Capability', portability: 'Portability', opportunity: 'Opportunity' };
+
+  // Find strongest dimension for each
+  const strongA = dims.reduce((max, d) => tA.scores[d] > tA.scores[max] ? d : max, dims[0]);
+  const strongB = dims.reduce((max, d) => tB.scores[d] > tB.scores[max] ? d : max, dims[0]);
+
+  // Find shared constructs via dimension overlap
+  const sharedDims = dims.filter(d => tA.scores[d] > 0.4 && tB.scores[d] > 0.4);
+  const divergentDims = dims.filter(d => Math.abs(tA.scores[d] - tB.scores[d]) > 0.3);
+
+  // Build complementarity narrative
+  let complementarity = '';
+  if (strongA !== strongB) {
+    complementarity = `These theories are complementary: ${tA.name} anchors primarily in ${dimNames[strongA]} (${(tA.scores[strongA]*100).toFixed(0)}%), while ${tB.name} anchors in ${dimNames[strongB]} (${(tB.scores[strongB]*100).toFixed(0)}%). Using both together provides broader coverage of the LVA framework than either alone.`;
+  } else {
+    complementarity = `Both theories anchor strongly in ${dimNames[strongA]}, with ${tA.name} scoring ${(tA.scores[strongA]*100).toFixed(0)}% and ${tB.name} scoring ${(tB.scores[strongB]*100).toFixed(0)}%. They offer competing or reinforcing perspectives on the same dimension rather than complementary coverage.`;
+  }
+
+  // Build convergence narrative
+  let convergence = '';
+  if (sharedDims.length > 0) {
+    convergence = `Both theories contribute meaningfully to ${sharedDims.map(d => dimNames[d]).join(' and ')}. `;
+    if (sharedDims.includes('engagement')) convergence += `Their shared engagement focus means both inform how to move learners from compliance toward committed participation. `;
+    if (sharedDims.includes('capability')) convergence += `Their shared capability focus means both address how real, durable skill is built. `;
+    if (sharedDims.includes('portability')) convergence += `Their shared portability focus means both address how learning becomes visible and communicable. `;
+    if (sharedDims.includes('opportunity')) convergence += `Their shared opportunity focus means both address environmental conditions for learning. `;
+  } else {
+    convergence = 'These theories have minimal dimensional overlap, suggesting they address fundamentally different aspects of the learning process. Combining them provides maximum coverage.';
+  }
+
+  // Build divergence narrative
+  let divergence = '';
+  if (divergentDims.length > 0) {
+    divergence = `The largest divergence is in ${divergentDims.map(d => {
+      const diff = tA.scores[d] - tB.scores[d];
+      return `${dimNames[d]} (${diff > 0 ? tA.name : tB.name} scores ${Math.abs(diff * 100).toFixed(0)} points higher)`;
+    }).join('; ')}. `;
+    divergence += `This divergence reflects genuine theoretical differences: `;
+    if (divergentDims.includes('engagement') && tA.scores.engagement > tB.scores.engagement) {
+      divergence += `${tA.name} prioritizes understanding motivation and investment, while ${tB.name} focuses elsewhere. `;
+    } else if (divergentDims.includes('engagement')) {
+      divergence += `${tB.name} prioritizes understanding motivation, while ${tA.name} focuses on other dimensions. `;
+    }
+    if (divergentDims.includes('capability') && tA.scores.capability > tB.scores.capability) {
+      divergence += `${tA.name} provides more detailed guidance on building durable skill, while ${tB.name} contributes more in other areas. `;
+    } else if (divergentDims.includes('capability')) {
+      divergence += `${tB.name} provides more detailed guidance on skill building than ${tA.name}. `;
+    }
+  }
+
+  // Build integration insight
+  const researchA = THEORY_RESEARCH[tA.id];
+  const researchB = THEORY_RESEARCH[tB.id];
+  const integration = `When integrated within the LVA framework, ${tA.name} ${researchA ? 'provides ' + researchA.keyFindings[0].split('.')[0].toLowerCase() : 'contributes unique constructs'}, while ${tB.name} ${researchB ? 'provides ' + researchB.keyFindings[0].split('.')[0].toLowerCase() : 'contributes complementary perspectives'}. Together they address ${sharedDims.length + divergentDims.length} of the four LVA dimensions with research-backed specificity.`;
+
+  return {
+    complementarity,
+    convergence,
+    divergence,
+    integration,
+    sharedDims,
+    divergentDims,
+    strongA,
+    strongB,
+    practicalA: researchA?.practicalImplications || '',
+    practicalB: researchB?.practicalImplications || ''
+  };
+}
+
+// Enriched dimension level details from research
+const DIMENSION_RESEARCH = {
+  engagement: {
+    overview: 'The Engagement dimension tracks the quality of learner motivation from absence to identity integration. Grounded in Self-Determination Theory, Expectancy-Value Theory, and Interest Development Theory, it captures qualitative shifts in WHY someone engages — not just whether they show up.',
+    levelDetails: {
+      e0: { research: 'Maps to SDT\'s amotivation and Hidi & Renninger\'s pre-interest phase. The learner sees no value, has no expectancy of success, and has not been triggered by any aspect of the content. Environmental barriers (Opportunity dimension) or prior negative experiences are common root causes.', evidence: 'Strong — amotivation is extensively studied in SDT literature (Howard et al., 2025).' },
+      e1: { research: 'Maps to SDT\'s external regulation and IDT\'s triggered situational interest. The learner participates because of external consequences (grades, requirements, manager directive) but has minimal personal investment. This is the most common state in mandatory training programs.', evidence: 'Strong — compliance-based engagement is well-characterized in both education and L&D research.' },
+      e2: { research: 'Maps to SDT\'s identified regulation and IDT\'s maintained situational interest. The learner engages voluntarily, showing curiosity and active participation. This is where utility value interventions (d = 0.40–0.60) have their strongest effect.', evidence: 'Strong — interest triggering and maintenance are well-studied (Hidi & Renninger, 2006).' },
+      e3: { research: 'Maps to the transition from identified to integrated regulation in SDT. The learner pursues learning beyond requirements, invests sustained effort, and connects learning to personal goals. This is the level where belonging interventions (d = 0.30–0.50) become critical — without community connection, commitment often fades.', evidence: 'Moderate — the mechanism from strategic engagement to commitment is the least characterized transition in the engagement literature.' },
+      e4: { research: 'Maps to SDT\'s intrinsic motivation with self-concordance. The learner drives their own learning agenda, seeks challenges, and transforms their learning context. This requires communities of practice where legitimate peripheral participation has matured into full participation.', evidence: 'Moderate — agentic engagement is increasingly studied (Reeve, 2013) but measurement tools are still developing.' },
+      e5: { research: 'Maps to SDT\'s fully integrated regulation where learning has become part of self-concept and professional identity. The learner does not separate "who I am" from "what I learn." This level is characterized by flow states (Csikszentmihalyi, 1990) and self-concordance (Sheldon & Elliot, 2000).', evidence: 'Moderate/Emerging — identity-integrated engagement is conceptually clear but difficult to distinguish from L4 empirically.' }
+    }
+  },
+  capability: {
+    overview: 'The Capability dimension tracks whether real ability was built — and critically, whether it is durable and transferable. Grounded in cognitive science (Dreyfus, Bloom, SOLO, Adaptive Expertise) and learning science (Cognitive Load Theory, Spaced Retrieval), it captures the full trajectory from memory failure to knowledge creation.',
+    levelDetails: {
+      c0: { research: 'The learner cannot perform the target skill. This may represent a pre-learning state or a state where prior learning has completely decayed. Ebbinghaus\' forgetting curve shows 75% of learning is forgotten within 6 days without retrieval practice or spacing.', evidence: 'Strong — forgetting curves are among the most replicated findings in psychology.' },
+      c1: { research: 'The learner can identify or recognize relevant concepts when presented but cannot recall or apply them independently. Maps to Bloom\'s "Remember" level. Retrieval strength is low but storage strength may be present — recognition is easier than recall.', evidence: 'Strong — the recognition-recall distinction is well-established in memory research.' },
+      c2: { research: 'The learner can perform with support but skill is fragile and context-dependent. Maps to Dreyfus\' Advanced Beginner. Brinkerhoff\'s research suggests 60–90% of training produces learners who never progress beyond this level. Spaced retrieval practice (d = 0.50–0.70) is the primary intervention.', evidence: 'Strong — unconsolidated learning is extensively documented in transfer research (Blume et al., 2010).' },
+      c3: { research: 'Reliable performance in trained contexts with durable skill. Maps to Dreyfus\' Competent stage and SOLO\'s Relational level. The learner has formed schemas that bypass working memory limitations (Sweller). Near transfer succeeds (d = 0.5–0.8) but far transfer typically fails (d = 0.1–0.3).', evidence: 'Strong — consolidation mechanisms are well-characterized in cognitive science.' },
+      c4: { research: 'Automated performance with low cognitive load and fast, accurate execution. Maps to Dreyfus\' Proficient stage. The expertise reversal effect becomes relevant: instructional methods that helped at L2 now actively harm by constraining automated processes.', evidence: 'Strong — automaticity is well-studied and measurable through dual-task paradigms.' },
+      c5: { research: 'Can modify and apply skills to novel situations; transfers across contexts. Maps to Hatano & Inagaki\'s Adaptive Expertise. Requires three conditions: varied practice contexts, psychological safety for experimentation, and emphasis on conceptual understanding. Effect sizes d = 0.40–0.65 for adaptive expertise training.', evidence: 'Moderate — adaptive expertise is conceptually clear but operationally difficult to distinguish from L4 in all cases.' },
+      c6: { research: 'Creates new knowledge, methods, or approaches. Maps to SOLO\'s Extended Abstract and Bloom\'s "Create." Includes the teaching paradox: deep expertise can impair teaching ability because experts skip automated steps and fail to anticipate novice misconceptions (Nathan & Petrosino, 2003).', evidence: 'Moderate — generativity is well-recognized but empirically thin. The boundary between creative and pedagogical generativity needs clarification.' }
+    }
+  },
+  portability: {
+    overview: 'The Portability dimension asks: does the learner know they have a capability, and can the world see it? Grounded in Polanyi\'s tacit knowledge, Nonaka & Takeuchi\'s SECI model, and metacognition research, it tracks the journey from invisible learning to contributory expertise.',
+    levelDetails: {
+      p0: { research: 'Learning exists but cannot be seen, measured, or articulated — either by the learner or by others. This is the default state of most informal learning and on-the-job skill development. Maps to Polanyi\'s "we know more than we can tell."', evidence: 'Strong — tacit knowledge is extensively theorized (Polanyi, 1966) and documented in organizational research.' },
+      p1: { research: 'The learner has capability but cannot explain or demonstrate it on demand. Maps to the SECI model\'s Socialization phase. Knowledge at this level can only be transmitted through shared experience, apprenticeship, and observation — it cannot be codified.', evidence: 'Strong — the tacit-explicit distinction is well-established in knowledge management literature.' },
+      p2: { research: 'The learner can describe what they know and how they would apply it. Maps to SECI\'s Externalization. This transition requires metacognitive knowledge (Flavell) — the ability to reflect on one\'s own competence. Think-alouds, teach-backs, and concept mapping are effective externalization techniques.', evidence: 'Moderate — externalization techniques are well-studied but measuring articulation quality remains subjective.' },
+      p3: { research: 'Evidence exists: portfolio, assessment, observable performance. Maps to Kirkpatrick\'s Level 3 (Behavior) and Level 4 (Results). The learning is no longer dependent on the learner\'s self-report — external evidence confirms it.', evidence: 'Strong — performance assessment and portfolio-based evaluation are well-established methodologies.' },
+      p4: { research: 'Formally recognized by institution, industry body, or credential system. The credential provides portability across contexts — the learner does not need to re-demonstrate capability for each new audience. The value depends on credential quality and recognition.', evidence: 'Strong — credentialing systems are extensively studied in education and labor economics.' },
+      p5: { research: 'Known for this capability; others seek them out; social proof established. Maps to Communities of Practice theory — the learner has become a recognized participant whose expertise is visible in the community. Boundary objects enable cross-community visibility.', evidence: 'Moderate — reputational capital is studied in sociology and organizational behavior but measurement is context-dependent.' },
+      p6: { research: 'Teaches, mentors, or publishes; capability produces value for others. Maps to SECI\'s full cycle and the teaching paradox. At this level, the learner\'s portability actively builds others\' capability — their knowledge has become generative in the social sense.', evidence: 'Moderate — contributory learning is well-described in CoP theory but difficult to measure independently of Capability L6.' }
+    }
+  },
+  opportunity: {
+    overview: 'The Opportunity dimension — added in LVA v2.0 based on COM-B analysis — asks whether the environment supports learning progression. Without opportunity, even capable and motivated learners cannot advance. This was identified as the most critical gap in the original three-dimension framework.',
+    levelDetails: {
+      o0: { research: 'No opportunity to learn or practice; environment blocks development. Maps to COM-B\'s absence of both physical and social opportunity. Structural barriers (no time, no resources, no access) or active discouragement prevent any learning activity.', evidence: 'Strong — environmental barriers to learning are extensively documented in COM-B literature (Michie et al., 2011).' },
+      o1: { research: 'Learning resources exist but are not actively promoted or supported. The learner must discover and access resources independently. Maps to the minimum threshold of COM-B\'s physical opportunity.', evidence: 'Moderate — resource availability without accessibility is a documented failure mode in organizational learning.' },
+      o2: { research: 'Resources are available AND the learner can realistically access them — barriers of time, cost, prerequisites, and technology have been addressed. Equity of access is the key concern at this level.', evidence: 'Strong — access equity is extensively studied in education policy and workplace learning research.' },
+      o3: { research: 'Active encouragement: dedicated time, mentoring, psychological safety, manager support. Maps to COM-B\'s social opportunity. Supervisor support is the single strongest predictor of training transfer (r = +0.50, Blume et al., 2010).', evidence: 'Strong — supported learning environments show consistent positive effects across contexts.' },
+      o4: { research: 'Learning is embedded in workflow; practice opportunities are routine. Maps to Senge\'s Learning Organization disciplines and COM-B\'s integrated opportunity. Learning is not a separate activity but a natural part of daily work.', evidence: 'Moderate — workflow-integrated learning is a growing area of research but measurement tools are still developing.' },
+      o5: { research: 'Organization-wide learning culture; systems reinforce continuous development. Maps to Senge\'s Systems Thinking and Fisher\'s Capability Infrastructure. Leadership models learning, performance systems reward development, and knowledge management enables collective growth.', evidence: 'Emerging — systemic learning culture is aspirational for most organizations. Evidence comes primarily from case studies of high-performing organizations.' }
+    }
+  }
+};
 
 // ============================================
 // UTILITIES
@@ -1318,6 +1858,38 @@ function navigateTo(viewId) {
 // VIEW: DIMENSION EXPLORER
 // ============================================
 function initDimensionExplorer() {
+  // Dimension Deep Dive
+  function renderDimensionDeepDive(filter) {
+    const container = $('#dimension-deep-dive');
+    const dimsToShow = filter === 'all' ? DIMENSIONS : DIMENSIONS.filter(d => d.id === filter);
+    container.innerHTML = dimsToShow.map(d => {
+      const dr = DIMENSION_RESEARCH[d.id];
+      if (!dr) return '';
+      return `
+        <div class="chart-container" style="margin-top:16px;border-top:3px solid ${d.color}">
+          <h3 style="color:${d.color}">${d.name}</h3>
+          <p style="font-size:0.85rem;color:var(--color-text-muted);line-height:1.7;margin-bottom:16px;max-width:80ch">${dr.overview}</p>
+          ${d.levels.map(l => {
+            const ld = dr.levelDetails[l.id];
+            return `<div style="padding:12px 0;border-top:1px solid var(--color-divider)">
+              <div style="display:flex;align-items:baseline;gap:8px">
+                <span style="font-weight:700;font-size:0.82rem;color:${d.color}">${l.label}</span>
+                <span style="font-size:0.78rem;color:var(--color-text-faint)">${l.desc}</span>
+              </div>
+              ${ld ? `<p style="font-size:0.82rem;color:var(--color-text-muted);line-height:1.6;margin-top:6px">${ld.research}</p>
+              <p style="font-size:0.72rem;color:var(--color-text-faint);margin-top:4px;font-style:italic">Evidence: ${ld.evidence}</p>` : ''}
+            </div>`;
+          }).join('')}
+        </div>`;
+    }).join('');
+  }
+  renderDimensionDeepDive('all');
+  $$('[data-dim-focus]').forEach(btn => btn.addEventListener('click', () => {
+    $$('[data-dim-focus]').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    renderDimensionDeepDive(btn.dataset.dimFocus);
+  }));
+
   // Radar Compare
   function updateRadarCompare() {
     const ids = ['#radar-sel-1','#radar-sel-2','#radar-sel-3'].map(s => $(s).value).filter(Boolean);
@@ -1438,6 +2010,7 @@ function initDimensionExplorer() {
 function renderProfiles() {
   const grid = $('#profile-grid');
   grid.innerHTML = THEORIES.map(t => {
+    const res = THEORY_RESEARCH[t.id];
     const tags = Object.entries(t.dimMap).flatMap(([dim, cs]) =>
       cs.slice(0, 3).map(c => `<span class="construct-tag" data-dim="${dim}">${c}</span>`)
     ).join('');
@@ -1450,7 +2023,16 @@ function renderProfiles() {
       <div class="profile-radar" id="profile-radar-${t.id}"></div>
       <div class="profile-body">
         <div class="profile-insight">${t.insight}</div>
-        <div class="profile-evidence">Effect size: ${t.effectSize}</div>
+        ${res ? `<p style="font-size:0.82rem;color:var(--color-text-muted);line-height:1.6;margin-top:12px">${res.summary}</p>` : ''}
+        ${res ? `<details style="margin-top:12px">
+          <summary style="font-size:0.78rem;font-weight:600;color:var(--color-primary);cursor:pointer">Key findings & evidence</summary>
+          <ul style="list-style:none;padding:0;margin-top:8px">
+            ${res.keyFindings.map(f => `<li style="font-size:0.78rem;color:var(--color-text-muted);line-height:1.5;padding:4px 0 4px 16px;position:relative"><span style="position:absolute;left:0;color:var(--color-primary)">→</span>${f}</li>`).join('')}
+          </ul>
+          <p style="font-size:0.78rem;color:var(--color-text-faint);margin-top:8px;font-style:italic"><strong>Limitations:</strong> ${res.limitations}</p>
+          <p style="font-size:0.78rem;color:var(--color-text-muted);margin-top:6px;padding:8px 12px;background:var(--color-primary-highlight);border-radius:var(--radius-sm)"><strong>Practical:</strong> ${res.practicalImplications}</p>
+        </details>` : ''}
+        <div class="profile-evidence" style="margin-top:10px">Effect size: ${t.effectSize}</div>
         <div class="construct-tags">${tags}</div>
       </div>
     </div>`;
@@ -1582,8 +2164,14 @@ function renderInterventions() {
         <span style="font-size:0.75rem;color:var(--color-text-faint);text-transform:capitalize">${int.dim}</span>
       </div>
       <div class="intervention-detail">
-        <p><strong>Strategy:</strong> ${int.strategy}</p>
-        <p style="margin-top:8px"><strong>Supporting theories:</strong> ${int.theories.join(', ')}</p>
+        <p style="font-size:0.88rem;font-weight:600;color:var(--color-text);margin-bottom:8px">${int.strategy}</p>
+        ${int.detail ? `<p style="margin-top:8px">${int.detail}</p>` : ''}
+        ${int.indicators ? `<div style="margin-top:12px;padding:10px 14px;background:var(--color-surface-offset);border-radius:var(--radius-sm)">
+          <p style="font-size:0.75rem;font-weight:600;text-transform:uppercase;letter-spacing:0.05em;color:var(--color-text-faint);margin-bottom:4px">Diagnostic Indicators</p>
+          <p style="font-size:0.82rem">${int.indicators}</p>
+        </div>` : ''}
+        ${int.effectSize ? `<p style="margin-top:10px;font-size:0.78rem;color:var(--color-text-faint);font-style:italic"><strong style="color:var(--color-text)">Effect size:</strong> ${int.effectSize}</p>` : ''}
+        <p style="margin-top:8px;font-size:0.82rem"><strong style="color:var(--color-text)">Supporting theories:</strong> ${int.theories.join(', ')}</p>
       </div>
     </div>`;
   }).join('');
@@ -1606,7 +2194,11 @@ function initCompare() {
   function update() {
     const aId = $('#compare-a').value;
     const bId = $('#compare-b').value;
-    if (!aId || !bId) return;
+    if (!aId || !bId) {
+      $('#compare-narrative').style.display = 'none';
+      $('#compare-dimension-detail').innerHTML = '';
+      return;
+    }
     const tA = THEORIES.find(t => t.id === aId);
     const tB = THEORIES.find(t => t.id === bId);
     if (!tA || !tB) return;
@@ -1616,6 +2208,9 @@ function initCompare() {
     $('#compare-th-b').textContent = tB.name;
 
     const dims = ['engagement', 'capability', 'portability', 'opportunity'];
+    const dimNames = { engagement: 'Engagement', capability: 'Capability', portability: 'Portability', opportunity: 'Opportunity' };
+
+    // Dimension table
     $('#compare-tbody').innerHTML = dims.map(d => {
       const vA = (tA.scores[d] * 100).toFixed(0);
       const vB = (tB.scores[d] * 100).toFixed(0);
@@ -1629,17 +2224,107 @@ function initCompare() {
       </tr>`;
     }).join('');
 
-    // Detail panels
-    $('#compare-details').innerHTML = [tA, tB].map(t => `
-      <div class="compare-panel">
-        <h4 style="font-family:var(--sans);font-size:0.95rem;font-weight:600">${t.name}</h4>
-        <p style="font-size:0.78rem;color:var(--color-text-faint)">${t.author}, ${t.year}</p>
-        <p style="font-size:0.85rem;color:var(--color-text-muted);margin-top:8px;font-style:italic">${t.insight}</p>
-        <div class="construct-tags" style="margin-top:12px">
-          ${t.constructs.slice(0, 8).map(c => `<span class="construct-tag" data-dim="engagement" style="background:var(--color-surface-offset);color:var(--color-text-muted)">${c}</span>`).join('')}
-        </div>
+    // Generate comparison narrative
+    const comp = generateComparison(tA, tB);
+    const resA = THEORY_RESEARCH[tA.id];
+    const resB = THEORY_RESEARCH[tB.id];
+
+    $('#compare-narrative').style.display = 'block';
+    $('#compare-narrative-content').innerHTML = `
+      <div class="narrative-section">
+        <h4><span class="dot" style="background:var(--color-primary)"></span>Complementarity</h4>
+        <p>${comp.complementarity}</p>
       </div>
-    `).join('');
+      <div class="narrative-section">
+        <h4><span class="dot" style="background:var(--cap)"></span>Where They Converge</h4>
+        <p>${comp.convergence}</p>
+      </div>
+      ${comp.divergence ? `<div class="narrative-section">
+        <h4><span class="dot" style="background:var(--eng)"></span>Where They Diverge</h4>
+        <p>${comp.divergence}</p>
+      </div>` : ''}
+      <div class="narrative-section">
+        <h4><span class="dot" style="background:var(--por)"></span>Integration Insight</h4>
+        <p>${comp.integration}</p>
+      </div>
+      ${comp.practicalA || comp.practicalB ? `<div class="narrative-callout">
+        <strong>Practical Implications</strong>
+        ${comp.practicalA ? `<p style="margin-top:8px"><strong>${tA.name}:</strong> ${comp.practicalA}</p>` : ''}
+        ${comp.practicalB ? `<p style="margin-top:8px"><strong>${tB.name}:</strong> ${comp.practicalB}</p>` : ''}
+      </div>` : ''}
+    `;
+
+    // Dimension deep-dive cards
+    $('#compare-dimension-detail').innerHTML = dims.map(d => {
+      const vA = tA.scores[d], vB = tB.scores[d];
+      const consA = (tA.dimMap[d] || []).join(', ') || 'None mapped';
+      const consB = (tB.dimMap[d] || []).join(', ') || 'None mapped';
+      const dimResearch = DIMENSION_RESEARCH[d];
+      return `
+        <div class="dim-detail-card" style="border-top-color:${dimColor(d)}">
+          <h4 style="color:${dimColor(d)}">${dimNames[d]}</h4>
+          <div class="dim-meta">${dimResearch?.overview || ''}</div>
+          <div class="bar-row">
+            <span class="bar-label" style="color:var(--color-text)">${tA.name.split(' ').slice(0, 2).join(' ')}</span>
+            <div class="bar-track"><div class="bar-fill" style="width:${vA * 100}%;background:${dimColor(d)}"></div></div>
+            <span style="font-size:0.78rem;font-weight:600;width:40px;text-align:right">${(vA * 100).toFixed(0)}%</span>
+          </div>
+          <div class="bar-row">
+            <span class="bar-label" style="color:var(--color-text)">${tB.name.split(' ').slice(0, 2).join(' ')}</span>
+            <div class="bar-track"><div class="bar-fill" style="width:${vB * 100}%;background:${dimColor(d)};opacity:0.6"></div></div>
+            <span style="font-size:0.78rem;font-weight:600;width:40px;text-align:right">${(vB * 100).toFixed(0)}%</span>
+          </div>
+          <div class="research-text">
+            <p><strong>${tA.name} constructs:</strong> ${consA}</p>
+            <p style="margin-top:6px"><strong>${tB.name} constructs:</strong> ${consB}</p>
+            ${vA > 0.5 && vB > 0.5 ? `<p style="margin-top:8px">Both theories provide substantial grounding for ${dimNames[d]}. ${
+              Math.abs(vA - vB) < 0.15 ? 'Their alignment scores are close, suggesting similar depth of contribution.' :
+              `${vA > vB ? tA.name : tB.name} provides deeper coverage (${Math.abs(vA - vB) * 100 | 0} points higher).`
+            }</p>` : vA > 0.5 ? `<p style="margin-top:8px">${tA.name} provides the primary grounding here. ${tB.name} contributes minimally to ${dimNames[d]}.</p>` :
+              vB > 0.5 ? `<p style="margin-top:8px">${tB.name} provides the primary grounding here. ${tA.name} contributes minimally to ${dimNames[d]}.</p>` :
+              `<p style="margin-top:8px">Neither theory provides strong ${dimNames[d]} coverage. Consider supplementing with theories that anchor in this dimension.</p>`
+            }
+          </div>
+        </div>`;
+    }).join('');
+
+    // Theory research panels (replaces old simple panels)
+    $('#compare-details').innerHTML = [tA, tB].map(t => {
+      const res = THEORY_RESEARCH[t.id];
+      if (!res) {
+        return `<div class="theory-research-panel">
+          <h4>${t.name}</h4>
+          <p class="meta">${t.author}, ${t.year} · <span class="evidence-badge ${t.evidence}">${t.evidence}</span></p>
+          <p class="summary" style="font-style:italic">${t.insight}</p>
+          <div class="construct-tags" style="margin-top:12px">
+            ${t.constructs.slice(0, 8).map(c => `<span class="construct-tag" data-dim="engagement" style="background:var(--color-surface-offset);color:var(--color-text-muted)">${c}</span>`).join('')}
+          </div>
+        </div>`;
+      }
+      return `<div class="theory-research-panel">
+        <h4>${t.name}</h4>
+        <p class="meta">${t.author}, ${t.year} · <span class="evidence-badge ${t.evidence}">${t.evidence}</span> · Effect size: ${t.effectSize}</p>
+        <p class="summary">${res.summary}</p>
+        <p style="font-size:0.78rem;font-weight:600;text-transform:uppercase;letter-spacing:0.05em;color:var(--color-text-faint);margin-bottom:6px">Key Research Findings</p>
+        <ul class="findings-list">
+          ${res.keyFindings.map(f => `<li>${f}</li>`).join('')}
+        </ul>
+        <div class="limitations">
+          <strong>Limitations</strong>
+          <p style="margin-top:4px">${res.limitations}</p>
+        </div>
+        <div class="implications">
+          <strong>Practical Implications</strong>
+          <p style="margin-top:4px">${res.practicalImplications}</p>
+        </div>
+        <div class="construct-tags" style="margin-top:16px">
+          ${t.constructs.map(c => {
+            const dim = Object.entries(t.dimMap).find(([_, cs]) => cs.includes(c))?.[0] || '';
+            return `<span class="construct-tag" data-dim="${dim}" ${!dim ? 'style="background:var(--color-surface-offset);color:var(--color-text-muted)"' : ''}>${c}</span>`;
+          }).join('')}
+        </div>
+      </div>`;
+    }).join('');
   }
 
   $('#compare-a')?.addEventListener('change', update);
