@@ -241,6 +241,7 @@ h1 em, h2 em, h3 em { font-style: italic; color: var(--color-primary); }
   background: var(--color-surface-2); border: 1px solid var(--color-border);
   border-radius: var(--radius-md); padding: 16px;
   cursor: pointer; transition: all 180ms var(--ease);
+  overflow: hidden; position: relative;
 }
 .theory-mini:hover {
   transform: translateY(-2px); box-shadow: var(--shadow-md);
@@ -248,7 +249,20 @@ h1 em, h2 em, h3 em { font-style: italic; color: var(--color-primary); }
 }
 .theory-mini h4 { font-family: var(--sans); font-size: 0.88rem; font-weight: 600; margin-bottom: 2px; }
 .theory-mini .theory-meta { font-size: 0.75rem; color: var(--color-text-faint); }
-.theory-mini .mini-radar { width: 100%; height: 120px; margin-top: 8px; }
+.theory-mini .mini-radar {
+  width: 120px;
+  height: 120px;
+  margin: 8px auto 0;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.theory-mini .mini-radar svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
 
 /* ============================================
    CONTROLS
@@ -310,7 +324,20 @@ h1 em, h2 em, h3 em { font-style: italic; color: var(--color-primary); }
 .profile-card .profile-meta {
   font-size: 0.78rem; color: var(--color-text-faint); margin-top: 2px;
 }
-.profile-card .profile-radar { width: 100%; height: 180px; }
+.profile-card .profile-radar {
+  width: 220px;
+  height: 220px;
+  margin: 16px auto;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.profile-card .profile-radar svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
 .profile-card .profile-body { padding: 0 20px 20px; }
 .profile-card .profile-insight {
   font-size: 0.85rem; color: var(--color-text-muted);
@@ -2035,8 +2062,10 @@ function drawRadar(container, datasets, size) {
   const labels = ['Engagement', 'Capability', 'Portability', 'Opportunity'];
   const angleSlice = (Math.PI * 2) / dims.length;
 
+  // Expand viewBox with padding so axis labels don't overflow
+  const pad = Math.max(20, w * 0.12);
   const svg = d3.select(container).html('').append('svg')
-    .attr('viewBox', `0 0 ${w} ${h}`).attr('class', 'chart-svg')
+    .attr('viewBox', `${-pad} ${-pad} ${w + pad * 2} ${h + pad * 2}`).attr('class', 'chart-svg')
     .attr('role', 'img').attr('aria-label', 'Radar chart comparing theory dimension scores');
 
   const g = svg.append('g').attr('transform', `translate(${cx},${cy})`);
@@ -2089,9 +2118,12 @@ function drawRadar(container, datasets, size) {
 function drawMiniRadar(container, scores) {
   const w = 120, h = 120, cx = 60, cy = 60, r = 42;
   const dims = ['engagement', 'capability', 'portability', 'opportunity'];
+  const dimColors = ['var(--eng)', 'var(--cap)', 'var(--por)', 'var(--opp)'];
   const angleSlice = (Math.PI * 2) / dims.length;
+  // No padding needed — mini radars have no labels
   const svg = d3.select(container).html('').append('svg')
-    .attr('viewBox', `0 0 ${w} ${h}`).attr('class', 'chart-svg');
+    .attr('viewBox', `0 0 ${w} ${h}`).attr('class', 'chart-svg')
+    .style('display', 'block').style('width', '100%').style('height', '100%');
   const g = svg.append('g').attr('transform', `translate(${cx},${cy})`);
 
   // Grid
@@ -2102,7 +2134,7 @@ function drawMiniRadar(container, scores) {
     }).join(' '))
     .attr('fill', 'none').attr('stroke', 'var(--color-divider)').attr('stroke-width', 0.5);
 
-  // Data
+  // Data polygon
   const points = dims.map((d, i) => {
     const a = angleSlice * i - Math.PI / 2;
     return [r * (scores[d] || 0) * Math.cos(a), r * (scores[d] || 0) * Math.sin(a)];
@@ -2111,9 +2143,10 @@ function drawMiniRadar(container, scores) {
     .attr('points', points.map(p => p.join(',')).join(' '))
     .attr('fill', 'var(--color-primary)').attr('fill-opacity', 0.15)
     .attr('stroke', 'var(--color-primary)').attr('stroke-width', 1.5);
-  points.forEach(p => {
-    g.append('circle').attr('cx', p[0]).attr('cy', p[1]).attr('r', 2.5)
-      .attr('fill', 'var(--color-primary)');
+  // Colored vertex dots per dimension
+  points.forEach((p, i) => {
+    g.append('circle').attr('cx', p[0]).attr('cy', p[1]).attr('r', 3)
+      .attr('fill', dimColors[i]);
   });
 }
 
@@ -2983,8 +3016,9 @@ function renderEvidence() {
       const labels = ['Engagement', 'Capability', 'Portability', 'Opportunity'];
       const w = 400, h = 400, cx = w/2, cy = h/2, r = w * 0.35;
       const angleSlice = (Math.PI * 2) / dims.length;
+      const ePad = 48;
       const svg = d3.select('#evidence-radar').html('').append('svg')
-        .attr('viewBox', `0 0 ${w} ${h}`).attr('class', 'chart-svg')
+        .attr('viewBox', `${-ePad} ${-ePad} ${w + ePad * 2} ${h + ePad * 2}`).attr('class', 'chart-svg')
         .attr('role', 'img').attr('aria-label', `Evidence strength radar for ${t.name}`);
       const g = svg.append('g').attr('transform', `translate(${cx},${cy})`);
 
