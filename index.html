@@ -3,11 +3,27 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Learning Value Architecture | Learning systems that produce real capability</title>
+  <title>Learning Value Architecture | Learning Systems Consultancy</title>
   <meta name="description" content="We design learning systems across higher education, workforce learning, and EdTech - where engagement, capability, portability, and opportunity work together.">
+  <link rel="canonical" href="https://learningvaluearchitecture.com/">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
   <meta property="og:title" content="Learning Value Architecture">
   <meta property="og:description" content="Learning systems that produce real capability - and can prove it.">
   <meta property="og:type" content="website">
+  <meta property="og:url" content="https://learningvaluearchitecture.com/">
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Learning Value Architecture">
+  <meta name="twitter:description" content="Learning systems that produce real capability - and can prove it.">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "Learning Value Architecture",
+    "url": "https://learningvaluearchitecture.com",
+    "description": "We design learning systems across higher education, workforce learning, and EdTech.",
+    "email": "hello@learningvaluearchitecture.com"
+  }
+  </script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:ital@1&display=swap" rel="stylesheet">
@@ -34,7 +50,7 @@
         <a href="contact.html">CONTACT</a>
       </nav>
       <a href="contact.html" class="btn btn--cta btn--sm nav__cta">Book a Consultation</a>
-      <button class="nav__toggle" id="nav-toggle" aria-label="Toggle menu" aria-expanded="false">
+      <button type="button" class="nav__toggle" id="nav-toggle" aria-label="Toggle menu" aria-expanded="false">
         <span></span><span></span><span></span>
       </button>
     </div>
@@ -50,7 +66,7 @@
         <p class="section-intro mb-xl">We work across higher education, workforce learning, and EdTech &mdash; designing systems where engagement, capability, portability, and opportunity work together.</p>
         <div class="flex flex--gap-md flex--wrap">
           <a href="contact.html" class="btn btn--primary">See how we can help you</a>
-          <a href="how-we-work.html" class="btn btn--ghost">Get Free Tip of Day</a>
+          <a href="how-we-work.html" class="btn btn--ghost">How we work</a>
         </div>
       </div>
     </section>
@@ -118,14 +134,14 @@
       <div class="container">
         <h2 class="mb-md">Three markets, one <em class="accent">methodology</em></h2>
         <p class="section-intro mb-xl">Every learning system must satisfy the same conditions: engagement, capability, portability, opportunity. The design contexts are different. We bring cross-industry fluency to each.</p>
-        <div class="tabs mb-xl">
-          <button class="tab-pill is-active" data-tab="higher-ed">Higher Education</button>
-          <button class="tab-pill" data-tab="workforce">Workforce Learning</button>
-          <button class="tab-pill" data-tab="edtech">EdTech</button>
+        <div class="tabs mb-xl" role="tablist" aria-label="Market segments">
+          <button type="button" class="tab-pill is-active" data-tab="higher-ed" role="tab" aria-selected="true" aria-controls="tab-higher-ed" id="pill-higher-ed" tabindex="0">Higher Education</button>
+          <button type="button" class="tab-pill" data-tab="workforce" role="tab" aria-selected="false" aria-controls="tab-workforce" id="pill-workforce" tabindex="-1">Workforce Learning</button>
+          <button type="button" class="tab-pill" data-tab="edtech" role="tab" aria-selected="false" aria-controls="tab-edtech" id="pill-edtech" tabindex="-1">EdTech</button>
         </div>
 
         <!-- Higher Education Panel -->
-        <div class="tab-panel is-active" id="tab-higher-ed">
+        <div class="tab-panel is-active" id="tab-higher-ed" role="tabpanel" aria-labelledby="pill-higher-ed">
           <div class="grid grid--2">
             <div>
               <h3 class="mb-md">Learning systems that drive visible behavior change.</h3>
@@ -170,7 +186,7 @@
         </div>
 
         <!-- Workforce Learning Panel -->
-        <div class="tab-panel" id="tab-workforce">
+        <div class="tab-panel" id="tab-workforce" role="tabpanel" aria-labelledby="pill-workforce">
           <div class="grid grid--2">
             <div>
               <h3 class="mb-md">Learning systems that change how people perform &mdash; and prove it.</h3>
@@ -208,7 +224,7 @@
         </div>
 
         <!-- EdTech Panel -->
-        <div class="tab-panel" id="tab-edtech">
+        <div class="tab-panel" id="tab-edtech" role="tabpanel" aria-labelledby="pill-edtech">
           <div class="grid grid--2">
             <div>
               <h3 class="mb-md">Prove your product works. Turn evidence into growth.</h3>
@@ -396,13 +412,21 @@
     <div class="container footer__inner">
       <p>&copy; 2026 Learning Value Architecture. All rights reserved.</p>
       <div class="flex flex--gap-lg">
+        <a href="/">Home</a>
+        <a href="how-we-work.html">Knowledge</a>
+        <a href="track-record.html">Markets</a>
+        <a href="LVA-Explorer.html">Explorer</a>
         <a href="contact.html">Contact</a>
-        <a href="how-we-work.html">How We Work</a>
-        <a href="track-record.html">Track Record</a>
       </div>
     </div>
   </footer>
 
+  <noscript>
+    <style>
+      .tab-panel { display: block !important; margin-bottom: var(--sp-2xl); }
+      .tabs[role="tablist"] { display: none; }
+    </style>
+  </noscript>
   <script src="js/main.js" defer></script>
 </body>
 </html>
