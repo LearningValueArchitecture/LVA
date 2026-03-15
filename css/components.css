@@ -51,6 +51,8 @@ header, .nav {
   -webkit-backdrop-filter: blur(20px);
   border-bottom: 1px solid var(--border-light);
   transition: box-shadow 0.3s ease;
+  box-sizing: border-box;
+  height: 64px;
 }
 
 header.is-scrolled, .nav.is-scrolled {
@@ -904,6 +906,11 @@ header.is-scrolled, .nav.is-scrolled {
 .gap-card {
   padding: 44px 36px;
   background: var(--bg-warm-accent);
+  transition: background 0.25s var(--ease-smooth);
+}
+
+.gap-card:hover {
+  background: #e5e1d9;
 }
 
 .gap-card h3 {

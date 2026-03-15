@@ -132,6 +132,7 @@ section, .section {
   .grid-4,
   .split-about,
   .split-market,
+  .split-layout,
   .grid--3,
   .grid--4 {
     grid-template-columns: 1fr;
