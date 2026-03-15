@@ -16,7 +16,7 @@
 <meta name="twitter:description" content="Interactive research tool: 4 dimensions, 25 levels, 20 theories grounded in learning science.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <script src="https://d3js.org/d3.v7.min.js"></script>
 <style>
 /* ============================================
@@ -102,10 +102,12 @@ img { max-width: 100%; display: block; }
    ============================================ */
 .site-header {
   position: sticky; top: 0; z-index: 100;
-  background: var(--color-surface-2);
-  border-bottom: 1px solid var(--color-divider);
+  background: rgba(246, 244, 240, 0.85);
+  border-bottom: 1px solid rgba(26, 26, 31, 0.1);
   height: var(--nav-h);
-  backdrop-filter: blur(12px);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  transition: box-shadow 0.3s ease;
 }
 .site-header .inner {
   max-width: 1260px; margin: 0 auto; padding: 0 24px;

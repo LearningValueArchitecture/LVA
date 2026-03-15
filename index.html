@@ -26,7 +26,7 @@
   </script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:ital@1&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/variables.css">
   <link rel="stylesheet" href="css/reset.css">
   <link rel="stylesheet" href="css/base.css">
@@ -36,20 +36,19 @@
 </head>
 <body>
 
-  <!-- Skip to content -->
   <a href="#main" class="sr-only">Skip to main content</a>
 
   <!-- NAVIGATION -->
   <header class="nav">
-    <div class="container nav__inner">
-      <a href="/" class="nav__logo">Learning Value Architecture</a>
+    <div class="nav__inner">
+      <a href="/" class="nav__logo">Learning Value Architecture<span>.</span></a>
       <nav class="nav__links" id="nav-links">
         <a href="how-we-work.html">KNOWLEDGE</a>
         <a href="track-record.html">MARKETS</a>
         <a href="LVA-Explorer.html">EXPLORER</a>
         <a href="contact.html">CONTACT</a>
       </nav>
-      <a href="contact.html" class="btn btn--cta btn--sm nav__cta">Book a Consultation</a>
+      <a href="contact.html" class="nav__cta">Book a Consultation</a>
       <button type="button" class="nav__toggle" id="nav-toggle" aria-label="Toggle menu" aria-expanded="false">
         <span></span><span></span><span></span>
       </button>
@@ -58,83 +57,116 @@
 
   <main id="main">
 
-    <!-- HERO -->
-    <section class="section" id="hero">
+    <!-- SECTION 1: HERO -->
+    <section class="hero" id="hero">
       <div class="container">
-        <p class="section-label">LEARNING VALUE ARCHITECTURE</p>
-        <h1 class="mb-lg" style="max-width: 720px;">Learning systems that produce real capability and can prove it.</h1>
-        <p class="section-intro mb-xl">We work across higher education, workforce learning, and EdTech &mdash; designing systems where engagement, capability, portability, and opportunity work together.</p>
-        <div class="flex flex--gap-md flex--wrap">
-          <a href="contact.html" class="btn btn--primary">See how we can help you</a>
-          <a href="how-we-work.html" class="btn btn--ghost">How we work</a>
+        <div class="section-label animate-in">
+          <span class="section-label__dash"></span>
+          <span class="section-label__text">Learning Value Architecture</span>
+        </div>
+        <h1 class="animate-in">Learning systems that produce real capability and can prove it.</h1>
+        <p class="subtitle animate-in">We work across higher education, workforce learning, and EdTech &mdash; designing systems where engagement, capability, portability, and opportunity work together.</p>
+        <div class="flex flex--gap-md flex--wrap animate-in">
+          <a href="contact.html" class="btn-primary">Take the Learning Value Scan &rarr;</a>
+          <a href="how-we-work.html" class="btn-secondary">How we work</a>
         </div>
       </div>
     </section>
 
-    <!-- PROBLEM SECTION -->
-    <section class="section section--cream" id="problem">
+    <!-- SECTION 2: THE PROBLEM (Dark) -->
+    <section class="section section--dark" id="problem">
       <div class="container">
-        <p class="section-label">THE CORE CHALLENGE</p>
-        <h2 class="mb-lg" style="max-width: 640px;">Most learning investment can't prove its own <em class="accent">value</em></h2>
-        <p class="section-intro mb-2xl" style="max-width: 640px;">Huge sums go into learning programs, yet most organizations cannot demonstrate return on that investment in ways that satisfy leadership.</p>
-        <div class="grid grid--3">
-          <div class="card card--bordered">
-            <p class="card__label">PROBLEM 01</p>
-            <h3 class="card__title">68% of leaders report no clear link between learning investment and business outcomes<sup><a href="#fn1" style="color:var(--color-accent);text-decoration:none;">1</a></sup></h3>
-            <p class="card__text">Organizations invest significantly in capability development yet cannot demonstrate how learning contributes to strategic goals.</p>
+        <div class="section-label animate-in stagger-0">
+          <span class="section-label__dash"></span>
+          <span class="section-label__text">The Problem</span>
+        </div>
+        <h2 class="animate-in stagger-2" style="margin-bottom: 20px;">Most learning investment can&rsquo;t prove its own <em>value</em></h2>
+        <p class="section-lead animate-in stagger-3" style="color: rgba(246, 244, 240, 0.6);">Huge sums go into learning programs, yet most organizations cannot demonstrate return on that investment in ways that satisfy leadership.</p>
+        <div class="grid-3" style="gap: 2px; border-radius: 12px; overflow: hidden;">
+          <div class="stat-card animate-in stagger-4">
+            <p class="stat-card__number">68%</p>
+            <p class="stat-card__headline">No clear link to outcomes</p>
+            <p class="stat-card__body">Of leaders report no clear link between learning investment and business outcomes.<sup style="color:var(--copper-light);">1</sup></p>
           </div>
-          <div class="card card--bordered">
-            <p class="card__label">PROBLEM 02</p>
-            <h3 class="card__title">Skills quickly degrade when learning systems lack durability architecture<sup><a href="#fn2" style="color:var(--color-accent);text-decoration:none;">2</a></sup></h3>
-            <p class="card__text">Most learning programs produce short-term capability spikes that decay within weeks, wasting investment and eroding trust.</p>
+          <div class="stat-card animate-in stagger-4" style="transition-delay: 330ms;">
+            <p class="stat-card__number">82%</p>
+            <p class="stat-card__headline">Skills fade within 90 days</p>
+            <p class="stat-card__body">Of behavior change from training programs fades within 90 days without durability architecture.<sup style="color:var(--copper-light);">2</sup></p>
           </div>
-          <div class="card card--bordered">
-            <p class="card__label">PROBLEM 03</p>
-            <h3 class="card__title">Learners disengage when programs feel disconnected from real challenges<sup><a href="#fn3" style="color:var(--color-accent);text-decoration:none;">3</a></sup></h3>
-            <p class="card__text">Without systems-level engagement design, participation drops and completion becomes a vanity metric rather than a capability signal.</p>
+          <div class="stat-card animate-in stagger-4" style="transition-delay: 410ms;">
+            <p class="stat-card__number">75%</p>
+            <p class="stat-card__headline">Can&rsquo;t demonstrate ROI</p>
+            <p class="stat-card__body">Of CLOs cannot demonstrate learning ROI to their board in terms leadership trusts.<sup style="color:var(--copper-light);">6</sup></p>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- LVA FRAMEWORK -->
+    <!-- SECTION 3: THE FRAMEWORK -->
     <section class="section" id="framework">
       <div class="container">
-        <div class="text-center mb-2xl">
-          <h2 class="mb-md">The Learning Value <em class="accent">Architecture</em></h2>
-          <p class="section-intro" style="margin: 0 auto;">Every learning investment must satisfy four conditions: it must engage, it must build real capability, it must be portable and visible, and the environment must support its application. The Learning Value Architecture designs all four as one system.</p>
+        <div class="section-label animate-in stagger-0">
+          <span class="section-label__dash"></span>
+          <span class="section-label__text">The Framework</span>
         </div>
-        <div class="grid grid--4">
-          <div class="card">
-            <p class="card__label">DIMENSION 01</p>
-            <h3 class="card__title">Engagement</h3>
-            <p class="card__text">Does the learner care &mdash; and if so, how and why? The system creates conditions where participation is meaningful, not mandated. When missing: low completion, passive attendance, compliance rather than capability.</p>
+        <h2 class="animate-in stagger-2" style="margin-bottom: 20px;">The Learning Value <em>Architecture</em></h2>
+        <p class="section-lead animate-in stagger-3">Every learning investment must satisfy four conditions: it must engage, it must build real capability, it must be portable and visible, and the environment must support its application.</p>
+
+        <div class="dimensions-container animate-in stagger-4">
+          <div class="dimension-card">
+            <p class="dimension-card__label">Dimension 01</p>
+            <div class="dimension-card__icon dimension-card__icon--engagement">&#9670;</div>
+            <h3 class="dimension-card__title">Engagement</h3>
+            <p class="dimension-card__description">Does the learner care &mdash; and if so, how and why? The system creates conditions where participation is meaningful, not mandated.</p>
+            <div class="dimension-card__examples">
+              <span>Low completion, passive attendance</span>
+              <span>Compliance rather than capability</span>
+            </div>
           </div>
-          <div class="card">
-            <p class="card__label">DIMENSION 02</p>
-            <h3 class="card__title">Capability</h3>
-            <p class="card__text">Was real ability actually built &mdash; and is it durable? Learning translates into behavior change visible on the job, not knowledge tested in a quiz. When missing: confident graduates who cannot perform, skills that decay within weeks.</p>
+          <div class="dimension-card">
+            <p class="dimension-card__label">Dimension 02</p>
+            <div class="dimension-card__icon dimension-card__icon--capability">&#9670;</div>
+            <h3 class="dimension-card__title">Capability</h3>
+            <p class="dimension-card__description">Was real ability actually built &mdash; and is it durable? Learning translates into behavior change visible on the job.</p>
+            <div class="dimension-card__examples">
+              <span>Confident graduates who cannot perform</span>
+              <span>Skills that decay within weeks</span>
+            </div>
           </div>
-          <div class="card">
-            <p class="card__label">DIMENSION 03</p>
-            <h3 class="card__title">Portability</h3>
-            <p class="card__text">Does the learner know they have it, and can the world see it? Capability is recognized, credentialed, and transferable across contexts. When missing: real skills with no visibility, credentials that don&rsquo;t travel, talent that stays hidden.</p>
+          <div class="dimension-card">
+            <p class="dimension-card__label">Dimension 03</p>
+            <div class="dimension-card__icon dimension-card__icon--evidence">&#9670;</div>
+            <h3 class="dimension-card__title">Portability</h3>
+            <p class="dimension-card__description">Does the learner know they have it, and can the world see it? Capability is recognized, credentialed, and transferable.</p>
+            <div class="dimension-card__examples">
+              <span>Real skills with no visibility</span>
+              <span>Credentials that don&rsquo;t travel</span>
+            </div>
           </div>
-          <div class="card">
-            <p class="card__label">DIMENSION 04</p>
-            <h3 class="card__title">Opportunity</h3>
-            <p class="card__text">Does the environment support or block learning application? The organization, culture, and systems enable people to use what they&rsquo;ve learned. When missing: trained people returning to unchanged systems, capability wasted by structural barriers.</p>
+        </div>
+
+        <div style="margin-top: 2px;">
+          <div class="animate-in stagger-5" style="border: 1px solid var(--border-light); border-radius: 12px; padding: 48px 36px;">
+            <p class="dimension-card__label">Dimension 04</p>
+            <div class="dimension-card__icon dimension-card__icon--opportunity">&#9670;</div>
+            <h3 class="dimension-card__title">Opportunity</h3>
+            <p class="dimension-card__description" style="max-width: 600px;">Does the environment support or block learning application? The organization, culture, and systems enable people to use what they&rsquo;ve learned. When missing: trained people returning to unchanged systems, capability wasted by structural barriers.</p>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- THREE MARKETS -->
-    <section class="section section--cream" id="markets">
+    <!-- SECTION 4: THREE MARKETS (White bg) -->
+    <section class="section section--white" id="markets">
       <div class="container">
-        <h2 class="mb-md">Three markets, one <em class="accent">methodology</em></h2>
-        <p class="section-intro mb-xl">Every learning system must satisfy the same conditions: engagement, capability, portability, opportunity. The design contexts are different. We bring cross-industry fluency to each.</p>
-        <div class="tabs mb-xl" role="tablist" aria-label="Market segments">
+        <div class="section-label animate-in stagger-0">
+          <span class="section-label__dash"></span>
+          <span class="section-label__text">Who I Work With</span>
+        </div>
+        <h2 class="animate-in stagger-2" style="margin-bottom: 20px;">Three markets, one <em>methodology</em></h2>
+        <p class="section-lead animate-in stagger-3">Every learning system must satisfy the same conditions: engagement, capability, portability, opportunity. The design contexts are different. We bring cross-industry fluency to each.</p>
+
+        <div class="tab-pills animate-in stagger-4" role="tablist" aria-label="Market segments">
           <button type="button" class="tab-pill is-active" data-tab="higher-ed" role="tab" aria-selected="true" aria-controls="tab-higher-ed" id="pill-higher-ed" tabindex="0">Higher Education</button>
           <button type="button" class="tab-pill" data-tab="workforce" role="tab" aria-selected="false" aria-controls="tab-workforce" id="pill-workforce" tabindex="-1">Workforce Learning</button>
           <button type="button" class="tab-pill" data-tab="edtech" role="tab" aria-selected="false" aria-controls="tab-edtech" id="pill-edtech" tabindex="-1">EdTech</button>
@@ -142,281 +174,283 @@
 
         <!-- Higher Education Panel -->
         <div class="tab-panel is-active" id="tab-higher-ed" role="tabpanel" aria-labelledby="pill-higher-ed">
-          <div class="grid grid--2">
+          <div class="split-market">
             <div>
-              <h3 class="mb-md">Learning systems that drive visible behavior change.</h3>
-              <p class="mb-lg">We help institutions redesign programs so that graduates demonstrate real capability &mdash; not just course completion. This requires systems-level thinking about curriculum, pedagogy, assessment, and evidence architecture.</p>
-              <p class="card__text">The result: programs that satisfy accreditation, attract students, and produce graduates employers actually want.</p>
+              <h3 style="font-size: clamp(1.6rem, 3vw, 2.2rem); margin-bottom: 20px;">Learning systems that drive visible behavior change.</h3>
+              <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.7; margin-bottom: 24px;">We help institutions redesign programs so that graduates demonstrate real capability &mdash; not just course completion. This requires systems-level thinking about curriculum, pedagogy, assessment, and evidence architecture.</p>
+              <p style="font-size: 0.88rem; color: var(--text-muted);">The result: programs that satisfy accreditation, attract students, and produce graduates employers actually want.</p>
             </div>
-            <div class="grid grid--2" style="gap: var(--sp-md);">
-              <div class="card card--bordered">
-                <p class="stat__value">67%</p>
-                <p class="stat__label">of employers say graduates lack job-ready capabilities<sup><a href="#fn4" style="color:var(--color-accent);text-decoration:none;">4</a></sup></p>
+            <div class="evidence-panel">
+              <div class="stat-inline">
+                <span class="stat-inline__number">67%</span>
+                <span class="stat-inline__text">of employers say graduates lack job-ready capabilities<sup>4</sup></span>
               </div>
-              <div class="card card--bordered">
-                <p class="stat__value">41%</p>
-                <p class="stat__label">of students question the value of their program experience<sup><a href="#fn5" style="color:var(--color-accent);text-decoration:none;">5</a></sup></p>
+              <div class="stat-inline">
+                <span class="stat-inline__number">41%</span>
+                <span class="stat-inline__text">of students question the value of their program experience<sup>5</sup></span>
               </div>
-            </div>
-          </div>
-          <div class="grid grid--3 mt-xl">
-            <div class="card card--bordered">
-              <p class="card__label">CORE OFFERING</p>
-              <h3 class="card__title">Learning Value Scan</h3>
-              <p class="card__text">A diagnostic that maps where your learning system creates value and where it leaks.</p>
-            </div>
-            <div class="card card--bordered">
-              <p class="card__label">CORE OFFERING</p>
-              <h3 class="card__title">Learning Value Audit</h3>
-              <p class="card__text">Deep analysis of engagement, capability, portability, and opportunity across your programs.</p>
-            </div>
-            <div class="card card--bordered">
-              <p class="card__label">CORE OFFERING</p>
-              <h3 class="card__title">Evidence Architecture</h3>
-              <p class="card__text">Design the system that proves your programs work &mdash; to accreditors, employers, and students.</p>
-            </div>
-          </div>
-          <div class="mt-lg">
-            <div class="card card--bordered">
-              <p class="card__label">ALSO AVAILABLE</p>
-              <h3 class="card__title">Embedded Advisory</h3>
-              <p class="card__text">Ongoing strategic partnership for institutions undertaking multi-year transformation. We stay through execution, not just strategy.</p>
             </div>
           </div>
         </div>
 
         <!-- Workforce Learning Panel -->
         <div class="tab-panel" id="tab-workforce" role="tabpanel" aria-labelledby="pill-workforce">
-          <div class="grid grid--2">
+          <div class="split-market">
             <div>
-              <h3 class="mb-md">Learning systems that change how people perform &mdash; and prove it.</h3>
-              <p class="mb-lg">We design workforce learning systems where behavior change is visible to business leaders, not just L&amp;D. The evidence is built into the system, so the conversation shifts from "did people complete the training?" to "did performance change?"</p>
-              <p class="card__text">The result: learning investment that leadership trusts because results are demonstrable.</p>
+              <h3 style="font-size: clamp(1.6rem, 3vw, 2.2rem); margin-bottom: 20px;">Learning systems that change how people perform &mdash; and prove it.</h3>
+              <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.7; margin-bottom: 24px;">We design workforce learning systems where behavior change is visible to business leaders, not just L&amp;D. The evidence is built into the system, so the conversation shifts from &ldquo;did people complete the training?&rdquo; to &ldquo;did performance change?&rdquo;</p>
+              <p style="font-size: 0.88rem; color: var(--text-muted);">The result: learning investment that leadership trusts because results are demonstrable.</p>
             </div>
-            <div class="grid grid--2" style="gap: var(--sp-md);">
-              <div class="card card--bordered">
-                <p class="stat__value">75%</p>
-                <p class="stat__label">of CLOs cannot demonstrate learning ROI to their board<sup><a href="#fn6" style="color:var(--color-accent);text-decoration:none;">6</a></sup></p>
+            <div class="evidence-panel">
+              <div class="stat-inline">
+                <span class="stat-inline__number">75%</span>
+                <span class="stat-inline__text">of CLOs cannot demonstrate learning ROI to their board<sup>6</sup></span>
               </div>
-              <div class="card card--bordered">
-                <p class="stat__value">82%</p>
-                <p class="stat__label">of behavior change from training programs fades within 90 days<sup><a href="#fn2" style="color:var(--color-accent);text-decoration:none;">2</a></sup></p>
+              <div class="stat-inline">
+                <span class="stat-inline__number">82%</span>
+                <span class="stat-inline__text">of behavior change from training programs fades within 90 days<sup>2</sup></span>
               </div>
-            </div>
-          </div>
-          <div class="grid grid--3 mt-xl">
-            <div class="card card--bordered">
-              <p class="card__label">CORE OFFERING</p>
-              <h3 class="card__title">Learning Value Scan</h3>
-              <p class="card__text">Rapid diagnostic of your learning system's value creation and leakage points.</p>
-            </div>
-            <div class="card card--bordered">
-              <p class="card__label">CORE OFFERING</p>
-              <h3 class="card__title">Learning Value Audit</h3>
-              <p class="card__text">Comprehensive analysis of how your learning programs drive &mdash; or fail to drive &mdash; business performance.</p>
-            </div>
-            <div class="card card--bordered">
-              <p class="card__label">CORE OFFERING</p>
-              <h3 class="card__title">Execution Sprint</h3>
-              <p class="card__text">Strategy-to-implementation in weeks, not months. We design and build the system with you.</p>
             </div>
           </div>
         </div>
 
         <!-- EdTech Panel -->
         <div class="tab-panel" id="tab-edtech" role="tabpanel" aria-labelledby="pill-edtech">
-          <div class="grid grid--2">
+          <div class="split-market">
             <div>
-              <h3 class="mb-md">Prove your product works. Turn evidence into growth.</h3>
-              <p class="mb-lg">We help EdTech companies build product-learning fit: the evidence that your product produces real learning outcomes. This turns customer success stories into renewal conversations and expansion revenue.</p>
-              <p class="card__text">The result: stronger renewals, credible impact claims, and a product story grounded in evidence rather than anecdote.</p>
+              <h3 style="font-size: clamp(1.6rem, 3vw, 2.2rem); margin-bottom: 20px;">Prove your product works. Turn evidence into growth.</h3>
+              <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.7; margin-bottom: 24px;">We help EdTech companies build product-learning fit: the evidence that your product produces real learning outcomes. This turns customer success stories into renewal conversations and expansion revenue.</p>
+              <p style="font-size: 0.88rem; color: var(--text-muted);">The result: stronger renewals, credible impact claims, and a product story grounded in evidence rather than anecdote.</p>
             </div>
-            <div class="grid grid--2" style="gap: var(--sp-md);">
-              <div class="card card--bordered">
-                <p class="stat__value">3x</p>
-                <p class="stat__label">renewal rate when EdTech products can demonstrate learning outcomes<sup><a href="#fn7" style="color:var(--color-accent);text-decoration:none;">7</a></sup></p>
+            <div class="evidence-panel">
+              <div class="stat-inline">
+                <span class="stat-inline__number">3x</span>
+                <span class="stat-inline__text">renewal rate when EdTech products can demonstrate learning outcomes<sup>7</sup></span>
               </div>
-              <div class="card card--bordered">
-                <p class="stat__value">58%</p>
-                <p class="stat__label">of EdTech buyers cite lack of evidence as the top barrier to purchase<sup><a href="#fn8" style="color:var(--color-accent);text-decoration:none;">8</a></sup></p>
+              <div class="stat-inline">
+                <span class="stat-inline__number">58%</span>
+                <span class="stat-inline__text">of EdTech buyers cite lack of evidence as the top barrier to purchase<sup>8</sup></span>
               </div>
-            </div>
-          </div>
-          <div class="grid grid--3 mt-xl">
-            <div class="card card--bordered">
-              <p class="card__label">CORE OFFERING</p>
-              <h3 class="card__title">Product-Learning Fit Sprint</h3>
-              <p class="card__text">Map the connection between your product features and demonstrable learning outcomes.</p>
-            </div>
-            <div class="card card--bordered">
-              <p class="card__label">CORE OFFERING</p>
-              <h3 class="card__title">Evidence Architecture</h3>
-              <p class="card__text">Build the system that captures and communicates your product's impact on learning.</p>
-            </div>
-            <div class="card card--bordered">
-              <p class="card__label">CORE OFFERING</p>
-              <h3 class="card__title">Embedded Advisory</h3>
-              <p class="card__text">Ongoing product strategy partnership focused on learning value and market positioning.</p>
             </div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- SEVEN OFFERINGS -->
+    <!-- SECTION 5: COMPLETE PORTFOLIO (Offering Table) -->
     <section class="section" id="offerings">
       <div class="container">
-        <h2 class="mb-md">Seven offerings, one <em class="accent">system</em></h2>
-        <p class="section-intro mb-2xl">Every offering maps to one job. The work combines based on what's needed.</p>
-        <div class="mb-md">
-          <div class="tabs mb-xl">
-            <span class="tag tag--dark">Core</span>
-            <span class="tag tag--outline">Add-on offerings</span>
-          </div>
+        <div class="section-label animate-in stagger-0">
+          <span class="section-label__dash"></span>
+          <span class="section-label__text">Complete Portfolio</span>
         </div>
-        <div>
-          <div class="offering">
-            <div class="offering__name">Learning Value Scan</div>
-            <div class="offering__desc">Rapid assessment that maps where your system creates value and where it leaks. Prioritized findings, clear next steps. Typically 2&ndash;3 weeks.</div>
-            <div class="offering__tags">
-              <span class="tag">Higher Ed</span>
-              <span class="tag">Workforce</span>
-              <span class="tag">EdTech</span>
+        <h2 class="animate-in stagger-2" style="margin-bottom: 20px;">Seven offerings, one <em>system</em></h2>
+        <p class="section-lead animate-in stagger-3">Every offering maps to one job. The work combines based on what&rsquo;s needed.</p>
+
+        <div class="tagline-centered animate-in stagger-4">
+          <p>Designed as separate activities, they underperform.</p>
+          <p>Designed as <strong>one system</strong>, they compound.</p>
+        </div>
+
+        <div class="offering-table animate-in stagger-5">
+          <!-- Tier 1: Diagnose -->
+          <div class="offering-table__tier-header offering-table__tier-header--t1">Tier 1 &mdash; Diagnose</div>
+          <div class="offering-table__row">
+            <div class="offering-table__name">Learning Value Scan</div>
+            <div class="offering-table__desc">Rapid assessment that maps where your system creates value and where it leaks. Prioritized findings, clear next steps.</div>
+            <div class="offering-table__price">2&ndash;3 weeks</div>
+            <div class="offering-table__markets">
+              <span class="market-badge">Higher Ed</span>
+              <span class="market-badge">Workforce</span>
+              <span class="market-badge">EdTech</span>
             </div>
           </div>
-          <div class="offering">
-            <div class="offering__name">Transfer Design Toolkit</div>
-            <div class="offering__desc">Structured resources for designing learning experiences that transfer to real performance contexts. Templates, frameworks, implementation guides.</div>
-            <div class="offering__tags">
-              <span class="tag">Workforce</span>
-              <span class="tag">Higher Ed</span>
+          <div class="offering-table__row">
+            <div class="offering-table__name">Learning Value Audit</div>
+            <div class="offering-table__desc">Comprehensive analysis of engagement, capability, portability, and opportunity across your programs.</div>
+            <div class="offering-table__price">4&ndash;6 weeks</div>
+            <div class="offering-table__markets">
+              <span class="market-badge">Higher Ed</span>
+              <span class="market-badge">Workforce</span>
             </div>
           </div>
-          <div class="offering">
-            <div class="offering__name">Learning Value Audit</div>
-            <div class="offering__desc">Comprehensive analysis of engagement, capability, portability, and opportunity across your learning programs. Stakeholder interviews, data analysis, system mapping.</div>
-            <div class="offering__tags">
-              <span class="tag">Higher Ed</span>
-              <span class="tag">Workforce</span>
+
+          <!-- Tier 2: Design & Build -->
+          <div class="offering-table__tier-header offering-table__tier-header--t2">Tier 2 &mdash; Design &amp; Build</div>
+          <div class="offering-table__row">
+            <div class="offering-table__name">Execution Sprint</div>
+            <div class="offering-table__desc">Strategy-to-implementation sprint. We design the system architecture and stay through the build.</div>
+            <div class="offering-table__price">6&ndash;12 weeks</div>
+            <div class="offering-table__markets">
+              <span class="market-badge">Workforce</span>
+              <span class="market-badge">Higher Ed</span>
             </div>
           </div>
-          <div class="offering">
-            <div class="offering__name">Execution Sprint</div>
-            <div class="offering__desc">Strategy-to-implementation sprint. We design the system architecture and stay through the build. Typically 6&ndash;12 weeks.</div>
-            <div class="offering__tags">
-              <span class="tag">Workforce</span>
-              <span class="tag">Higher Ed</span>
+          <div class="offering-table__row">
+            <div class="offering-table__name">Evidence Architecture</div>
+            <div class="offering-table__desc">Design the evidence system that proves your learning investment works. Built into the learning system, not bolted on.</div>
+            <div class="offering-table__price">4&ndash;8 weeks</div>
+            <div class="offering-table__markets">
+              <span class="market-badge">Higher Ed</span>
+              <span class="market-badge">Workforce</span>
+              <span class="market-badge">EdTech</span>
             </div>
           </div>
-          <div class="offering">
-            <div class="offering__name">Evidence Architecture</div>
-            <div class="offering__desc">Design the evidence system that proves your learning investment works. Built into the learning system, not bolted on.</div>
-            <div class="offering__tags">
-              <span class="tag">Higher Ed</span>
-              <span class="tag">Workforce</span>
-              <span class="tag">EdTech</span>
+          <div class="offering-table__row">
+            <div class="offering-table__name">Product-Learning Fit</div>
+            <div class="offering-table__desc">Map the connection between product features and demonstrable learning outcomes. Build the evidence story for renewals and growth.</div>
+            <div class="offering-table__price">3&ndash;6 weeks</div>
+            <div class="offering-table__markets">
+              <span class="market-badge">EdTech</span>
             </div>
           </div>
-          <div class="offering">
-            <div class="offering__name">Product-Learning Fit</div>
-            <div class="offering__desc">For EdTech: map the connection between product features and demonstrable learning outcomes. Build the evidence story for renewals and growth.</div>
-            <div class="offering__tags">
-              <span class="tag">EdTech</span>
+          <div class="offering-table__row">
+            <div class="offering-table__name">Transfer Design Toolkit</div>
+            <div class="offering-table__desc">Structured resources for designing learning experiences that transfer to real performance contexts.</div>
+            <div class="offering-table__price">Included</div>
+            <div class="offering-table__markets">
+              <span class="market-badge">Workforce</span>
+              <span class="market-badge">Higher Ed</span>
             </div>
           </div>
-          <div class="offering">
-            <div class="offering__name">Embedded Advisory</div>
-            <div class="offering__desc">Ongoing strategic partnership for organizations undertaking sustained learning transformation. We stay through execution.</div>
-            <div class="offering__tags">
-              <span class="tag">Higher Ed</span>
-              <span class="tag">Workforce</span>
-              <span class="tag">EdTech</span>
+
+          <!-- Tier 3: Partner -->
+          <div class="offering-table__tier-header offering-table__tier-header--t3">Tier 3 &mdash; Ongoing Partnership</div>
+          <div class="offering-table__row">
+            <div class="offering-table__name">Embedded Advisory</div>
+            <div class="offering-table__desc">Ongoing strategic partnership for organizations undertaking sustained learning transformation. We stay through execution.</div>
+            <div class="offering-table__price">Retainer</div>
+            <div class="offering-table__markets">
+              <span class="market-badge">Higher Ed</span>
+              <span class="market-badge">Workforce</span>
+              <span class="market-badge">EdTech</span>
             </div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- STRUCTURAL GAP -->
-    <section class="section section--cream" id="structural-gap">
+    <!-- SECTION 6: STRUCTURAL GAP (Warm accent bg) -->
+    <section class="section section--warm-accent" id="structural-gap">
       <div class="container">
-        <h2 class="mb-md">The structural gap in <em class="accent">every</em> market</h2>
-        <p class="section-intro mb-2xl">What leaders experience as learning problems are usually structural problems. The same patterns appear everywhere &mdash; in universities, corporations, and EdTech companies.</p>
-        <div class="grid grid--2">
-          <div class="card card--bordered">
-            <h3 class="card__title">Strategy and delivery pulled apart</h3>
-            <p class="card__text">Consultants write strategies. Internal teams try to execute them. The gap between strategy documents and operational reality is where learning value disappears.</p>
+        <div class="section-label animate-in stagger-0">
+          <span class="section-label__dash"></span>
+          <span class="section-label__text">Why This Is Different</span>
+        </div>
+        <h2 class="animate-in stagger-2" style="margin-bottom: 20px;">The structural gap in <em>every</em> market</h2>
+        <p class="section-lead animate-in stagger-3">What leaders experience as learning problems are usually structural problems. The same patterns appear everywhere &mdash; in universities, corporations, and EdTech companies.</p>
+
+        <div class="gap-grid animate-in stagger-4">
+          <div class="gap-card">
+            <h3>Strategy and delivery pulled apart</h3>
+            <p>Consultants write strategies. Internal teams try to execute them. The gap between strategy documents and operational reality is where learning value disappears.</p>
           </div>
-          <div class="card card--bordered">
-            <h3 class="card__title">Evidence as design afterthought</h3>
-            <p class="card__text">Evidence of impact is requested after programs launch, rather than designed into the system from the start. This produces retroactive justification rather than genuine insight.</p>
+          <div class="gap-card">
+            <h3>Evidence as design afterthought</h3>
+            <p>Evidence of impact is requested after programs launch, rather than designed into the system from the start. This produces retroactive justification rather than genuine insight.</p>
           </div>
-          <div class="card card--bordered">
-            <h3 class="card__title">Cross-industry transfer</h3>
-            <p class="card__text">Higher education, workforce learning, and EdTech face structurally similar challenges but rarely learn from each other. We bring product thinking to institutions and academic rigor to enterprises.</p>
+          <div class="gap-card">
+            <h3>Cross-industry transfer</h3>
+            <p>Higher education, workforce learning, and EdTech face structurally similar challenges but rarely learn from each other. We bring product thinking to institutions and academic rigor to enterprises.</p>
           </div>
-          <div class="card card--bordered">
-            <h3 class="card__title">Systems-level execution</h3>
-            <p class="card__text">Most interventions target individual programs or courses. But engagement, capability, portability, and opportunity are system-level properties that require system-level design.</p>
+          <div class="gap-card">
+            <h3>Systems-level execution</h3>
+            <p>Most interventions target individual programs or courses. But engagement, capability, portability, and opportunity are system-level properties that require system-level design.</p>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- PARTNERSHIP PROCESS -->
-    <section class="section" id="process">
+    <!-- SECTION 7: HOW WE WORK (with divider) -->
+    <section class="section" id="process" style="border-top: 1px solid var(--border-light);">
       <div class="container">
-        <p class="section-label">HOW WE ENGAGE</p>
-        <h2 class="mb-2xl">From curiosity to <em class="accent">partnership</em></h2>
-        <div class="steps">
-          <div class="step card card--bordered">
-            <p class="step__number">Step 01</p>
-            <h3 class="step__title">Discover</h3>
-            <p class="step__text">We listen. You describe what you're seeing, what you've tried, what concerns leadership. We identify whether our approach fits your situation.</p>
+        <div class="section-label animate-in stagger-0">
+          <span class="section-label__dash"></span>
+          <span class="section-label__text">How We Work Together</span>
+        </div>
+        <h2 class="animate-in stagger-2" style="margin-bottom: 56px;">From curiosity to <em>partnership</em></h2>
+
+        <div class="step-cards">
+          <div class="step-card animate-in stagger-4">
+            <p class="step-card__number">Step 01</p>
+            <h4 class="step-card__title">Discover</h4>
+            <p class="step-card__body">We listen. You describe what you&rsquo;re seeing, what you&rsquo;ve tried, what concerns leadership. We identify whether our approach fits your situation.</p>
           </div>
-          <div class="step card card--bordered">
-            <p class="step__number">Step 02</p>
-            <h3 class="step__title">Diagnose</h3>
-            <p class="step__text">We map your learning system through the four dimensions. Where is value being created? Where is it leaking? What's the highest-leverage intervention?</p>
+          <div class="step-card animate-in stagger-4" style="transition-delay: 330ms;">
+            <p class="step-card__number">Step 02</p>
+            <h4 class="step-card__title">Diagnose</h4>
+            <p class="step-card__body">We map your learning system through the four dimensions. Where is value being created? Where is it leaking? What&rsquo;s the highest-leverage intervention?</p>
           </div>
-          <div class="step card card--bordered">
-            <p class="step__number">Step 03</p>
-            <h3 class="step__title">Design</h3>
-            <p class="step__text">We architect the solution. Not a strategy document &mdash; a system design with clear components, dependencies, and an evidence architecture built in.</p>
+          <div class="step-card animate-in stagger-4" style="transition-delay: 410ms;">
+            <p class="step-card__number">Step 03</p>
+            <h4 class="step-card__title">Design</h4>
+            <p class="step-card__body">We architect the solution. Not a strategy document &mdash; a system design with clear components, dependencies, and evidence architecture built in.</p>
           </div>
-          <div class="step card card--bordered">
-            <p class="step__number">Step 04</p>
-            <h3 class="step__title">Partner</h3>
-            <p class="step__text">We stay through execution. The architecture comes to life with our team embedded alongside yours, adapting the design as real-world signals emerge.</p>
+          <div class="step-card animate-in stagger-4" style="transition-delay: 490ms;">
+            <p class="step-card__number">Step 04</p>
+            <h4 class="step-card__title">Partner</h4>
+            <p class="step-card__body">We stay through execution. The architecture comes to life with our team embedded alongside yours, adapting the design as real-world signals emerge.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 8: ABOUT (with divider) -->
+    <section class="section" id="about" style="border-top: 1px solid var(--border-light);">
+      <div class="container">
+        <div class="section-label animate-in stagger-0">
+          <span class="section-label__dash"></span>
+          <span class="section-label__text">About</span>
+        </div>
+
+        <div class="about-section">
+          <div class="animate-in stagger-2">
+            <h3 class="about__name">Lucian Cosinschi</h3>
+            <p class="about__title">Founder, Learning Value Architecture</p>
+            <ul class="about__credential-list">
+              <li class="about__credential">Learning systems design across higher education, workforce, and EdTech</li>
+              <li class="about__credential">Former roles at IKEA, Minerva University, Zayed University</li>
+              <li class="about__credential">EdTech advisory across US, UK, and Middle East</li>
+              <li class="about__credential">Cross-industry fluency: product thinking + academic rigor</li>
+            </ul>
+          </div>
+          <div class="about__narrative animate-in stagger-3">
+            <p>I&rsquo;ve spent my career at the intersection of learning science, institutional design, and product strategy. The Learning Value Architecture grew out of a recurring observation: organizations invest heavily in learning but have no reliable way to know whether it&rsquo;s working.</p>
+            <p>The problem isn&rsquo;t bad content or disengaged learners. It&rsquo;s that most learning systems are designed to deliver content, not to produce and evidence capability. The LVA provides a diagnostic framework that makes the invisible visible &mdash; where engagement breaks down, where capability fails to transfer, where evidence doesn&rsquo;t exist.</p>
+            <p>I work with boards, university presidents, CHROs, L&amp;D leaders, and EdTech founders who want their learning investment to produce demonstrable results. The approach is always the same: diagnose the system, design the architecture, stay through execution.</p>
           </div>
         </div>
       </div>
     </section>
 
     <!-- SOURCES -->
-    <section class="section" id="sources" style="padding: var(--sp-2xl) 0;">
+    <section style="padding: 48px 0; border-top: 1px solid var(--border-light);">
       <div class="container">
-        <p style="font-size: var(--fs-xs); color: var(--color-text-muted); max-width: 720px; line-height: 1.8;">
-          <span id="fn1"><strong>1.</strong> McKinsey &amp; Company, "Building workforce skills at scale" (2023).</span><br>
-          <span id="fn2"><strong>2.</strong> Ebbinghaus forgetting curve; Burke &amp; Hutchins, "Training Transfer: An Integrative Literature Review," <em>Human Resource Development Review</em> (2007).</span><br>
+        <p style="font-size: 0.72rem; font-family: var(--font-mono); color: var(--text-muted-light); max-width: 720px; line-height: 2;">
+          <span id="fn1"><strong>1.</strong> McKinsey &amp; Company, &ldquo;Building workforce skills at scale&rdquo; (2023).</span><br>
+          <span id="fn2"><strong>2.</strong> Ebbinghaus forgetting curve; Burke &amp; Hutchins, &ldquo;Training Transfer: An Integrative Literature Review,&rdquo; <em>Human Resource Development Review</em> (2007).</span><br>
           <span id="fn3"><strong>3.</strong> Deci &amp; Ryan, Self-Determination Theory meta-analyses on intrinsic motivation and engagement (2017).</span><br>
-          <span id="fn4"><strong>4.</strong> AACU/Hart Research Associates, "Falling Short? College Learning and Career Success" (2023).</span><br>
-          <span id="fn5"><strong>5.</strong> Gallup-Purdue Index, "Great Jobs, Great Lives" national survey (2023).</span><br>
-          <span id="fn6"><strong>6.</strong> CLO Magazine / i4cp, "Measuring the Business Impact of Learning" survey (2024).</span><br>
+          <span id="fn4"><strong>4.</strong> AACU/Hart Research Associates, &ldquo;Falling Short? College Learning and Career Success&rdquo; (2023).</span><br>
+          <span id="fn5"><strong>5.</strong> Gallup-Purdue Index, &ldquo;Great Jobs, Great Lives&rdquo; national survey (2023).</span><br>
+          <span id="fn6"><strong>6.</strong> CLO Magazine / i4cp, &ldquo;Measuring the Business Impact of Learning&rdquo; survey (2024).</span><br>
           <span id="fn7"><strong>7.</strong> LearnPlatform / EdTech Evidence Exchange, product efficacy and renewal correlation data (2024).</span><br>
-          <span id="fn8"><strong>8.</strong> EdSurge / Tyton Partners, "Signals and Shifts in EdTech Buying Behavior" (2024).</span>
+          <span id="fn8"><strong>8.</strong> EdSurge / Tyton Partners, &ldquo;Signals and Shifts in EdTech Buying Behavior&rdquo; (2024).</span>
         </p>
       </div>
     </section>
 
-    <!-- CTA FOOTER -->
-    <section class="section section--dark" id="cta">
-      <div class="container text-center">
-        <h2 class="mb-md">Start with a <em class="accent">scan</em></h2>
-        <p style="max-width: 540px; margin: 0 auto var(--sp-xl);">A 2&ndash;3 week diagnostic that maps where your learning system creates value and where it leaks. Actionable insight, no commitment.</p>
-        <div class="flex flex--gap-md" style="justify-content: center;">
-          <a href="contact.html" class="btn btn--white">Start the Learning Value Scan</a>
-          <a href="contact.html" class="btn btn--outline-white">Book a Consultation</a>
+    <!-- SECTION 9: CTA FOOTER (Dark) -->
+    <section class="cta-footer">
+      <div class="container--narrow">
+        <div class="section-label animate-in stagger-0" style="justify-content: center;">
+          <span class="section-label__dash" style="background: var(--copper-light);"></span>
+          <span class="section-label__text" style="color: var(--copper-light);">Get Started</span>
+        </div>
+        <h2 class="animate-in stagger-2">Start with a <em>scan</em></h2>
+        <p class="animate-in stagger-3">A 2&ndash;3 week diagnostic that maps where your learning system creates value and where it leaks. Actionable insight, no commitment.</p>
+        <div class="cta-footer__actions animate-in stagger-5">
+          <a href="contact.html" class="btn-light">Start the Learning Value Scan &rarr;</a>
+          <a href="contact.html" class="btn-ghost-light">Book a Consultation</a>
         </div>
       </div>
     </section>
@@ -424,25 +458,24 @@
   </main>
 
   <!-- FOOTER -->
-  <footer class="footer">
-    <div class="container footer__inner">
-      <p>&copy; 2026 Learning Value Architecture. All rights reserved.</p>
-      <div class="flex flex--gap-lg">
-        <a href="/">Home</a>
-        <a href="how-we-work.html">Knowledge</a>
-        <a href="track-record.html">Markets</a>
-        <a href="LVA-Explorer.html">Explorer</a>
-        <a href="contact.html">Contact</a>
-      </div>
+  <footer>
+    <div class="footer__inner">
+      <span>&copy; 2026 Learning Value Architecture</span>
+      <span>&middot;</span>
+      <a href="contact.html">Contact</a>
+      <span>&middot;</span>
+      <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer">LinkedIn</a>
     </div>
   </footer>
 
   <noscript>
     <style>
-      .tab-panel { display: block !important; margin-bottom: var(--sp-2xl); }
-      .tabs[role="tablist"] { display: none; }
+      .tab-panel { display: block !important; margin-bottom: 48px; }
+      [role="tablist"], .tab-pills { display: none; }
+      .animate-in { opacity: 1; filter: none; transform: none; }
     </style>
   </noscript>
   <script src="js/main.js" defer></script>
+  <script src="js/animations.js" defer></script>
 </body>
 </html>

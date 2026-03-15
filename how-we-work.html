@@ -16,7 +16,7 @@
   <meta name="twitter:description" content="Our methodology addresses the execution gap and the evidence gap in learning systems.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:ital@1&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/variables.css">
   <link rel="stylesheet" href="css/reset.css">
   <link rel="stylesheet" href="css/base.css">
@@ -29,15 +29,15 @@
   <a href="#main" class="sr-only">Skip to main content</a>
 
   <header class="nav">
-    <div class="container nav__inner">
-      <a href="/" class="nav__logo">Learning Value Architecture</a>
+    <div class="nav__inner">
+      <a href="/" class="nav__logo">Learning Value Architecture<span>.</span></a>
       <nav class="nav__links" id="nav-links">
         <a href="how-we-work.html" aria-current="page">KNOWLEDGE</a>
         <a href="track-record.html">MARKETS</a>
         <a href="LVA-Explorer.html">EXPLORER</a>
         <a href="contact.html">CONTACT</a>
       </nav>
-      <a href="contact.html" class="btn btn--cta btn--sm nav__cta">Book a Consultation</a>
+      <a href="contact.html" class="nav__cta">Book a Consultation</a>
       <button type="button" class="nav__toggle" id="nav-toggle" aria-label="Toggle menu" aria-expanded="false">
         <span></span><span></span><span></span>
       </button>
@@ -47,139 +47,157 @@
   <main id="main">
 
     <!-- HERO -->
-    <section class="section">
+    <section class="hero">
       <div class="container">
-        <p class="section-label">HOW WE WORK</p>
-        <h1 class="mb-lg" style="max-width: 720px;">Where learning systems <em class="accent">break</em></h1>
-        <p class="section-intro" style="max-width: 640px;">Most learning investments fail not because of bad content or disengaged learners, but because of two structural gaps that go unaddressed.</p>
+        <div class="section-label animate-in">
+          <span class="section-label__dash"></span>
+          <span class="section-label__text">How We Work</span>
+        </div>
+        <h1 class="animate-in">Where learning systems <em>break</em></h1>
+        <p class="subtitle animate-in" style="max-width: 640px;">Most learning investments fail not because of bad content or disengaged learners, but because of two structural gaps that go unaddressed.</p>
       </div>
     </section>
 
-    <!-- THE TWO GAPS -->
-    <section class="section section--cream">
+    <!-- THE TWO GAPS (Dark) -->
+    <section class="section section--dark">
       <div class="container">
-        <div class="grid grid--2">
-          <div class="card card--bordered">
-            <p class="card__label">GAP 01</p>
-            <h2 class="mb-md" style="font-size: var(--fs-xl);">The Execution Gap</h2>
-            <p class="card__text mb-md">Strategy consultants write recommendations. Internal teams try to implement them. The gap between strategy documents and operational reality is where learning value disappears.</p>
-            <p class="card__text"><strong>Symptoms:</strong> Strategy decks that gather dust. Pilots that never scale. Implementation timelines that slip by quarters, not weeks. Teams that understand what to do but not how to do it within their constraints.</p>
+        <div class="section-label animate-in stagger-0">
+          <span class="section-label__dash"></span>
+          <span class="section-label__text">The Two Gaps</span>
+        </div>
+        <div class="grid--2" style="display: grid; gap: 2px; border-radius: 12px; overflow: hidden;">
+          <div class="stat-card animate-in stagger-4">
+            <p class="step-card__number" style="color: var(--copper-light);">Gap 01</p>
+            <h3 style="color: var(--text-light); margin-bottom: 12px;">The Execution Gap</h3>
+            <p class="stat-card__body" style="margin-bottom: 16px;">Strategy consultants write recommendations. Internal teams try to implement them. The gap between strategy documents and operational reality is where learning value disappears.</p>
+            <p class="stat-card__body"><strong style="color: var(--text-light);">Symptoms:</strong> Strategy decks that gather dust. Pilots that never scale. Implementation timelines that slip by quarters, not weeks.</p>
           </div>
-          <div class="card card--bordered">
-            <p class="card__label">GAP 02</p>
-            <h2 class="mb-md" style="font-size: var(--fs-xl);">The Evidence Gap</h2>
-            <p class="card__text mb-md">Organizations invest in learning and then try to prove it worked after the fact. Evidence is treated as a reporting requirement, not a design input.</p>
-            <p class="card__text"><strong>Symptoms:</strong> Completion rates presented as impact metrics. Annual surveys as the primary evidence source. Leadership skepticism about learning ROI. Inability to connect learning programs to business outcomes.</p>
+          <div class="stat-card animate-in stagger-4" style="transition-delay: 330ms;">
+            <p class="step-card__number" style="color: var(--copper-light);">Gap 02</p>
+            <h3 style="color: var(--text-light); margin-bottom: 12px;">The Evidence Gap</h3>
+            <p class="stat-card__body" style="margin-bottom: 16px;">Organizations invest in learning and then try to prove it worked after the fact. Evidence is treated as a reporting requirement, not a design input.</p>
+            <p class="stat-card__body"><strong style="color: var(--text-light);">Symptoms:</strong> Completion rates presented as impact metrics. Annual surveys as the primary evidence source. Leadership skepticism about learning ROI.</p>
           </div>
         </div>
       </div>
     </section>
 
     <!-- FOUR DIMENSIONS -->
-    <section class="section">
+    <section class="section" id="dimensions">
       <div class="container">
-        <h2 class="mb-md text-center">The Four <em class="accent">Dimensions</em></h2>
-        <p class="section-intro mb-2xl text-center" style="margin-left: auto; margin-right: auto;">Every learning system must satisfy four conditions. Most are designed with one in mind and hope the others follow. They do not.</p>
+        <div class="section-label animate-in stagger-0">
+          <span class="section-label__dash"></span>
+          <span class="section-label__text">The Framework</span>
+        </div>
+        <h2 class="animate-in stagger-2 text-center" style="margin-bottom: 20px;">The Four <em>Dimensions</em></h2>
+        <p class="section-lead animate-in stagger-3 text-center" style="margin: 0 auto 56px;">Every learning system must satisfy four conditions. Most are designed with one in mind and hope the others follow. They do not.</p>
 
-        <div class="grid grid--4 mb-2xl">
-          <div class="card card--bordered">
-            <p class="card__label">DIMENSION 01</p>
-            <h3 class="card__title">Engagement</h3>
-            <p class="card__text mb-md">Does the learner care &mdash; and if so, how and why? The system creates conditions where participation is meaningful, not mandated.</p>
-            <p class="card__text"><strong>When missing:</strong> Low completion. Passive attendance. Investment that produces compliance rather than capability.</p>
+        <div class="grid-4" style="gap: 12px;">
+          <div class="step-card animate-in stagger-4">
+            <p class="step-card__number">Dimension 01</p>
+            <h4 class="step-card__title">Engagement</h4>
+            <p class="step-card__body" style="margin-bottom: 12px;">Does the learner care &mdash; and if so, how and why? The system creates conditions where participation is meaningful, not mandated.</p>
+            <p class="step-card__body"><strong>When missing:</strong> Low completion. Passive attendance. Investment that produces compliance rather than capability.</p>
           </div>
-          <div class="card card--bordered">
-            <p class="card__label">DIMENSION 02</p>
-            <h3 class="card__title">Capability</h3>
-            <p class="card__text mb-md">Was real ability actually built &mdash; and is it durable? Learning translates into behavior change visible on the job, not knowledge tested in a quiz.</p>
-            <p class="card__text"><strong>When missing:</strong> Confident graduates who cannot perform. Trained employees who revert within weeks. Programs that feel productive but produce no lasting change.</p>
+          <div class="step-card animate-in stagger-4" style="transition-delay: 330ms;">
+            <p class="step-card__number">Dimension 02</p>
+            <h4 class="step-card__title">Capability</h4>
+            <p class="step-card__body" style="margin-bottom: 12px;">Was real ability actually built &mdash; and is it durable? Learning translates into behavior change visible on the job.</p>
+            <p class="step-card__body"><strong>When missing:</strong> Confident graduates who cannot perform. Trained employees who revert within weeks.</p>
           </div>
-          <div class="card card--bordered">
-            <p class="card__label">DIMENSION 03</p>
-            <h3 class="card__title">Portability</h3>
-            <p class="card__text mb-md">Does the learner know they have it, and can the world see it? Capability is recognized, credentialed, and transferable across contexts.</p>
-            <p class="card__text"><strong>When missing:</strong> Real skills with no visibility. Credentials that don&rsquo;t travel. Talent that stays hidden inside organizations or programs.</p>
+          <div class="step-card animate-in stagger-4" style="transition-delay: 410ms;">
+            <p class="step-card__number">Dimension 03</p>
+            <h4 class="step-card__title">Portability</h4>
+            <p class="step-card__body" style="margin-bottom: 12px;">Does the learner know they have it, and can the world see it? Capability is recognized, credentialed, and transferable.</p>
+            <p class="step-card__body"><strong>When missing:</strong> Real skills with no visibility. Credentials that don&rsquo;t travel. Talent that stays hidden.</p>
           </div>
-          <div class="card card--bordered">
-            <p class="card__label">DIMENSION 04</p>
-            <h3 class="card__title">Opportunity</h3>
-            <p class="card__text mb-md">Does the environment support or block learning application? The organization, culture, and systems enable people to use what they&rsquo;ve learned.</p>
-            <p class="card__text"><strong>When missing:</strong> Trained people returning to unchanged systems. Capability wasted by structural barriers. Evidence impossible because the environment never allowed application.</p>
+          <div class="step-card animate-in stagger-4" style="transition-delay: 490ms;">
+            <p class="step-card__number">Dimension 04</p>
+            <h4 class="step-card__title">Opportunity</h4>
+            <p class="step-card__body" style="margin-bottom: 12px;">Does the environment support or block learning application? The organization, culture, and systems enable people to use what they&rsquo;ve learned.</p>
+            <p class="step-card__body"><strong>When missing:</strong> Trained people returning to unchanged systems. Capability wasted by structural barriers.</p>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- WHAT WE DO - MATCHING SCENARIOS -->
-    <section class="section section--cream">
+    <!-- WHAT WE DO — MATCHING SCENARIOS (Warm accent) -->
+    <section class="section section--warm-accent">
       <div class="container">
-        <h2 class="mb-md">What we actually <em class="accent">do</em></h2>
-        <p class="section-intro mb-2xl">We match the right intervention to your situation. Here's how to find the starting point.</p>
+        <div class="section-label animate-in stagger-0">
+          <span class="section-label__dash"></span>
+          <span class="section-label__text">Starting Points</span>
+        </div>
+        <h2 class="animate-in stagger-2" style="margin-bottom: 20px;">What we actually <em>do</em></h2>
+        <p class="section-lead animate-in stagger-3">We match the right intervention to your situation. Here&rsquo;s how to find the starting point.</p>
 
-        <div class="grid grid--2">
-          <div class="card card--bordered">
-            <p class="card__label">IF YOU&rsquo;RE SAYING</p>
-            <h3 class="card__title">&ldquo;We're investing in learning but can't tell if it's working.&rdquo;</h3>
-            <p class="card__text mb-md">You need visibility into where value is being created and where it's leaking.</p>
-            <p><span class="tag">Learning Value Audit</span></p>
+        <div class="gap-grid animate-in stagger-4">
+          <div class="gap-card">
+            <p class="step-card__number" style="margin-bottom: 12px;">If you&rsquo;re saying</p>
+            <h3>&ldquo;We&rsquo;re investing in learning but can&rsquo;t tell if it&rsquo;s working.&rdquo;</h3>
+            <p style="margin-bottom: 16px;">You need visibility into where value is being created and where it&rsquo;s leaking.</p>
+            <span class="tag" style="background: var(--tier1-bg); color: var(--tier1-text);">Learning Value Audit</span>
           </div>
-          <div class="card card--bordered">
-            <p class="card__label">IF YOU&rsquo;RE SAYING</p>
-            <h3 class="card__title">&ldquo;We're about to launch a major program and want to get it right.&rdquo;</h3>
-            <p class="card__text mb-md">You need a system design that builds in engagement, capability, portability, and opportunity from day one.</p>
-            <p><span class="tag">Execution Sprint</span></p>
+          <div class="gap-card">
+            <p class="step-card__number" style="margin-bottom: 12px;">If you&rsquo;re saying</p>
+            <h3>&ldquo;We&rsquo;re about to launch a major program and want to get it right.&rdquo;</h3>
+            <p style="margin-bottom: 16px;">You need a system design that builds in engagement, capability, portability, and opportunity from day one.</p>
+            <span class="tag" style="background: var(--tier2-bg); color: var(--tier2-text);">Execution Sprint</span>
           </div>
-          <div class="card card--bordered">
-            <p class="card__label">IF YOU&rsquo;RE SAYING</p>
-            <h3 class="card__title">&ldquo;We can't prove our impact to leadership or accreditors.&rdquo;</h3>
-            <p class="card__text mb-md">You need an evidence architecture designed into your system, not a dashboard added after the fact.</p>
-            <p><span class="tag">Evidence Architecture</span></p>
+          <div class="gap-card">
+            <p class="step-card__number" style="margin-bottom: 12px;">If you&rsquo;re saying</p>
+            <h3>&ldquo;We can&rsquo;t prove our impact to leadership or accreditors.&rdquo;</h3>
+            <p style="margin-bottom: 16px;">You need an evidence architecture designed into your system, not a dashboard added after the fact.</p>
+            <span class="tag" style="background: var(--tier2-bg); color: var(--tier2-text);">Evidence Architecture</span>
           </div>
-          <div class="card card--bordered">
-            <p class="card__label">IF YOU&rsquo;RE SAYING</p>
-            <h3 class="card__title">&ldquo;Our product works but we can't demonstrate learning outcomes.&rdquo;</h3>
-            <p class="card__text mb-md">You need product-learning fit &mdash; the evidence that connects your features to real outcomes.</p>
-            <p><span class="tag">Product-Learning Fit Sprint</span></p>
+          <div class="gap-card">
+            <p class="step-card__number" style="margin-bottom: 12px;">If you&rsquo;re saying</p>
+            <h3>&ldquo;Our product works but we can&rsquo;t demonstrate learning outcomes.&rdquo;</h3>
+            <p style="margin-bottom: 16px;">You need product-learning fit &mdash; the evidence that connects your features to real outcomes.</p>
+            <span class="tag" style="background: var(--tier2-bg); color: var(--tier2-text);">Product-Learning Fit Sprint</span>
           </div>
         </div>
       </div>
     </section>
 
     <!-- SECONDARY CTA -->
-    <section class="section">
+    <section class="section" style="border-top: 1px solid var(--border-light);">
       <div class="container text-center">
-        <p class="section-intro mb-lg" style="margin-left: auto; margin-right: auto;">Not sure where to start? The Learning Value Scan helps you see where your system is strong and where value is leaking.</p>
-        <a href="contact.html" class="btn btn--primary">Let's talk</a>
+        <p class="section-lead animate-in stagger-2" style="margin: 0 auto 32px;">Not sure where to start? The Learning Value Scan helps you see where your system is strong and where value is leaking.</p>
+        <a href="contact.html" class="btn-primary animate-in stagger-5">Let&rsquo;s talk &rarr;</a>
       </div>
     </section>
 
-    <!-- CTA FOOTER -->
-    <section class="section section--dark">
-      <div class="container text-center">
-        <h2 class="mb-md">Start with a <em class="accent">scan</em></h2>
-        <p style="max-width: 540px; margin: 0 auto var(--sp-xl);">A 2&ndash;3 week diagnostic that maps where your learning system creates value and where it leaks.</p>
-        <div class="flex flex--gap-md" style="justify-content: center;">
-          <a href="contact.html" class="btn btn--white">Start the Learning Value Scan</a>
-          <a href="contact.html" class="btn btn--outline-white">Book a Consultation</a>
+    <!-- CTA FOOTER (Dark) -->
+    <section class="cta-footer">
+      <div class="container--narrow">
+        <h2 class="animate-in stagger-2">Start with a <em>scan</em></h2>
+        <p class="animate-in stagger-3">A 2&ndash;3 week diagnostic that maps where your learning system creates value and where it leaks.</p>
+        <div class="cta-footer__actions animate-in stagger-5">
+          <a href="contact.html" class="btn-light">Start the Learning Value Scan &rarr;</a>
+          <a href="contact.html" class="btn-ghost-light">Book a Consultation</a>
         </div>
       </div>
     </section>
 
   </main>
 
-  <footer class="footer">
-    <div class="container footer__inner">
-      <p>&copy; 2026 Learning Value Architecture. All rights reserved.</p>
-      <div class="flex flex--gap-lg">
-        <a href="/">Home</a>
-        <a href="how-we-work.html">Knowledge</a>
-        <a href="track-record.html">Markets</a>
-        <a href="LVA-Explorer.html">Explorer</a>
-        <a href="contact.html">Contact</a>
-      </div>
+  <footer>
+    <div class="footer__inner">
+      <span>&copy; 2026 Learning Value Architecture</span>
+      <span>&middot;</span>
+      <a href="contact.html">Contact</a>
+      <span>&middot;</span>
+      <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer">LinkedIn</a>
     </div>
   </footer>
 
+  <noscript>
+    <style>
+      .animate-in { opacity: 1; filter: none; transform: none; }
+    </style>
+  </noscript>
   <script src="js/main.js" defer></script>
+  <script src="js/animations.js" defer></script>
 </body>
 </html>
