@@ -11,15 +11,77 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 
-  // Tab switching
-  var tabPills = document.querySelectorAll('.tab-pill');
+  // Tab switching with ARIA support
+  var tabLists = document.querySelectorAll('[role="tablist"]');
 
-  tabPills.forEach(function (pill) {
+  tabLists.forEach(function (tabList) {
+    var tabs = tabList.querySelectorAll('[role="tab"]');
+
+    tabs.forEach(function (tab) {
+      tab.addEventListener('click', function () {
+        activateTab(tab, tabs);
+      });
+
+      // Keyboard navigation (WAI-ARIA tabs pattern)
+      tab.addEventListener('keydown', function (e) {
+        var tabArray = Array.from(tabs);
+        var index = tabArray.indexOf(tab);
+        var newTab;
+
+        if (e.key === 'ArrowRight') {
+          newTab = tabArray[(index + 1) % tabArray.length];
+        } else if (e.key === 'ArrowLeft') {
+          newTab = tabArray[(index - 1 + tabArray.length) % tabArray.length];
+        } else if (e.key === 'Home') {
+          newTab = tabArray[0];
+        } else if (e.key === 'End') {
+          newTab = tabArray[tabArray.length - 1];
+        }
+
+        if (newTab) {
+          e.preventDefault();
+          activateTab(newTab, tabs);
+          newTab.focus();
+        }
+      });
+    });
+  });
+
+  function activateTab(activeTab, allTabs) {
+    var tabId = activeTab.getAttribute('data-tab');
+    var parent = activeTab.closest('.section') || document;
+
+    // Deactivate all tabs
+    allTabs.forEach(function (t) {
+      t.classList.remove('is-active');
+      t.setAttribute('aria-selected', 'false');
+      t.setAttribute('tabindex', '-1');
+    });
+
+    // Activate clicked tab
+    activeTab.classList.add('is-active');
+    activeTab.setAttribute('aria-selected', 'true');
+    activeTab.setAttribute('tabindex', '0');
+
+    // Hide all panels
+    parent.querySelectorAll('[role="tabpanel"]').forEach(function (panel) {
+      panel.classList.remove('is-active');
+    });
+
+    // Show target panel
+    var target = document.getElementById('tab-' + tabId);
+    if (target) {
+      target.classList.add('is-active');
+    }
+  }
+
+  // Fallback: tab-pills without role="tab" (legacy support)
+  var legacyPills = document.querySelectorAll('.tab-pill:not([role="tab"])');
+  legacyPills.forEach(function (pill) {
     pill.addEventListener('click', function () {
       var tabId = this.getAttribute('data-tab');
       var parent = this.closest('.section') || document;
 
-      // Deactivate all pills in this group
       var group = this.closest('.tabs');
       if (group) {
         group.querySelectorAll('.tab-pill').forEach(function (p) {
@@ -27,15 +89,12 @@ document.addEventListener('DOMContentLoaded', function () {
         });
       }
 
-      // Activate clicked pill
       this.classList.add('is-active');
 
-      // Hide all panels in this section
       parent.querySelectorAll('.tab-panel').forEach(function (panel) {
         panel.classList.remove('is-active');
       });
 
-      // Show target panel
       var target = document.getElementById('tab-' + tabId);
       if (target) {
         target.classList.add('is-active');
