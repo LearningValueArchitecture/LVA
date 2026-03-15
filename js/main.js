@@ -1,17 +1,44 @@
 document.addEventListener('DOMContentLoaded', function () {
 
+  // ==========================================
+  // Header scroll shadow
+  // ==========================================
+  var header = document.querySelector('header') || document.querySelector('.nav');
+  if (header) {
+    window.addEventListener('scroll', function () {
+      header.classList.toggle('is-scrolled', window.scrollY > 100);
+    }, { passive: true });
+  }
+
+  // ==========================================
   // Mobile nav toggle
-  var toggle = document.getElementById('nav-toggle');
-  var navLinks = document.getElementById('nav-links');
+  // ==========================================
+  var toggle = document.getElementById('nav-toggle') || document.querySelector('.nav__toggle');
+  var navLinks = document.getElementById('nav-links') || document.querySelector('.nav__links');
 
   if (toggle && navLinks) {
     toggle.addEventListener('click', function () {
-      var isOpen = navLinks.classList.toggle('is-open');
+      var isOpen = navLinks.classList.toggle('open');
+      // Also support legacy is-open class
+      navLinks.classList.toggle('is-open', isOpen);
       toggle.setAttribute('aria-expanded', isOpen);
+      document.body.style.overflow = isOpen ? 'hidden' : '';
+    });
+
+    // Close menu on link click
+    navLinks.querySelectorAll('a').forEach(function (link) {
+      link.addEventListener('click', function () {
+        navLinks.classList.remove('open');
+        navLinks.classList.remove('is-open');
+        toggle.setAttribute('aria-expanded', 'false');
+        document.body.style.overflow = '';
+      });
     });
   }
 
+  // ==========================================
   // Tab switching with ARIA support
+  // ==========================================
   var tabLists = document.querySelectorAll('[role="tablist"]');
 
   tabLists.forEach(function (tabList) {
@@ -22,7 +49,6 @@ document.addEventListener('DOMContentLoaded', function () {
         activateTab(tab, tabs);
       });
 
-      // Keyboard navigation (WAI-ARIA tabs pattern)
       tab.addEventListener('keydown', function (e) {
         var tabArray = Array.from(tabs);
         var index = tabArray.indexOf(tab);
@@ -49,40 +75,38 @@ document.addEventListener('DOMContentLoaded', function () {
 
   function activateTab(activeTab, allTabs) {
     var tabId = activeTab.getAttribute('data-tab');
-    var parent = activeTab.closest('.section') || document;
+    var parent = activeTab.closest('section') || activeTab.closest('.section') || document;
 
-    // Deactivate all tabs
     allTabs.forEach(function (t) {
       t.classList.remove('is-active');
       t.setAttribute('aria-selected', 'false');
       t.setAttribute('tabindex', '-1');
     });
 
-    // Activate clicked tab
     activeTab.classList.add('is-active');
     activeTab.setAttribute('aria-selected', 'true');
     activeTab.setAttribute('tabindex', '0');
 
-    // Hide all panels
     parent.querySelectorAll('[role="tabpanel"]').forEach(function (panel) {
       panel.classList.remove('is-active');
     });
 
-    // Show target panel
     var target = document.getElementById('tab-' + tabId);
     if (target) {
       target.classList.add('is-active');
     }
   }
 
-  // Fallback: tab-pills without role="tab" (legacy support)
+  // ==========================================
+  // Fallback: tab-pills without role="tab"
+  // ==========================================
   var legacyPills = document.querySelectorAll('.tab-pill:not([role="tab"])');
   legacyPills.forEach(function (pill) {
     pill.addEventListener('click', function () {
       var tabId = this.getAttribute('data-tab');
-      var parent = this.closest('.section') || document;
+      var parent = this.closest('section') || this.closest('.section') || document;
 
-      var group = this.closest('.tabs');
+      var group = this.closest('.tabs') || this.closest('.tab-pills');
       if (group) {
         group.querySelectorAll('.tab-pill').forEach(function (p) {
           p.classList.remove('is-active');
@@ -101,15 +125,5 @@ document.addEventListener('DOMContentLoaded', function () {
       }
     });
   });
-
-  // Close mobile nav on link click
-  if (navLinks) {
-    navLinks.querySelectorAll('a').forEach(function (link) {
-      link.addEventListener('click', function () {
-        navLinks.classList.remove('is-open');
-        if (toggle) toggle.setAttribute('aria-expanded', 'false');
-      });
-    });
-  }
 
 });
